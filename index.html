@@ -235,6 +235,7 @@ a{color:#0B4D3E}a:hover{color:#0F5F4C}
 <div style="display: flex; gap: 14px; align-items: flex-start"><span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: #C2410C; color: #FFFFFF; font-weight: 800; display: flex; align-items: center; justify-content: center">2</span><p style="margin: 4px 0 0">Recebe por e-mail os dados para pagar 19 € por MB Way ou por transferência.</p></div>
 <div style="display: flex; gap: 14px; align-items: flex-start"><span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: #C2410C; color: #FFFFFF; font-weight: 800; display: flex; align-items: center; justify-content: center">3</span><p style="margin: 4px 0 0">Depois do pagamento, recebe a sua chave de licença e as instruções no prazo de 24 horas.</p></div>
 <a href="mailto:pautavaliacao@gmail.com?subject=Compra%20da%20PAUTA" style="align-self: flex-start; display: inline-flex; align-items: center; min-height: 52px; padding: 0 28px; border-radius: 12px; background: #C2410C; color: #FFFFFF; font-weight: 800; font-size: 18px; text-decoration: none; box-shadow: 0 10px 24px rgba(232, 89, 12, 0.3)">Enviar e-mail de compra</a>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; font-size: 15px; color: #5D6F68"><span>Se o botão não abrir o seu e-mail, escreva diretamente para <strong style="color: #0B4D3E">pautavaliacao@gmail.com</strong></span><button type="button" id="copiarEmail" style="min-height: 44px; padding: 0 16px; border-radius: 10px; border: 2px solid #0B4D3E; background: #FFFFFF; color: #0B4D3E; font: inherit; font-weight: 700; cursor: pointer">Copiar endereço</button></div>
 </div>
 </div>
 </section>
@@ -269,5 +270,11 @@ a{color:#0B4D3E}a:hover{color:#0F5F4C}
 </footer>
 
 </div>
+<script>
+(function(){var b=document.getElementById('copiarEmail');if(!b)return;var mail='pautavaliacao@gmail.com';
+b.addEventListener('click',function(){function ok(){b.textContent='Copiado!';setTimeout(function(){b.textContent='Copiar endereço'},2500)}
+if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(mail).then(ok,fallback)}else{fallback()}
+function fallback(){var t=document.createElement('textarea');t.value=mail;document.body.appendChild(t);t.select();try{document.execCommand('copy');ok()}catch(e){b.textContent=mail}document.body.removeChild(t)}});})();
+</script>
 </body>
 </html>
