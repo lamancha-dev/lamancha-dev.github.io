@@ -422,9 +422,9 @@
 <script>
   (function(){
     if (window !== window.top) document.documentElement.classList.add('emb');
-    function altura(){ try{ parent.postMessage({mrvAltura: document.documentElement.scrollHeight}, '*'); }catch(e){} }
+    function altura(){ try{ parent.postMessage({mrvAltura: Math.ceil(document.querySelector('.jornal').getBoundingClientRect().bottom + window.scrollY + 6)}, '*'); }catch(e){} }
     window.addEventListener('load', altura); window.addEventListener('resize', altura);
-    document.addEventListener('click', function(){ setTimeout(altura, 50); });
+    document.addEventListener('click', function(){ setTimeout(altura, 60); setTimeout(altura, 450); setTimeout(altura, 1200); });
     if (window.ResizeObserver) new ResizeObserver(altura).observe(document.body);
   })();
 </script>
