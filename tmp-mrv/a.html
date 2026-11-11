@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>@antero.dequental — perfil</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{ --fundo:#faf9f6; --tinta:#171b1c; --cinza:#6b7270; --linha:#e3ded3; --verde:#233e38; --terra:#a64b43; --rosa:#f3e4e1; }
+  *{box-sizing:border-box}
+  html{background:#efe9df}
+  body{margin:0; padding:24px 12px 40px; font-family:-apple-system, "Segoe UI", Roboto, Arial, sans-serif; color:var(--tinta)}
+  .tel{max-width:620px; margin:0 auto; background:var(--fundo); border:1px solid var(--linha); border-radius:22px; overflow:hidden; box-shadow:0 18px 50px rgba(40,30,20,.18)}
+  .barra{display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--linha); font-weight:700; font-size:17px}
+  .barra .nome{display:flex; align-items:center; gap:6px}
+  .verif{display:inline-grid; place-items:center; width:16px; height:16px; border-radius:50%; background:var(--verde); color:#fff; font-size:10px}
+  .barra small{font-weight:400; color:var(--cinza); font-size:12px}
+
+  .cab{display:grid; grid-template-columns:96px 1fr; gap:22px; align-items:center; padding:22px 20px 8px}
+  .avatar{width:96px; height:96px; border-radius:50%; padding:3px; background:conic-gradient(var(--terra), #d9a441, var(--verde), var(--terra))}
+  .avatar svg{width:100%; height:100%; border-radius:50%; background:#efe6d6; border:3px solid var(--fundo); display:block}
+  .numeros{display:flex; justify-content:space-around; text-align:center}
+  .numeros b{display:block; font-size:18px}
+  .numeros span{font-size:13px; color:var(--cinza)}
+  .bio{padding:6px 20px 14px; font-size:14.5px; line-height:1.5}
+  .bio b{display:block; font-size:15px}
+  .bio .cat{color:var(--cinza)}
+  .bio a{color:#284a7a; text-decoration:none}
+
+  .botoes{display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; padding:0 20px 16px}
+  .botoes button{border:0; border-radius:9px; padding:9px 0; font-weight:600; font-size:14px; background:#ebe6dc; color:var(--tinta); cursor:pointer; font-family:inherit}
+  .botoes button.seguir{background:var(--verde); color:#fff}
+  .botoes button.seguir.ja{background:#ebe6dc; color:var(--tinta)}
+
+  .destaques{display:flex; gap:16px; padding:4px 20px 18px; overflow-x:auto}
+  .dest{flex:0 0 auto; width:66px; text-align:center; font-size:12px; cursor:pointer; background:none; border:0; padding:0; font-family:inherit; color:inherit}
+  .dest i{display:grid; place-items:center; width:62px; height:62px; margin:0 auto 6px; border-radius:50%; border:1px solid var(--linha); background:#fff; font-style:normal; font-family:"Playfair Display", serif; font-size:22px; color:var(--terra); box-shadow:0 0 0 3px var(--fundo), 0 0 0 4px #cfc6b6}
+
+  .abas{display:grid; grid-template-columns:1fr 1fr; border-top:1px solid var(--linha)}
+  .abas button{border:0; background:none; padding:12px 0; font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:var(--cinza); cursor:pointer; border-top:1px solid transparent; margin-top:-1px; font-family:inherit}
+  .abas button.ativa{color:var(--tinta); border-top-color:var(--tinta); font-weight:700}
+
+  .grelha{display:grid; grid-template-columns:repeat(3,1fr); gap:3px}
+  .post{position:relative; aspect-ratio:1; border:0; padding:14px; cursor:pointer; display:flex; flex-direction:column; justify-content:space-between; text-align:left; font-family:Lora, Georgia, serif; overflow:hidden}
+  .post .verso{font-size:clamp(11px, 2.6vw, 15px); line-height:1.35; font-style:italic}
+  .post .tit{font-family:Arial, sans-serif; font-size:10px; letter-spacing:1.4px; text-transform:uppercase; opacity:.85}
+  .post:hover::after{content:"♥ " attr(data-gostos); position:absolute; inset:0; display:grid; place-items:center; background:rgba(0,0,0,.35); color:#fff; font:700 16px Arial, sans-serif}
+  .p1{background:var(--verde); color:#f3ece0}
+  .p2{background:#e8d9bf; color:#3a2f22}
+  .p3{background:var(--terra); color:#fff3ee}
+  .p4{background:#2f2b28; color:#efe6d6}
+  .p5{background:#d9e0d6; color:#233e38}
+  .p6{background:#f1e7d3; color:#7a3a33}
+  .vazio{background:repeating-linear-gradient(45deg,#f2eee6,#f2eee6 8px,#ece6db 8px,#ece6db 16px); color:var(--cinza); cursor:default; align-items:center; justify-content:center; text-align:center; font-family:Arial, sans-serif; font-size:11px; line-height:1.4}
+  .marcados{padding:36px 24px; text-align:center; color:var(--cinza); font-size:14px; line-height:1.6; display:none}
+  .marcados b{display:block; color:var(--tinta); font-size:16px; margin-bottom:6px}
+
+  /* Publicação aberta */
+  .modal{position:fixed; inset:0; background:rgba(20,18,16,.55); display:none; align-items:flex-start; justify-content:center; padding:20px 10px; overflow-y:auto; z-index:10}
+  .modal.aberto{display:flex}
+  .cartao{width:100%; max-width:560px; background:var(--fundo); border-radius:16px; overflow:hidden}
+  .c-topo{display:flex; align-items:center; gap:10px; padding:12px 14px; border-bottom:1px solid var(--linha); font-weight:700; font-size:14px}
+  .c-topo .mini{width:32px; height:32px; border-radius:50%; overflow:hidden; background:#efe6d6}
+  .c-topo .mini svg{width:100%; height:100%}
+  .c-topo small{display:block; font-weight:400; color:var(--cinza); font-size:12px}
+  .c-topo .fechar{margin-left:auto; border:0; background:none; font-size:26px; line-height:1; cursor:pointer; color:var(--tinta)}
+  .poema{padding:26px 28px; font-family:Lora, Georgia, serif; font-size:16.5px; line-height:1.65; white-space:pre-line}
+  .poema h2{font-family:"Playfair Display", Georgia, serif; font-style:italic; font-weight:400; font-size:26px; margin:0 0 14px; white-space:normal}
+  .acoes{display:flex; gap:16px; padding:4px 16px 0; font-size:24px}
+  .acoes button{border:0; background:none; font-size:24px; cursor:pointer; padding:0; line-height:1}
+  .acoes .gosto.sim{color:#d43c3c}
+  .gostos{padding:6px 16px 0; font-weight:700; font-size:14px}
+  .legenda{padding:6px 16px 0; font-size:14px; line-height:1.5}
+  .comentarios{padding:8px 16px 4px; font-size:14px; line-height:1.5}
+  .comentarios p{margin:6px 0}
+  .comentarios .misterio{color:var(--cinza); font-style:italic}
+  .analise{display:block; margin:12px 16px 18px; padding:11px 14px; border:1px solid var(--verde); border-radius:10px; text-align:center; font-weight:700; font-size:13px; color:var(--verde); text-decoration:none; letter-spacing:.3px}
+  .analise:hover{background:var(--verde); color:#fff}
+  .nota{max-width:620px; margin:14px auto 0; text-align:center; font-size:12.5px; color:#7d776c; line-height:1.5; font-family:Lora, Georgia, serif; font-style:italic}
+
+  .destaques{align-items:flex-start}
+  .dest{display:flex; flex-direction:column; align-items:center; justify-content:flex-start; line-height:1.25}
+  .dest i{flex:0 0 auto}
+  .seguido{padding:0 20px 14px; font-size:13.5px; color:var(--cinza)}
+  .seguido b{color:var(--tinta)}
+  html.emb{background:transparent} html.emb body{padding:0}
+  html.emb .tel{box-shadow:none}
+  html.emb body{position:relative}
+  html.emb .modal{position:absolute; top:0; left:0; right:0; bottom:0; padding-top:var(--y,20px); overflow:visible}
+</style>
+</head>
+<body>
+<div class="tel">
+  <div class="barra">
+    <span class="nome">antero.dequental <span class="verif" title="Verificado">✓</span></span>
+    <small>Ponta Delgada, 1891</small>
+  </div>
+
+  <div class="cab">
+    <div class="avatar" aria-hidden="true">
+      <svg viewBox="0 0 100 100">
+        <rect width="100" height="100" fill="#e9e2d2"/>
+        <path d="M18 100 C20 76 33 68 50 68 C67 68 80 76 82 100 Z" fill="#2b2a33"/>
+        <path d="M45 66 L50 76 L55 66 Z" fill="#f4f0e8"/>
+        <ellipse cx="50" cy="42" rx="15" ry="18" fill="#ebcfb2"/>
+        <path d="M34 40 C33 22 45 18 51 18 C61 18 68 25 66 40 C64 32 58 28 50 28 C42 28 37 32 34 40 Z" fill="#4a2e1f"/>
+        <path d="M35 46 C35 62 40 76 50 80 C60 76 65 62 65 46 C62 52 58 56 50 56 C42 56 38 52 35 46 Z" fill="#7a4428"/>
+        <path d="M43 52 C46 50 54 50 57 52 C54 54 46 54 43 52 Z" fill="#5a3220"/>
+        <circle cx="44" cy="42" r="1.6" fill="#1d1a17"/><circle cx="56" cy="42" r="1.6" fill="#1d1a17"/>
+        <path d="M40 37.5 L47 36.5 M53 36.5 L60 37.5" stroke="#4a2e1f" stroke-width="1.6"/>
+      </svg>
+    </div>
+    <div class="numeros">
+      <div><b>3</b><span>publicações</span></div>
+      <div><b id="seg">1 891</b><span>seguidores</span></div>
+      <div><b>0</b><span>a seguir</span></div>
+    </div>
+  </div>
+
+  <div class="bio">
+    <b>Antero de Quental</b>
+    <span class="cat">Poeta e pensador · Ponta Delgada, 1842–1891</span><br>
+    Sonetos, revolução e muitas perguntas sem resposta.<br>
+    Questão Coimbrã ⚔️ · Conferências do Casino 🎙️<br>
+    📍 Coimbra · Lisboa · Ponta Delgada<br>
+    <a href="https://www.leramargem.com/search/label/Antero%20de%20Quental" target="_blank" rel="noopener">leramargem.com/antero-de-quental</a>
+  </div>
+
+  <div class="seguido">Seguido por <b>antonia.mancha</b> e outras 1 890 pessoas</div>
+  <div class="botoes">
+    <button class="seguir" id="seguir" type="button">Seguir</button>
+    <button type="button" id="msg">Mensagem</button>
+    <button type="button" id="partilhar">Partilhar</button>
+  </div>
+
+  <div class="destaques" aria-label="Temas">
+    <button class="dest" type="button" data-abrir="palacio"><i>S</i>Sonho</button>
+    <button class="dest" type="button" data-abrir="poeta"><i>R</i>Revolução</button>
+    <button class="dest" type="button" data-abrir="despondency"><i>D</i>Desalento</button>
+    <button class="dest" type="button" data-abrir="palacio"><i>I</i>Ideal</button>
+  </div>
+
+  <div class="abas">
+    <button class="ativa" type="button" data-aba="grelha">Publicações</button>
+    <button type="button" data-aba="marcados">Marcado em</button>
+  </div>
+
+  <div class="grelha" id="grelha">
+    <button class="post p1" type="button" data-abrir="palacio" data-gostos="3 120"><span class="verso">Sonho que sou um cavaleiro andante.</span><span class="tit">O Palácio da Ventura</span></button>
+    <button class="post p2" type="button" data-abrir="poeta" data-gostos="2 410"><span class="verso">Acorda! é tempo!</span><span class="tit">A um Poeta</span></button>
+    <button class="post p3" type="button" data-abrir="despondency" data-gostos="2 876"><span class="verso">Deixá-la ir, a ave, a quem roubaram ninho e filhos e tudo…</span><span class="tit">Despondency</span></button>
+  </div>
+  <div class="marcados" id="marcados">
+    <b>Marcado numa polémica.</b>Um tal senhor Castilho anda a falar de mim desde 1865. A Questão Coimbrã ainda não acabou nos comentários.
+  </div>
+</div>
+<p class="nota">Perfil imaginado para fins pedagógicos, a partir de sonetos de Antero de Quental (domínio público). Na Margem, cada poema tem a sua análise completa.</p>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Publicação">
+  <div class="cartao">
+    <div class="c-topo">
+      <span class="mini" id="mini"></span>
+      <span>antero.dequental<small id="m-local">Lisboa</small></span>
+      <button class="fechar" type="button" id="fechar" aria-label="Fechar">×</button>
+    </div>
+    <div class="poema" id="m-poema"></div>
+    <div class="acoes">
+      <button class="gosto" type="button" id="m-gosto" aria-label="Gosto">♡</button>
+      <button type="button" aria-label="Comentar">💬</button>
+      <button type="button" aria-label="Guardar">🔖</button>
+    </div>
+    <div class="gostos" id="m-gostos"></div>
+    <div class="legenda" id="m-legenda"></div>
+    <div class="comentarios" id="m-coment"></div>
+    <a class="analise" id="m-analise" href="#" target="_blank" rel="noopener">Ler a análise completa na Margem →</a>
+  </div>
+</div>
+
+<script>
+var POSTS = {
+ "palacio": {
+  "titulo": "O Palácio da Ventura",
+  "local": "Algures num deserto",
+  "gostos": 3120,
+  "poema": "Sonho que sou um cavaleiro andante.\nPor desertos, por sóis, por noite escura,\nPaladino do amor, busco anelante\nO palácio encantado da Ventura!\n\nMas já desmaio, exausto e vacilante,\nQuebrada a espada já, rota a armadura...\nE eis que súbito o avisto, fulgurante\nNa sua pompa e aérea formosura!\n\nCom grandes golpes bato à porta e brado:\nEu sou o Vagabundo, o Deserdado...\nAbri-vos, portas d'ouro, ante meus ais!\n\nAbrem-se as portas d'ouro, com fragor...\nMas dentro encontro só, cheio de dor,\nSilêncio e escuridão — e nada mais!",
+  "legenda": "Viagem de sonho, final inesperado. Não recomendo. 0/5 ⭐ #desilusão #ideal",
+  "coment": [
+   [
+    "leitor.atento",
+    "Pensei que no fim ia haver uma festa 😭"
+   ],
+   [
+    "antero.dequental",
+    "Eu também. Daí o soneto."
+   ],
+   [
+    "porta_d_ouro",
+    "Abri, como pediste. Não reclames."
+   ]
+  ],
+  "link": "https://www.leramargem.com/search/label/O%20Pal%C3%A1cio%20da%20Ventura"
+ },
+ "poeta": {
+  "titulo": "A um Poeta",
+  "local": "Coimbra",
+  "gostos": 2410,
+  "poema": "Tu que dormes, espírito sereno,\nPosto à sombra dos cedros seculares,\nComo um levita à sombra dos altares,\nLonge da luta e do fragor terreno,\n\nAcorda! é tempo! O sol, já alto e pleno,\nAfugentou as larvas tumulares...\nPara surgir do seio desses mares,\nUm mundo novo espera só um aceno...\n\nEscuta! é a grande voz das multidões!\nSão teus irmãos, que se erguem! são canções...\nMas de guerra... e são vozes de rebate!\n\nErgue-te, pois, soldado do Futuro,\nE dos raios de luz do sonho puro,\nSonhador, faze espada de combate!",
+  "legenda": "Recado para os poetas que só escrevem sobre o luar. A poesia também é luta. ✊ #missãodopoeta",
+  "coment": [
+   [
+    "aluna_do_11",
+    "Isto é o despertador mais poético de sempre ⏰"
+   ],
+   [
+    "antero.dequental",
+    "E serve para acordar o mundo, não só o poeta."
+   ],
+   [
+    "poeta_ultrarromântico",
+    "Estava tão bem a dormir à sombra do cedro..."
+   ]
+  ],
+  "link": "https://www.leramargem.com/search/label/A%20um%20Poeta"
+ },
+ "despondency": {
+  "titulo": "Despondency",
+  "local": "Ponta Delgada",
+  "gostos": 2876,
+  "poema": "Deixá-la ir, a ave, a quem roubaram\nNinho e filhos e tudo, sem piedade...\nQue a leve o ar sem fim da soledade\nOnde as asas partidas a levaram...\n\nDeixá-la ir, a vela, que arrojaram\nOs tufões pelo mar, na escuridade,\nQuando a noite surgiu da imensidade,\nQuando os ventos do Sul se levantaram...\n\nDeixá-la ir, a alma lastimosa,\nQue perdeu fé e paz e confiança,\nÀ morte queda, à morte silenciosa...\n\nDeixá-la ir, a nota desprendida\nDum canto extremo... e a última esperança...\nE a vida... e o amor... deixá-la ir, a vida!",
+  "legenda": "Hoje não estou para grandes ideais. 🌫️ #desalento",
+  "coment": [
+   [
+    "leitor.atento",
+    "Repara: «Deixá-la ir» repete-se em todas as estrofes. Anáfora!"
+   ],
+   [
+    "antero.dequental",
+    "E cada vez dói mais."
+   ],
+   [
+    "professora_de_ingles",
+    "Despondency = desânimo. De nada 😉"
+   ]
+  ],
+  "link": "https://www.leramargem.com/search/label/Despondency"
+ }
+};
+
+var AVATAR = document.querySelector('.avatar svg').outerHTML;
+document.getElementById('mini').innerHTML = AVATAR;
+var gostados = {};
+var atual = null;
+
+function fmt(n){ return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
+function el(tag, cls, txt){ var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+
+function abrir(id, y){
+  var p = POSTS[id]; if (!p) return; atual = id;
+  document.getElementById('modal').style.setProperty('--y', Math.max(20, (y || 0) - 160) + 'px');
+  var poema = document.getElementById('m-poema');
+  poema.innerHTML = ''; poema.appendChild(el('h2', '', p.titulo)); poema.appendChild(document.createTextNode(p.poema));
+  document.getElementById('m-local').textContent = p.local;
+  atualizarGosto();
+  var leg = document.getElementById('m-legenda'); leg.innerHTML = '';
+  leg.appendChild(el('b', '', 'antero.dequental ')); leg.appendChild(document.createTextNode(p.legenda));
+  var c = document.getElementById('m-coment'); c.innerHTML = '';
+  p.coment.forEach(function (k) { var l = el('p'); l.appendChild(el('b', '', k[0] + ' ')); l.appendChild(document.createTextNode(k[1])); c.appendChild(l); });
+  var m = el('p', 'misterio', "O utilizador castilho_oficial tentou comentar, mas foi bloqueado depois da Questão Coimbrã.");
+  c.appendChild(m);
+  document.getElementById('m-analise').href = p.link;
+  document.getElementById('modal').classList.add('aberto');
+  altura();
+}
+function atualizarGosto(){
+  var p = POSTS[atual], sim = !!gostados[atual];
+  var b = document.getElementById('m-gosto'); b.textContent = sim ? '♥' : '♡'; b.classList.toggle('sim', sim);
+  document.getElementById('m-gostos').textContent = fmt(p.gostos + (sim ? 1 : 0)) + ' gostos';
+}
+document.querySelectorAll('[data-abrir]').forEach(function (b) { b.addEventListener('click', function (e) { abrir(b.getAttribute('data-abrir'), e.pageY); }); });
+document.getElementById('m-gosto').addEventListener('click', function () { gostados[atual] = !gostados[atual]; atualizarGosto(); });
+document.getElementById('fechar').addEventListener('click', function () { document.getElementById('modal').classList.remove('aberto'); altura(); });
+document.getElementById('modal').addEventListener('click', function (e) { if (e.target.id === 'modal') { e.currentTarget.classList.remove('aberto'); altura(); } });
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') document.getElementById('modal').classList.remove('aberto'); });
+
+var seguindo = false;
+document.getElementById('seguir').addEventListener('click', function () {
+  seguindo = !seguindo;
+  this.textContent = seguindo ? 'A seguir' : 'Seguir'; this.classList.toggle('ja', seguindo);
+  document.getElementById('seg').textContent = seguindo ? '1 892' : '1 891';
+});
+document.getElementById('msg').addEventListener('click', function () { this.textContent = 'Indisponível'; var b = this; setTimeout(function () { b.textContent = 'Mensagem'; }, 1800); });
+document.getElementById('partilhar').addEventListener('click', function () { this.textContent = 'Partilhado!'; var b = this; setTimeout(function () { b.textContent = 'Partilhar'; }, 1800); });
+document.querySelector('[data-misterio]').addEventListener('click', function () { mostrarAba('marcados'); });
+function mostrarAba(n){
+  document.querySelectorAll('.abas button').forEach(function (b) { b.classList.toggle('ativa', b.getAttribute('data-aba') === n); });
+  document.getElementById('grelha').style.display = n === 'grelha' ? '' : 'none';
+  document.getElementById('marcados').style.display = n === 'marcados' ? 'block' : 'none';
+  altura();
+}
+document.querySelectorAll('.abas button').forEach(function (b) { b.addEventListener('click', function () { mostrarAba(b.getAttribute('data-aba')); }); });
+
+/* Ajuste de altura quando estiver dentro do Blogger */
+if (window !== window.top) document.documentElement.classList.add('emb');
+function altura(){
+  try {
+    var modal = document.getElementById('modal');
+    var h = document.querySelector('.nota').getBoundingClientRect().bottom + window.scrollY + 8;
+    if (modal.classList.contains('aberto')) h = Math.max(h, modal.querySelector('.cartao').getBoundingClientRect().bottom + window.scrollY + 30);
+    parent.postMessage({ mrvAltura: Math.ceil(h) }, '*');
+  } catch (e) {}
+}
+window.addEventListener('load', function () { altura(); setTimeout(altura, 800); setTimeout(altura, 2000); });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(altura);
+window.addEventListener('resize', altura);
+</script>
+</body>
+</html>
