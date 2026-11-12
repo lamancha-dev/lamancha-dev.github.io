@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Descarregar a PAUTA</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/pauta/icon-192.png">
+<style>
+:root{--verde:#1f5f46;--verde2:#e7f2ec;--laranja:#c2410c;--fundo:#f4f6f3;--tinta:#1c2b24;--cinza:#5b6b63}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fundo);color:var(--tinta);font:17px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{background:var(--verde);color:#fff;padding:22px 20px;text-align:center}
+header img{width:56px;height:56px;border-radius:12px;vertical-align:middle;margin-right:10px}
+header b{font:600 26px/1 Lora,Georgia,serif;vertical-align:middle}
+main{max-width:640px;margin:0 auto;padding:28px 20px 60px}
+h1{font:600 30px/1.2 Lora,Georgia,serif;margin:6px 0 8px;text-align:center}
+.sub{text-align:center;color:var(--cinza);margin:0 0 26px}
+.passo{display:flex;gap:16px;background:#fff;border:1px solid #dfe7e2;border-radius:14px;padding:20px;margin:0 0 14px}
+.n{flex:none;width:38px;height:38px;border-radius:50%;background:var(--laranja);color:#fff;font-weight:700;font-size:19px;display:grid;place-items:center}
+.passo h2{margin:4px 0 6px;font-size:19px}
+.passo p{margin:0;color:var(--cinza)}
+.big{display:block;text-align:center;background:var(--laranja);color:#fff;text-decoration:none;font-weight:700;font-size:20px;padding:16px 20px;border-radius:12px;margin:14px 0 8px}
+.big:hover{filter:brightness(1.08)}
+.outros{font-size:14.5px;color:var(--cinza);text-align:center}
+.outros a{color:var(--verde)}
+.aviso{background:var(--verde2);border-radius:10px;padding:12px 14px;margin-top:12px;font-size:15px}
+.aviso b{color:var(--tinta)}
+code{background:var(--verde2);padding:1px 6px;border-radius:5px}
+footer{text-align:center;color:var(--cinza);font-size:14px;margin-top:30px}
+footer a{color:var(--verde)}
+</style>
+</head>
+<body>
+<header><img src="/pauta/icon-192.png" alt=""><b>PAUTA</b></header>
+<main>
+  <h1>Obrigada pela sua compra!</h1>
+  <p class="sub">Em 3 passos fica com a PAUTA a funcionar.</p>
+
+  <div class="passo"><div class="n">1</div><div style="flex:1">
+    <h2>Descarregue a PAUTA</h2>
+    <a class="big" id="botao" href="/pauta/PAUTA.exe">Descarregar a PAUTA</a>
+    <div class="outros" id="outros"></div>
+    <div class="aviso" id="avisoWin"><b>Apareceu um aviso azul «O Windows protegeu o seu PC»?</b> É normal em programas novos. Carregue em <b>«Mais informações»</b> e depois em <b>«Executar mesmo assim»</b>.</div>
+    <div class="aviso" id="avisoMac" hidden><b>No Mac:</b> abra o ficheiro descarregado para o descompactar. Na primeira vez, clique na PAUTA com o <b>botão direito</b> e escolha <b>«Abrir»</b>.</div>
+  </div></div>
+
+  <div class="passo"><div class="n">2</div><div>
+    <h2>Abra a PAUTA e ative-a</h2>
+    <p>Carregue em <b>«Começar do zero»</b>. Quando aparecer «Ative a sua PAUTA», cole a <b>chave de licença</b> que recebeu por e-mail (começa por <code>PAUTA1.</code>) e carregue em <b>«Ativar»</b>.</p>
+  </div></div>
+
+  <div class="passo"><div class="n">3</div><div>
+    <h2>Crie a sua palavra-passe</h2>
+    <p>Protege os dados dos seus alunos. Depois é só criar a primeira turma. Está pronta!</p>
+  </div></div>
+
+  <footer>Alguma dúvida? Escreva para <a href="mailto:pautavaliacao@gmail.com">pautavaliacao@gmail.com</a></footer>
+</main>
+<script>
+(function(){
+  var ua=navigator.userAgent||'', mac=/Macintosh|Mac OS X/.test(ua)&&!/iPhone|iPad/.test(ua), mobil=/Android|iPhone|iPad|Mobile/.test(ua);
+  var b=document.getElementById('botao'), o=document.getElementById('outros');
+  var win='<a href="/pauta/PAUTA.exe">Windows</a>', mc='<a href="/pauta/PAUTA-Mac.zip">Mac</a>', web='<a href="/pauta/">usar no navegador, sem instalar</a>';
+  if(mac){b.href='/pauta/PAUTA-Mac.zip';b.textContent='Descarregar a PAUTA para Mac';o.innerHTML='Outras opções: '+win+' · '+web;
+    document.getElementById('avisoWin').hidden=true;document.getElementById('avisoMac').hidden=false;}
+  else if(mobil){b.href='/pauta/';b.textContent='Abrir a PAUTA';o.innerHTML='No computador pode descarregar para '+win+' ou '+mc+'.';
+    document.getElementById('avisoWin').hidden=true;}
+  else{b.textContent='Descarregar a PAUTA para Windows';o.innerHTML='Outras opções: '+mc+' · '+web;}
+})();
+</script>
+</body>
+</html>
