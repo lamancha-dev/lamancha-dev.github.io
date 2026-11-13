@@ -379,13 +379,19 @@ a{color:#0B4D3E}a:hover{color:#0F5F4C}
 <span style="font-size: 19px; font-weight: 800; letter-spacing: 0.03em; color: #0B4D3E">IBAN PT50 0045 6313 4029 1645 5826 1</span>
 <button type="button" id="copiarIban" style="min-height: 40px; padding: 0 16px; border-radius: 10px; border: 2px solid #0B4D3E; background: #FFFFFF; color: #0B4D3E; font: inherit; font-weight: 700; cursor: pointer">Copiar IBAN</button>
 </div>
-<p style="margin: 0; color: #2F6F5E">Na descrição do pagamento escreva <strong>PAUTA</strong> e o seu nome. Assim que o pagamento chegar, recebe a sua chave de licença por e-mail no prazo de 24 horas.</p>
+<div style="display: flex; flex-direction: column; gap: 10px; background: #FFF1E6; border: 2px solid #C2410C; border-radius: 12px; padding: 16px 18px">
+<p style="margin: 0; font-weight: 800; color: #9A3412; font-size: 17px">Importante: identifique o seu pagamento</p>
+<p style="margin: 0; color: #9A3412">Na <strong>descrição</strong> (ou «mensagem») do MB Way ou da transferência, escreva exatamente:</p>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px"><span id="refPagamento" style="font-size: 20px; font-weight: 800; color: #0B4D3E; background: #FFFFFF; border-radius: 8px; padding: 8px 12px">PAUTA</span><button type="button" id="copiarRef" style="min-height: 40px; padding: 0 16px; border-radius: 10px; border: 2px solid #0B4D3E; background: #FFFFFF; color: #0B4D3E; font: inherit; font-weight: 700; cursor: pointer">Copiar</button></div>
+<p style="margin: 0; color: #9A3412">Sem esta identificação não conseguimos saber de quem é o pagamento. Se se esquecer, envie o comprovativo para <strong>pautavaliacao@gmail.com</strong>.</p>
+</div>
+<p style="margin: 0; color: #2F6F5E">Assim que o pagamento chegar, recebe a sua chave de licença por e-mail no prazo de 24 horas.</p>
 <p style="margin: 0; color: #2F6F5E">Também lhe enviámos estes dados por e-mail, de <strong>pautavaliacao@gmail.com</strong>.</p>
 <p style="margin: 0; padding: 12px 14px; border-radius: 10px; background: #FFF1E6; color: #9A3412; font-weight: 600">Não vê o e-mail na caixa de entrada? Procure na pasta <strong>Spam</strong> e carregue em «Não é spam», para receber também a sua chave de licença sem problemas.</p>
 </div>
 <script>
-[['copiarMbway','962340896','Copiar número'],['copiarIban','PT50004563134029164558261','Copiar IBAN']].forEach(function(c){(function(){var b=document.getElementById(c[0]);if(!b)return;var n=c[1];
-b.addEventListener('click',function(){function ok(){b.textContent='Copiado!';setTimeout(function(){b.textContent=c[2]},2500)}
+[['copiarMbway','962340896','Copiar número'],['copiarIban','PT50004563134029164558261','Copiar IBAN'],['copiarRef',null,'Copiar']].forEach(function(c){(function(){var b=document.getElementById(c[0]);if(!b)return;var n=c[1];
+b.addEventListener('click',function(){if(c[1]===null)n=document.getElementById('refPagamento').textContent;function ok(){b.textContent='Copiado!';setTimeout(function(){b.textContent=c[2]},2500)}
 if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(n).then(ok,fb)}else{fb()}
 function fb(){var t=document.createElement('textarea');t.value=n;document.body.appendChild(t);t.select();try{document.execCommand('copy');ok()}catch(e){}document.body.removeChild(t)}});})();});
 </script>
@@ -456,7 +462,7 @@ function fallback(){var t=document.createElement('textarea');t.value=mail;docume
 (function(){var f=document.getElementById('pedido');if(!f)return;var b=document.getElementById('pedidoBtn');
 f.addEventListener('submit',function(e){e.preventDefault();b.disabled=true;b.textContent='A enviar…';document.getElementById('pedidoErro').style.display='none';
 fetch('https://docs.google.com/forms/d/e/1FAIpQLScinN2dTkoj447qbkRFV2r0eWv0XGBF4dziogN0_nvCcc_eLw/formResponse',{method:'POST',mode:'no-cors',body:(function(){var d=new URLSearchParams(new FormData(f)),n=(document.getElementById('nifFatura').value||'').replace(/\D/g,''),e=d.get('entry.2140670547')||'';if(n){d.set('entry.2140670547','NIF '+n+(e?' · '+e:''))}return d})()})
-.then(function(){f.style.display='none';document.getElementById('pedidoOk').style.display='flex';document.getElementById('pedidoOk').scrollIntoView({behavior:'smooth',block:'center'});})
+.then(function(){var nm=(f.querySelector('[name="entry.1835743717"]').value||'').trim();var rf=document.getElementById('refPagamento');if(rf)rf.textContent='PAUTA '+nm;f.style.display='none';document.getElementById('pedidoOk').style.display='flex';document.getElementById('pedidoOk').scrollIntoView({behavior:'smooth',block:'center'});})
 .catch(function(){b.disabled=false;b.textContent='Enviar pedido de compra';document.getElementById('pedidoErro').style.display='block';});});})();
 </script>
 <div id="barraCompra" class="esconde" role="region" aria-label="Comprar a PAUTA"><span style="font-weight: 700">PAUTA · <span style="color: #FFB48A">19 € para sempre</span></span><a href="#comprar" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 12px; background: #C2410C; color: #FFFFFF; font-weight: 800; text-decoration: none">Comprar</a></div>
