@@ -356,7 +356,7 @@ a{color:#0B4D3E}a:hover{color:#0F5F4C}
 <div style="flex: 1 1 440px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
 <h2 style="margin: 0; font-family: Lora, Georgia, serif; font-size: 40px; line-height: 1.15; font-weight: 700">Como comprar</h2>
 <div style="display: flex; gap: 14px; align-items: flex-start"><span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: #C2410C; color: #FFFFFF; font-weight: 800; display: flex; align-items: center; justify-content: center">1</span><p style="margin: 4px 0 0">Preencha o formulário em baixo com o nome que quer na licença e o seu e-mail.</p></div>
-<div style="display: flex; gap: 14px; align-items: flex-start"><span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: #C2410C; color: #FFFFFF; font-weight: 800; display: flex; align-items: center; justify-content: center">2</span><p style="margin: 4px 0 0">Recebe logo por e-mail os dados para pagar 19 € por MB Way ou por transferência.</p></div>
+<div style="display: flex; gap: 14px; align-items: flex-start"><span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: #C2410C; color: #FFFFFF; font-weight: 800; display: flex; align-items: center; justify-content: center">2</span><p style="margin: 4px 0 0">Vê logo no ecrã os dados para pagar 19 € por MB Way ou por transferência (e recebe-os também por e-mail).</p></div>
 <div style="display: flex; gap: 14px; align-items: flex-start"><span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: #C2410C; color: #FFFFFF; font-weight: 800; display: flex; align-items: center; justify-content: center">3</span><p style="margin: 4px 0 0">Depois do pagamento, recebe a sua chave de licença e as instruções no prazo de 24 horas.</p></div>
 <form id="pedido" style="display: flex; flex-direction: column; gap: 14px; background: #F4F6F3; border-radius: 16px; padding: 24px; margin-top: 4px">
 <label style="display: flex; flex-direction: column; gap: 6px; font-weight: 700; font-size: 15px">Nome que quer na licença *<input name="entry.1835743717" required autocomplete="name" style="min-height: 48px; padding: 10px 14px; border-radius: 10px; border: 2px solid #DFE6E2; background: #FFFFFF; color: #0B4D3E; font: inherit; font-weight: 400; font-size: 16px"></label>
@@ -365,11 +365,29 @@ a{color:#0B4D3E}a:hover{color:#0F5F4C}
 <button type="submit" id="pedidoBtn" style="align-self: flex-start; min-height: 52px; padding: 0 28px; border-radius: 12px; border: 0; background: #C2410C; color: #FFFFFF; font: inherit; font-weight: 800; font-size: 18px; cursor: pointer; box-shadow: 0 10px 24px rgba(232, 89, 12, 0.3)">Enviar pedido de compra</button>
 <p style="margin: 0; font-size: 13px; color: #5D6F68">Os seus dados servem apenas para tratar da compra.</p>
 </form>
-<div id="pedidoOk" style="background: #E1EFE8; border-radius: 16px; padding: 24px; display: none; flex-direction: column; gap: 8px">
+<div id="pedidoOk" style="background: #E1EFE8; border-radius: 16px; padding: 24px; display: none; flex-direction: column; gap: 12px">
 <p style="margin: 0; font-family: Lora, Georgia, serif; font-size: 26px; font-weight: 700">Pedido recebido. Obrigada!</p>
-<p style="margin: 0; color: #2F6F5E">Dentro de momentos recebe um e-mail de <strong>PAUTA</strong> (pautavaliacao@gmail.com) com as instruções para pagar.</p>
-<p style="margin: 0; padding: 12px 14px; border-radius: 10px; background: #FFF1E6; color: #9A3412; font-weight: 600">Não o vê na caixa de entrada? Procure na pasta <strong>Spam</strong> e carregue em «Não é spam», para receber também a sua chave de licença sem problemas.</p>
+<p style="margin: 0; color: #2F6F5E; font-size: 17px">Para concluir a compra, pague <strong>19 €</strong> de uma destas formas:</p>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; background: #FFFFFF; border-radius: 12px; padding: 16px 18px">
+<span style="font-weight: 700; color: #0B4D3E">MB Way</span>
+<span id="mbwayNum" style="font-size: 26px; font-weight: 800; letter-spacing: 0.04em; color: #0B4D3E">962 340 896</span>
+<button type="button" id="copiarMbway" style="min-height: 40px; padding: 0 16px; border-radius: 10px; border: 2px solid #0B4D3E; background: #FFFFFF; color: #0B4D3E; font: inherit; font-weight: 700; cursor: pointer">Copiar número</button>
 </div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; background: #FFFFFF; border-radius: 12px; padding: 16px 18px">
+<span style="font-weight: 700; color: #0B4D3E">Transferência</span>
+<span style="font-size: 19px; font-weight: 800; letter-spacing: 0.03em; color: #0B4D3E">IBAN PT50 0045 6313 4029 1645 5826 1</span>
+<button type="button" id="copiarIban" style="min-height: 40px; padding: 0 16px; border-radius: 10px; border: 2px solid #0B4D3E; background: #FFFFFF; color: #0B4D3E; font: inherit; font-weight: 700; cursor: pointer">Copiar IBAN</button>
+</div>
+<p style="margin: 0; color: #2F6F5E">Na descrição do pagamento escreva <strong>PAUTA</strong> e o seu nome. Assim que o pagamento chegar, recebe a sua chave de licença por e-mail no prazo de 24 horas.</p>
+<p style="margin: 0; color: #2F6F5E">Também lhe enviámos estes dados por e-mail, de <strong>pautavaliacao@gmail.com</strong>.</p>
+<p style="margin: 0; padding: 12px 14px; border-radius: 10px; background: #FFF1E6; color: #9A3412; font-weight: 600">Não vê o e-mail na caixa de entrada? Procure na pasta <strong>Spam</strong> e carregue em «Não é spam», para receber também a sua chave de licença sem problemas.</p>
+</div>
+<script>
+[['copiarMbway','962340896','Copiar número'],['copiarIban','PT50004563134029164558261','Copiar IBAN']].forEach(function(c){(function(){var b=document.getElementById(c[0]);if(!b)return;var n=c[1];
+b.addEventListener('click',function(){function ok(){b.textContent='Copiado!';setTimeout(function(){b.textContent=c[2]},2500)}
+if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(n).then(ok,fb)}else{fb()}
+function fb(){var t=document.createElement('textarea');t.value=n;document.body.appendChild(t);t.select();try{document.execCommand('copy');ok()}catch(e){}document.body.removeChild(t)}});})();});
+</script>
 <p id="pedidoErro" style="display: none; margin: 0; color: #B42318; font-weight: 700">Não foi possível enviar o pedido. Verifique a ligação à Internet ou escreva para pautavaliacao@gmail.com.</p>
 <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; font-size: 15px; color: #5D6F68"><span>Dúvidas? Escreva para <strong style="color: #0B4D3E">pautavaliacao@gmail.com</strong></span><button type="button" id="copiarEmail" style="min-height: 44px; padding: 0 16px; border-radius: 10px; border: 2px solid #0B4D3E; background: #FFFFFF; color: #0B4D3E; font: inherit; font-weight: 700; cursor: pointer">Copiar endereço</button></div>
 </div>
