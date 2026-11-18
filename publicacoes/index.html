@@ -141,8 +141,8 @@
   <section>
     <h2>6. Vídeo</h2>
     <p class="note" style="margin-top:0">O vídeo usa os mesmos textos e cores: as frases vão aparecendo uma a uma. Para Reels e histórias, escolha o formato «Story».</p>
-    <label class="f" for="hold">Tempo parado no fim: <span id="holdLbl"></span></label>
-    <input type="range" id="hold" min="2" max="8" step="1">
+    <label class="f">Duração do vídeo</label>
+    <div class="chips" id="durBox"></div>
     <div class="row">
       <button class="btn sec" id="btnPlay">▶ Ver animação</button>
       <button class="btn pri" id="btnVideo2">🎬 Criar vídeo</button>
@@ -264,7 +264,7 @@ const BRANDS = {
 /* ===================== Estado guardado ===================== */
 const KEY = 'publicacoes-insta-v1';
 let st = {brand:'margem', tpl:{margem:'ouvido', pauta:'dica'}, fmt:'retrato',
-          variant:{margem:'papel', pauta:'verde'}, scale:100, hold:3, data:{}, logo:{}, caps:{}};
+          variant:{margem:'papel', pauta:'verde'}, scale:100, hold:3, vdur:15, data:{}, logo:{}, caps:{}};
 try{ const s = JSON.parse(localStorage.getItem(KEY)||'null'); if(s) st = Object.assign(st, s); }catch(e){}
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} }
 
@@ -343,6 +343,10 @@ function render(){
   seqCursor=0.35;
   const d=data(), t=tpl(), v=variant(), k=st.scale/100;
   ctx.globalAlpha=1;
+  if(ANIM && ANIM.D){
+    const z=1+0.06*Math.min(1, ANIM.real/ANIM.D);
+    ctx.setTransform(z,0,0,z, W/2*(1-z), H/2*(1-z));
+  }
   if(st.brand==='margem') drawMargem(W,H,d,t,v,k); else drawPauta(W,H,d,t,v,k);
   return seqCursor;
 }
@@ -525,7 +529,7 @@ function buildAll(){
   buildFields();
   if(typeof atualizarSugestao==='function') atualizarSugestao();
   $('scale').value = st.scale;
-  $('hold').value = st.hold; $('holdLbl').textContent = st.hold+' s';
+  $('durBox').innerHTML = [8,15,20,30,45].map(n=>`<button class="chip ${n===(+st.vdur||15)?'on':''}" data-dur="${n}">${n} s</button>`).join('');
   const lg=st.logo[st.brand];
   $('logoPrev').classList.toggle('hidden', !lg); $('logoDel').classList.toggle('hidden', !lg);
   if(lg) $('logoPrev').src=lg;
@@ -637,7 +641,13 @@ $('btnSave').onclick=()=>{
 
 // ===== vídeo =====
 let busy=false;
-function duracao(){ ANIM={t:1e9}; const fim=render(); ANIM=null; render(); return Math.min(24, Math.max(5, fim+0.8+(+st.hold||3))); }
+function duracao(){
+  ANIM={t:1e9}; const fim=render()+0.8; ANIM=null; render();
+  let D=+st.vdur||15;
+  const f=Math.max(1, Math.min(2.6, (D*0.55)/fim));   // ritmo mais lento em vídeos longos
+  if(fim*f+2>D) D=Math.ceil(fim*f+2);
+  return {D, f};
+}
 function botoes(on, txt){
   ['btnSave','btnVideo','btnVideo2','btnPlay'].forEach(id=>$(id).disabled=!on);
   $('btnVideo').textContent = txt || '🎬 Vídeo';
@@ -645,7 +655,7 @@ function botoes(on, txt){
 }
 async function animar(gravar){
   if(busy) return;
-  const dur=duracao();
+  const {D:dur, f:ritmo}=duracao();
   let rec=null, chunks=[], mime='', ext='webm', stream=null;
   if(gravar){
     if(!cv.captureStream || !window.MediaRecorder){ modal(`<p>Este navegador não consegue gravar vídeo.</p><p>Experimente abrir a aplicação no <b>Chrome</b> do telemóvel.</p><button class="btn pri" data-close style="width:100%">Fechar</button>`); return; }
@@ -659,12 +669,12 @@ async function animar(gravar){
     rec.ondataavailable=e=>{ if(e.data && e.data.size) chunks.push(e.data); };
   }
   busy=true;
-  ANIM={t:0}; render();
+  ANIM={t:0, real:0, D:dur}; render();
   if(rec) rec.start(250);
   const t0=performance.now();
   await new Promise(res=>{
     function frame(){
-      const t=(performance.now()-t0)/1000; ANIM={t}; render();
+      const t=(performance.now()-t0)/1000; ANIM={t:t/ritmo, real:t, D:dur}; render();
       if(gravar) botoes(false, `⏺ ${Math.min(Math.ceil(t),Math.ceil(dur))}/${Math.ceil(dur)} s`);
       else botoes(false, '▶ …');
       if(t<dur) requestAnimationFrame(frame); else res();
@@ -694,7 +704,7 @@ function guardarVideo(blob, ext){
 $('btnVideo').onclick=()=>animar(true);
 $('btnVideo2').onclick=()=>animar(true);
 $('btnPlay').onclick=()=>animar(false);
-$('hold').addEventListener('input', e=>{ st.hold=+e.target.value; $('holdLbl').textContent=st.hold+' s'; save(); });
+$('durBox').addEventListener('click', e=>{ const b=e.target.closest('[data-dur]'); if(!b) return; st.vdur=+b.dataset.dur; save(); buildAll(); });
 
 /* ===================== Instalação ===================== */
 let pedidoInstalar=null;
