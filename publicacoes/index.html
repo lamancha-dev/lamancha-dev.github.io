@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Publicações · a margem & PAUTA</title>
+<meta name="theme-color" content="#8B2E2E">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,500&family=Inter:wght@400;500;600&family=Montserrat:wght@500;700;800&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F3EE; --card:#FFFFFF; --ink:#1E1B18; --muted:#6D655C; --line:#E4DED5;
+    --accent:#8B2E2E; --accent-ink:#fff;
+  }
+  body.pauta{ --accent:#1F7A4D; }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);
+       -webkit-tap-highlight-color:transparent;padding-bottom:96px}
+  header{padding:18px 18px 6px}
+  header h1{font-family:"Playfair Display",serif;font-size:26px;margin:0;font-weight:700}
+  header p{margin:4px 0 0;color:var(--muted);font-size:14px}
+  .wrap{max-width:560px;margin:0 auto}
+  .brand{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 18px}
+  .brand button{border:2px solid var(--line);background:var(--card);border-radius:16px;padding:14px 8px;
+       font-size:17px;font-weight:600;color:var(--ink);cursor:pointer}
+  .brand button .sub{display:block;font-size:12px;font-weight:400;color:var(--muted);margin-top:2px}
+  .brand button.on{border-color:var(--accent);background:var(--accent);color:#fff}
+  .brand button.on .sub{color:rgba(255,255,255,.85)}
+  .preview{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 18px 10px;
+       border-bottom:1px solid var(--line);text-align:center}
+  .preview canvas{max-width:100%;max-height:36vh;height:auto;width:auto;border-radius:10px;
+       box-shadow:0 4px 18px rgba(0,0,0,.12);background:#ddd;vertical-align:top}
+  .preview .hint{font-size:12px;color:var(--muted);margin-top:6px}
+  section{background:var(--card);margin:12px 18px;border-radius:18px;padding:16px;border:1px solid var(--line)}
+  section h2{font-size:15px;margin:0 0 10px;font-weight:600}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:10px 14px;font-size:15px;
+       color:var(--ink);cursor:pointer;font-family:inherit}
+  .chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .chip small{opacity:.75;font-size:12px}
+  .swatches{display:flex;gap:12px;flex-wrap:wrap}
+  .sw{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;cursor:pointer;
+       font-size:13px;color:var(--ink);font-family:inherit;padding:0}
+  .sw span.dot{width:52px;height:52px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1.5px var(--line);
+       display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px}
+  .sw.on span.dot{box-shadow:0 0 0 3px var(--accent)}
+  label.f{display:block;font-size:14px;font-weight:600;margin:14px 0 6px}
+  label.f:first-of-type{margin-top:0}
+  input[type=text],textarea{width:100%;font:inherit;font-size:16px;padding:12px;border:1.5px solid var(--line);
+       border-radius:12px;background:#FCFBF9;color:var(--ink)}
+  textarea{min-height:96px;resize:vertical;line-height:1.4}
+  input:focus,textarea:focus{outline:none;border-color:var(--accent);background:#fff}
+  input[type=range]{width:100%;accent-color:var(--accent);height:32px}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .btn{border:0;border-radius:14px;padding:13px 16px;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit}
+  .btn.pri{background:var(--accent);color:#fff}
+  .btn.sec{background:#EFEAE3;color:var(--ink)}
+  .note{font-size:13px;color:var(--muted);margin:8px 0 0;line-height:1.4}
+  .bar{position:fixed;left:0;right:0;bottom:0;z-index:10;background:rgba(255,255,255,.96);
+       border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));
+       display:flex;gap:10px;justify-content:center}
+  .bar .btn{flex:1;max-width:190px;padding:15px 6px;font-size:15px;white-space:nowrap}
+  .btn:disabled{opacity:.55}
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:20;display:none;align-items:center;
+       justify-content:center;padding:18px}
+  .modal.show{display:flex}
+  .modal .box{background:#fff;border-radius:18px;padding:18px;max-width:480px;width:100%;max-height:92vh;overflow:auto;text-align:center}
+  .modal img{max-width:100%;max-height:58vh;border-radius:10px;margin:10px 0}
+  .modal p{margin:6px 0;line-height:1.45}
+  .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#1E1B18;color:#fff;
+       padding:11px 18px;border-radius:999px;font-size:15px;z-index:30;opacity:0;transition:opacity .25s;pointer-events:none;
+       max-width:90vw;text-align:center}
+  .toast.show{opacity:1}
+  .logoPrev{max-height:56px;max-width:160px;border-radius:6px;background:#eee;padding:4px;vertical-align:middle}
+  .hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Publicações</h1>
+    <p>Crie imagens e vídeos para o Instagram d'a margem e da PAUTA.</p>
+    <button class="btn pri hidden" id="btnInstall" style="margin-top:12px;width:100%">📲 Instalar no telemóvel</button>
+  </header>
+
+  <div class="brand" id="brandBox">
+    <button data-brand="margem">a margem<span class="sub">@leramargem</span></button>
+    <button data-brand="pauta">PAUTA<span class="sub">@pautavaliacao</span></button>
+  </div>
+
+  <div class="preview">
+    <canvas id="cv" width="1080" height="1350"></canvas>
+    <div class="hint">Pré-visualização: muda à medida que escreve</div>
+  </div>
+
+  <section>
+    <h2>1. Tipo de publicação</h2>
+    <div class="chips" id="tplBox"></div>
+  </section>
+
+  <section>
+    <h2>2. Formato</h2>
+    <div class="chips" id="fmtBox"></div>
+    <p class="note">«Retrato» é o que ocupa mais espaço no feed. «Story» é para as histórias.</p>
+  </section>
+
+  <section>
+    <h2>3. Cores</h2>
+    <div class="swatches" id="varBox"></div>
+  </section>
+
+  <section>
+    <h2>4. Textos</h2>
+    <div id="fieldsBox"></div>
+    <p class="note hidden" id="sugNote"></p>
+    <label class="f" for="scale">Tamanho das letras</label>
+    <input type="range" id="scale" min="70" max="125" step="5">
+    <div class="row">
+      <button class="btn pri" id="btnSug">💡 Sugerir texto</button>
+      <button class="btn sec" id="btnExample">Repor exemplo</button>
+      <button class="btn sec" id="btnClear">Apagar textos</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>5. Logótipo (opcional)</h2>
+    <p class="note" style="margin-top:0">Se escolher uma imagem do logótipo, aparece no fundo da publicação em vez do nome escrito. Fica guardado para a próxima vez.</p>
+    <div class="row" style="align-items:center">
+      <label class="btn sec" for="logoIn" style="display:inline-block">Escolher logótipo</label>
+      <input type="file" id="logoIn" accept="image/*" class="hidden">
+      <img id="logoPrev" class="logoPrev hidden" alt="Logótipo">
+      <button class="btn sec hidden" id="logoDel">Tirar</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>6. Vídeo</h2>
+    <p class="note" style="margin-top:0">O vídeo usa os mesmos textos e cores: as frases vão aparecendo uma a uma. Para Reels e histórias, escolha o formato «Story».</p>
+    <label class="f" for="hold">Tempo parado no fim: <span id="holdLbl"></span></label>
+    <input type="range" id="hold" min="2" max="8" step="1">
+    <div class="row">
+      <button class="btn sec" id="btnPlay">▶ Ver animação</button>
+      <button class="btn pri" id="btnVideo2">🎬 Criar vídeo</button>
+    </div>
+    <p class="note">Enquanto o vídeo está a ser gravado, deixe o telemóvel na aplicação (não mude de ecrã).</p>
+  </section>
+
+  <section>
+    <h2>7. Legenda para o Instagram</h2>
+    <textarea id="caption" style="min-height:170px"></textarea>
+    <div class="row">
+      <button class="btn sec" id="btnCapGen">Fazer nova legenda</button>
+      <button class="btn sec" id="btnCapCopy">Copiar legenda</button>
+    </div>
+    <p class="note">Pode mudar a legenda à vontade antes de a copiar.</p>
+  </section>
+</div>
+
+<div class="bar">
+  <button class="btn pri" id="btnSave">🖼️ Imagem</button>
+  <button class="btn pri" id="btnVideo">🎬 Vídeo</button>
+  <button class="btn sec" id="btnCopy2">📋 Legenda</button>
+</div>
+
+<div class="modal" id="modal"><div class="box" id="modalBox"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================== Configuração das marcas ===================== */
+const FORMATOS = [
+  {id:'quadrado', nome:'Quadrado', sub:'1:1', h:1080},
+  {id:'retrato',  nome:'Retrato',  sub:'4:5', h:1350},
+  {id:'story',    nome:'Story',    sub:'9:16', h:1920}
+];
+
+const BRANDS = {
+  margem: {
+    nome:'a margem', handle:'@leramargem', site:'leramargem.com',
+    variants:[
+      {id:'papel',   nome:'Papel',    bg:'#F4EFE6', ink:'#1F1B16', muted:'#6B6157', accent:'#8B2E2E', line:'rgba(31,27,22,.30)'},
+      {id:'tinta',   nome:'Tinta',    bg:'#1C1A17', ink:'#F4EFE6', muted:'#BDB2A3', accent:'#C9A15B', line:'rgba(244,239,230,.30)'},
+      {id:'bordeaux',nome:'Bordeaux', bg:'#6E2430', ink:'#F7EFE4', muted:'#E6D3C4', accent:'#E8C27A', line:'rgba(247,239,228,.38)'},
+      {id:'branco',  nome:'Branco',   bg:'#FFFFFF', ink:'#1F1B16', muted:'#6B6157', accent:'#8B2E2E', line:'rgba(31,27,22,.22)'},
+      {id:'areia',   nome:'Areia',    bg:'#E8DCC6', ink:'#2A2119', muted:'#6E5F4E', accent:'#8B2E2E', line:'rgba(42,33,25,.28)'},
+      {id:'rosa',    nome:'Rosa-velho',bg:'#EBD9D2', ink:'#3A1F22', muted:'#7A5A57', accent:'#8B2E2E', line:'rgba(58,31,34,.26)'},
+      {id:'dourado', nome:'Dourado',  bg:'#C9A15B', ink:'#1F1B16', muted:'#4A3B27', accent:'#6E2430', line:'rgba(31,27,22,.30)'},
+      {id:'vinho',   nome:'Vinho',    bg:'#3E121A', ink:'#F4EFE6', muted:'#D8C3B6', accent:'#C9A15B', line:'rgba(244,239,230,.30)'}
+    ],
+    templates:[
+      {id:'ouvido', nome:'Ouvido na aula', style:'quote', aspas:true,
+        kicker:'Ouvido na aula',
+        titulo:null,
+        texto:{label:'Frase dita na aula', ex:'Os Lusíadas são longos, mas pelo menos rimam.'},
+        assin:{label:'Iniciais e turma', ex:'A. M., 12.º E', traco:true}},
+      {id:'camoes', nome:'Aguenta, Camões!', style:'quote',
+        kicker:'Aguenta, Camões!',
+        titulo:{label:'Pergunta (opcional)', ex:'Quem foi Alberto Caeiro?', pequeno:true},
+        texto:{label:'Resposta do aluno', ex:'Era o mestre dos heterónimos, mas não dava aulas.'},
+        assin:{label:'Nota final (opcional)', ex:'Resposta verdadeira, autor anónimo.'}},
+      {id:'destaque', nome:'Destaque da semana', style:'prose',
+        kicker:'Novas Vozes · Destaque da semana',
+        titulo:{label:'Título do texto', ex:'O mar visto da janela'},
+        texto:{label:'Excerto (curto)', ex:'Há manhãs em que o mar parece esperar por mim, como quem guarda um segredo que ainda não sabe contar.'},
+        assin:{label:'Autor', ex:'A. M., 12.º E', traco:true}},
+      {id:'antologia', nome:'Antologia / citação', style:'quote', aspas:true,
+        kicker:'Antologia da Face',
+        titulo:null,
+        texto:{label:'Citação', ex:'O poeta é um fingidor.'},
+        assin:{label:'Autor e obra', ex:'Fernando Pessoa, «Autopsicografia»', traco:true}},
+      {id:'caderno', nome:'Caderno de Autor', style:'prose',
+        kicker:'Caderno de Autor',
+        titulo:{label:'Título', ex:'Fernando Pessoa'},
+        texto:{label:'Texto', ex:'Um poeta, muitos poetas: conheça os heterónimos e as vozes que cabem numa só pessoa.'},
+        assin:{label:'Linha final (opcional)', ex:'Leia em leramargem.com'}},
+      {id:'novidade', nome:'Novidade no site', style:'prose',
+        kicker:'Novo na margem',
+        titulo:{label:'Título', ex:'Há textos novos dos alunos'},
+        texto:{label:'Texto', ex:'Esta semana há novas vozes a ler. Passe pela margem e descubra-as.'},
+        assin:{label:'Linha final (opcional)', ex:'leramargem.com · link na bio'}}
+    ]
+  },
+  pauta: {
+    nome:'PAUTA', handle:'@pautavaliacao', site:'lamancha-dev.github.io',
+    variants:[
+      {id:'verde',  nome:'Verde',   bg:'#1F7A4D', ink:'#FFFFFF', muted:'rgba(255,255,255,.88)', accent:'#F28C28', circle:'#F28C28', pillInk:'#FFFFFF', btnBg:'#FFFFFF', btnInk:'#1F7A4D', lines:'rgba(255,255,255,.16)'},
+      {id:'laranja',nome:'Laranja', bg:'#F28C28', ink:'#FFFFFF', muted:'rgba(255,255,255,.92)', accent:'#145C39', circle:'#1F7A4D', pillInk:'#FFFFFF', btnBg:'#145C39', btnInk:'#FFFFFF', lines:'rgba(255,255,255,.22)', dot:'#145C39'},
+      {id:'claro',  nome:'Claro',   bg:'#FFF8F0', ink:'#16392A', muted:'#3E5D50', accent:'#F28C28', circle:'#1F7A4D', pillInk:'#FFFFFF', btnBg:'#F28C28', btnInk:'#FFFFFF', lines:'rgba(31,122,77,.18)'},
+      {id:'escuro', nome:'Verde-escuro', bg:'#0F3D27', ink:'#FFFFFF', muted:'rgba(255,255,255,.86)', accent:'#F28C28', circle:'#F28C28', pillInk:'#FFFFFF', btnBg:'#F28C28', btnInk:'#FFFFFF', lines:'rgba(255,255,255,.14)'},
+      {id:'branco', nome:'Branco',  bg:'#FFFFFF', ink:'#16392A', muted:'#3E5D50', accent:'#1F7A4D', circle:'#F28C28', pillInk:'#FFFFFF', btnBg:'#1F7A4D', btnInk:'#FFFFFF', lines:'rgba(31,122,77,.15)'},
+      {id:'menta',  nome:'Menta',   bg:'#E3F2E9', ink:'#0F3D27', muted:'#2F5A45', accent:'#F28C28', circle:'#1F7A4D', pillInk:'#FFFFFF', btnBg:'#1F7A4D', btnInk:'#FFFFFF', lines:'rgba(31,122,77,.22)', dot:'#1F7A4D'},
+      {id:'pessego',nome:'Pêssego', bg:'#FDE6CF', ink:'#0F3D27', muted:'#4A5A3F', accent:'#1F7A4D', circle:'#F28C28', pillInk:'#FFFFFF', btnBg:'#F28C28', btnInk:'#FFFFFF', lines:'rgba(242,140,40,.30)'},
+      {id:'terracota',nome:'Laranja-escuro', bg:'#C9621A', ink:'#FFFFFF', muted:'rgba(255,255,255,.92)', accent:'#0F3D27', circle:'#1F7A4D', pillInk:'#FFFFFF', btnBg:'#FFFFFF', btnInk:'#C9621A', lines:'rgba(255,255,255,.2)', dot:'#0F3D27'}
+    ],
+    templates:[
+      {id:'dica', nome:'Sabia que…?',
+        kicker:'Sabia que…?',
+        titulo:{label:'Título', ex:'A PAUTA faz as médias por período sozinha.'},
+        texto:{label:'Texto', ex:'Lança as cotações, escolhe os critérios e os gráficos aparecem logo. Para o 2.º e 3.º ciclos, CEF e secundário.'},
+        assin:{label:'Botão (opcional)', ex:'Saiba mais'}},
+      {id:'humor', nome:'Vida de professor',
+        kicker:'Vida de professor',
+        titulo:{label:'A situação', ex:'Domingo, 23h. Faltam três turmas para corrigir.'},
+        texto:{label:'O remate', ex:'Ainda bem que as contas já não são comigo.'},
+        assin:{label:'Botão (opcional)', ex:''}},
+      {id:'promo', nome:'Licença / venda',
+        kicker:'Licença PAUTA',
+        titulo:{label:'Título', ex:'Corrigir testes nunca foi tão rápido.'},
+        texto:{label:'Texto', ex:'Uma licença pessoal, com o seu nome nas impressões. Pagamento por MB Way ou transferência.'},
+        assin:{label:'Botão (opcional)', ex:'Peça a sua licença'}},
+      {id:'novidade', nome:'Novidade',
+        kicker:'Novidade',
+        titulo:{label:'Título', ex:'Nova versão da PAUTA'},
+        texto:{label:'Texto', ex:'Agora pode importar a grelha de critérios da sua escola.'},
+        assin:{label:'Botão (opcional)', ex:'Atualize já'}}
+    ]
+  }
+};
+
+/* ===================== Estado guardado ===================== */
+const KEY = 'publicacoes-insta-v1';
+let st = {brand:'margem', tpl:{margem:'ouvido', pauta:'dica'}, fmt:'retrato',
+          variant:{margem:'papel', pauta:'verde'}, scale:100, hold:3, data:{}, logo:{}, caps:{}};
+try{ const s = JSON.parse(localStorage.getItem(KEY)||'null'); if(s) st = Object.assign(st, s); }catch(e){}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} }
+
+const brand = () => BRANDS[st.brand];
+const tpl = () => brand().templates.find(t=>t.id===st.tpl[st.brand]) || brand().templates[0];
+const variant = () => brand().variants.find(v=>v.id===st.variant[st.brand]) || brand().variants[0];
+const fmt = () => FORMATOS.find(f=>f.id===st.fmt) || FORMATOS[1];
+const dkey = () => st.brand+'/'+tpl().id;
+function exemplo(t){ return {kicker:t.kicker, titulo:t.titulo?t.titulo.ex:'', texto:t.texto.ex, assin:t.assin?t.assin.ex:''}; }
+function data(){ const k=dkey(); if(!st.data[k]) st.data[k]=exemplo(tpl()); return st.data[k]; }
+
+/* ===================== Desenho ===================== */
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const logoImgs = {};
+function logoImg(){
+  const src = st.logo[st.brand]; if(!src) return null;
+  if(logoImgs[st.brand] && logoImgs[st.brand].src===src) return logoImgs[st.brand].complete ? logoImgs[st.brand] : null;
+  const im = new Image(); im.onload = ()=>render(); im.src = src; logoImgs[st.brand]=im; return null;
+}
+function setLS(v){ try{ ctx.letterSpacing = v; }catch(e){} }
+
+function wrap(text, maxW){
+  const out=[];
+  String(text).split('\n').forEach(par=>{
+    if(!par.trim()){ out.push(''); return; }
+    const words = par.trim().split(/\s+/); let line='';
+    words.forEach(w=>{
+      const test = line ? line+' '+w : w;
+      if(line && ctx.measureText(test).width > maxW){ out.push(line); line=w; } else line=test;
+    });
+    out.push(line);
+  });
+  return out;
+}
+function fit(text, fontFn, maxW, maxH, maxSize, minSize, lh){
+  let size = Math.round(maxSize), lines;
+  for(; size>=minSize; size-=2){
+    ctx.font = fontFn(size); lines = wrap(text, maxW);
+    if(lines.length*size*lh <= maxH) return {size, lines, h:lines.length*size*lh, font:fontFn(size), lh};
+  }
+  size=minSize; ctx.font=fontFn(size); lines=wrap(text,maxW);
+  return {size, lines, h:lines.length*size*lh, font:fontFn(size), lh};
+}
+/* --- animação (para os vídeos) --- */
+let ANIM=null;          // null = imagem parada; {t:segundos} = vídeo
+let seqCursor=0;
+function nextStart(step){ const s=seqCursor; seqCursor+=step; return s; }
+function P(start, dur){ if(!ANIM) return 1; const x=(ANIM.t-start)/(dur||0.7); return x<=0?0:x>=1?1:1-Math.pow(1-x,3); }
+function withP(p, dy, fn){ if(p<=0) return; ctx.save(); ctx.globalAlpha*=p; ctx.translate(0,(1-p)*dy); fn(); ctx.restore(); }
+
+function drawBlock(b, x, y, align, porLinha){
+  const base = porLinha ? 0 : nextStart(0.55);
+  b.lines.forEach((ln,i)=>{
+    const s = porLinha ? nextStart(0.32) : base;
+    withP(P(s), 34, ()=>{
+      ctx.font=b.font; ctx.textAlign=align; ctx.textBaseline='alphabetic'; ctx.fillStyle=b.color;
+      setLS(b.ls||'0px');
+      ctx.fillText(ln, x, y + i*b.size*b.lh + b.size*0.92);
+      setLS('0px');
+    });
+  });
+  if(porLinha) nextStart(0.25);
+}
+function rr(x,y,w,h,r){
+  ctx.beginPath();
+  if(ctx.roundRect){ ctx.roundRect(x,y,w,h,r); }
+  else { ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+}
+function aspas(t){ t=t.trim(); if(!t) return t; return /^[«"“'‘]/.test(t) ? t : '«'+t+'»'; }
+
+function render(){
+  const W=1080, H=fmt().h;
+  if(cv.height!==H) cv.height=H;
+  cv.width=W;
+  seqCursor=0.35;
+  const d=data(), t=tpl(), v=variant(), k=st.scale/100;
+  ctx.globalAlpha=1;
+  if(st.brand==='margem') drawMargem(W,H,d,t,v,k); else drawPauta(W,H,d,t,v,k);
+  return seqCursor;
+}
+
+function drawMargem(W,H,d,t,v,k){
+  ctx.fillStyle=v.bg; ctx.fillRect(0,0,W,H);
+  // moldura dupla
+  withP(P(0,1.0), 0, ()=>{
+    ctx.strokeStyle=v.line; ctx.lineWidth=2; ctx.strokeRect(46,46,W-92,H-92);
+    ctx.lineWidth=1; ctx.strokeRect(58,58,W-116,H-116);
+  });
+  const mx=130, cw=W-2*mx, story = H>1500;
+  const topK = story ? 210 : 150;
+  // cabeçalho (rubrica) + ornamento
+  const sK = nextStart(0.6), pK=P(sK);
+  if(d.kicker && d.kicker.trim()){
+    withP(pK, 24, ()=>{
+      ctx.font='600 26px Inter'; setLS('6px'); ctx.fillStyle=v.accent; ctx.textAlign='center';
+      ctx.fillText(d.kicker.trim().toUpperCase(), W/2+3, topK); setLS('0px');
+    });
+  }
+  const oy=topK+46, po=P(sK+0.25, 0.8);
+  if(po>0){
+    const L=16+54*po; ctx.save(); ctx.globalAlpha=po; ctx.strokeStyle=v.accent; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(W/2-16-54*po,oy); ctx.lineTo(W/2-16,oy); ctx.moveTo(W/2+16,oy); ctx.lineTo(W/2+16+54*po,oy); ctx.stroke();
+    ctx.fillStyle=v.accent; ctx.beginPath(); ctx.moveTo(W/2,oy-8); ctx.lineTo(W/2+8,oy); ctx.lineTo(W/2,oy+8); ctx.lineTo(W/2-8,oy); ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+  const logo=logoImg(), fy = story ? H-200 : H-150;
+
+  // conteúdo
+  const top = oy+60, bottom = fy-(logo?140:110), avail = bottom-top, gap=38;
+  const temTitulo = t.titulo && d.titulo && d.titulo.trim();
+  const temAssin = t.assin && d.assin && d.assin.trim();
+  const temTexto = d.texto && d.texto.trim();
+  let sig=null, tit=null, txt=null;
+  if(temAssin){
+    const s = (t.assin.traco ? '— ' : '') + d.assin.trim();
+    sig = fit(s, z=>`500 ${z}px Inter`, cw, 90, 28*k, 20, 1.45); sig.color=v.muted; sig.ls='1px';
+  }
+  if(temTitulo){
+    if(t.titulo.pequeno){ tit = fit(d.titulo.trim(), z=>`400 ${z}px Inter`, cw, avail*0.25, 38*k, 22, 1.35); tit.color=v.muted; }
+    else { tit = fit(d.titulo.trim(), z=>`700 ${z}px "Playfair Display"`, cw, temTexto?avail*0.32:avail*0.7, 78*k, 34, 1.15); tit.color=v.ink; }
+  }
+  if(temTexto){
+    const texto = t.aspas ? aspas(d.texto) : d.texto.trim();
+    const used = (tit?tit.h+gap:0) + (sig?sig.h+gap:0);
+    if(t.style==='quote' && texto.indexOf('\n')>=0){
+      // poema: tenta manter cada verso numa só linha
+      const fn=z=>`italic 500 ${z}px "Cormorant Garamond"`, nv=texto.split('\n').length;
+      txt=null;
+      for(let z=Math.round(96*k); z>=40; z-=2){ const r=fit(texto, fn, cw, avail-used, z, z, 1.22); if(r.lines.length===nv && r.h<=avail-used){ txt=r; break; } }
+      if(!txt) txt = fit(texto, fn, cw, avail-used, 96*k, 34, 1.22);
+    }
+    else if(t.style==='quote') txt = fit(texto, z=>`italic 500 ${z}px "Cormorant Garamond"`, cw, avail-used, 108*k, 34, 1.18);
+    else txt = fit(texto, z=>`400 ${z}px "Cormorant Garamond"`, cw, avail-used, 62*k, 28, 1.36);
+    txt.color=v.ink;
+  }
+  const blocks=[tit,txt,sig].filter(Boolean);
+  const total = blocks.reduce((a,b)=>a+b.h,0) + gap*Math.max(0,blocks.length-1);
+  let y = top + Math.max(0,(avail-total)/2);
+  blocks.forEach(b=>{ drawBlock(b, W/2, y, 'center', b===txt); y += b.h + gap; });
+
+  // rodapé (aparece no fim)
+  const pF=P(nextStart(0.6));
+  withP(pF, 20, ()=>{
+    if(logo){
+      const lh=100, lw=logo.width*lh/logo.height; ctx.drawImage(logo, W/2-lw/2, fy-lh-6, lw, lh);
+    } else {
+      ctx.font='italic 400 54px "Playfair Display"'; ctx.fillStyle=v.ink; ctx.textAlign='center'; ctx.fillText('a margem', W/2, fy-22);
+    }
+    ctx.font='500 22px Inter'; setLS('4px'); ctx.fillStyle=v.muted; ctx.textAlign='center';
+    ctx.fillText('LERAMARGEM.COM  ·  @LERAMARGEM', W/2+2, fy+30); setLS('0px');
+  });
+}
+
+function drawPauta(W,H,d,t,v,k){
+  ctx.fillStyle=v.bg; ctx.fillRect(0,0,W,H);
+  // círculos decorativos (crescem no vídeo)
+  const pc=P(0,1.1);
+  if(pc>0){
+    ctx.fillStyle=v.circle; ctx.beginPath(); ctx.arc(W-30, 30, 280*pc, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle=v.lines; ctx.lineWidth=3;
+    ctx.beginPath(); ctx.arc(W-30, 30, 370*pc, 0, Math.PI*2); ctx.stroke();
+  }
+  // linhas de pauta (desenham-se da esquerda para a direita)
+  ctx.strokeStyle=v.lines; ctx.lineWidth=3;
+  const ly = H-300;
+  for(let i=0;i<5;i++){ const p=P(0.2+i*0.12,0.9); if(p<=0) continue; ctx.beginPath(); ctx.moveTo(0, ly+i*20); ctx.lineTo((360-i*30)*p, ly+i*20); ctx.stroke(); }
+  const mx=96, cw=W-2*mx, story=H>1500;
+  // etiqueta
+  const ky = story ? 220 : 140;
+  const pK=P(nextStart(0.6));
+  if(d.kicker && d.kicker.trim()){
+    withP(pK, 24, ()=>{
+      ctx.font='700 28px Montserrat'; setLS('3px');
+      const kt=d.kicker.trim().toUpperCase(), kw=ctx.measureText(kt).width;
+      ctx.fillStyle=v.accent; rr(mx, ky, kw+60, 64, 32); ctx.fill();
+      ctx.fillStyle=v.pillInk; ctx.textAlign='left'; ctx.textBaseline='middle'; ctx.fillText(kt, mx+30, ky+34);
+      ctx.textBaseline='alphabetic'; setLS('0px');
+    });
+  }
+  const fy = story ? H-170 : H-100, logo=logoImg();
+
+  // conteúdo
+  const top = ky+64+70, bottom = fy-120, avail=bottom-top, gap=40;
+  const temT = d.titulo && d.titulo.trim(), temX = d.texto && d.texto.trim(), temB = d.assin && d.assin.trim();
+  const btnH = temB ? 88 : 0;
+  let tit=null, txt=null;
+  if(temT){ tit = fit(d.titulo.trim(), z=>`800 ${z}px Montserrat`, cw, (temX?avail*0.5:avail*0.8)-btnH, 100*k, 40, 1.1); tit.color=v.ink; }
+  if(temX){
+    const used=(tit?tit.h+gap:0)+(temB?btnH+gap:0);
+    txt = fit(d.texto.trim(), z=>`500 ${z}px Montserrat`, cw, avail-used, 46*k, 24, 1.4); txt.color=v.muted;
+  }
+  const blocks=[tit,txt].filter(Boolean);
+  const total = blocks.reduce((a,b)=>a+b.h,0) + gap*Math.max(0,blocks.length-1) + (temB?(blocks.length?gap:0)+btnH:0);
+  let y = top + Math.max(0,(avail-total)/2);
+  blocks.forEach(b=>{ drawBlock(b, mx, y, 'left', b===tit); y += b.h + gap; });
+  if(temB){
+    const pb=P(nextStart(0.6),0.6);
+    if(pb>0){
+      ctx.save(); ctx.globalAlpha*=pb;
+      ctx.font='700 34px Montserrat'; const bt=d.assin.trim()+'  →', bw=Math.min(cw, ctx.measureText(bt).width+84);
+      const sc=0.85+0.15*pb; ctx.translate(mx, y+btnH/2); ctx.scale(sc,sc); ctx.translate(-mx, -(y+btnH/2));
+      ctx.fillStyle=v.btnBg; rr(mx, y, bw, btnH, btnH/2); ctx.fill();
+      ctx.fillStyle=v.btnInk; ctx.textAlign='left'; ctx.textBaseline='middle'; ctx.fillText(bt, mx+42, y+btnH/2+2);
+      ctx.textBaseline='alphabetic'; ctx.restore();
+    }
+  }
+  // rodapé
+  const pF=P(nextStart(0.6));
+  withP(pF, 20, ()=>{
+    if(logo){ const lh=92, lw=logo.width*lh/logo.height; ctx.drawImage(logo, mx, fy-lh+18, lw, lh); }
+    else {
+      ctx.font='800 50px Montserrat'; ctx.fillStyle=v.ink; ctx.textAlign='left'; ctx.fillText('PAUTA', mx, fy);
+      const pw=ctx.measureText('PAUTA').width; ctx.fillStyle=v.dot||'#F28C28';
+      ctx.beginPath(); ctx.arc(mx+pw+16, fy-8, 9, 0, Math.PI*2); ctx.fill();
+    }
+    ctx.font='600 28px Montserrat'; ctx.fillStyle=v.muted; ctx.textAlign='right'; ctx.fillText('@pautavaliacao', W-mx, fy);
+  });
+}
+
+/* ===================== Legendas ===================== */
+function legenda(){
+  const d=data(), t=tpl(), L=s=>(s||'').trim();
+  if(st.brand==='margem'){
+    const tags='#leramargem #portugues #literatura #escola #alunos #leitura';
+    switch(t.id){
+      case 'ouvido': return `Ouvido na aula 👂\n\n${aspas(L(d.texto))}\n— ${L(d.assin)}\n\nHá frases que merecem ficar escritas. Mais vozes dos alunos em leramargem.com (link na bio).\n\n${tags} #ouvidonaaula`;
+      case 'camoes': return `Aguenta, Camões! 😅\n\n${L(d.titulo)?'Pergunta: '+L(d.titulo)+'\n':''}Resposta: ${L(d.texto)}\n\nRespostas verdadeiras, autores anónimos. Há mais na margem: leramargem.com (link na bio).\n\n${tags} #aguentacamoes #humor`;
+      case 'destaque': return `Destaque da semana ✍️\n\n«${L(d.titulo)}», de ${L(d.assin).replace(/^—\s*/,'')}.\n\n${L(d.texto)}\n\nLeia o texto completo em leramargem.com (link na bio).\n\n${tags} #novasvozes #escrita`;
+      case 'antologia': return `Antologia da Face 📖\n\n${aspas(L(d.texto))}\n— ${L(d.assin)}\n\nleramargem.com (link na bio)\n\n${tags} #poesia`;
+      case 'caderno': return `Caderno de Autor 🖋️\n\n${L(d.titulo)}\n${L(d.texto)}\n\nleramargem.com (link na bio)\n\n${tags} #cadernodeautor`;
+      default: return `${L(d.titulo)}\n\n${L(d.texto)}\n\nleramargem.com (link na bio)\n\n${tags}`;
+    }
+  } else {
+    const tags='#pautavaliacao #professores #avaliacao #educacao #escola #docentes';
+    const fim='Saiba mais em lamancha-dev.github.io (link na bio) ou escreva para pautavaliacao@gmail.com.';
+    switch(t.id){
+      case 'humor': return `${L(d.titulo)}\n\n${L(d.texto)} 😅\n\nQuem nunca? Marque um colega que precisa da PAUTA.\n\n${fim}\n\n${tags} #vidadeprofessor`;
+      case 'promo': return `${L(d.titulo)}\n\n${L(d.texto)}\n\n${fim}\n\n${tags}`;
+      default: return `${L(d.kicker)} ${L(d.titulo)}\n\n${L(d.texto)}\n\n${fim}\n\n${tags}`;
+    }
+  }
+}
+
+/* ===================== Interface ===================== */
+const $ = id => document.getElementById(id);
+function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),2600); }
+function modal(html){ $('modalBox').innerHTML=html; $('modal').classList.add('show'); }
+$('modal').addEventListener('click', e=>{ if(e.target.id==='modal' || e.target.dataset.close!==undefined) $('modal').classList.remove('show'); });
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function buildAll(){
+  document.body.classList.toggle('pauta', st.brand==='pauta');
+  document.querySelectorAll('#brandBox button').forEach(b=>b.classList.toggle('on', b.dataset.brand===st.brand));
+  $('tplBox').innerHTML = brand().templates.map(t=>`<button class="chip ${t.id===tpl().id?'on':''}" data-tpl="${t.id}">${esc(t.nome)}</button>`).join('');
+  $('fmtBox').innerHTML = FORMATOS.map(f=>`<button class="chip ${f.id===fmt().id?'on':''}" data-fmt="${f.id}">${f.nome} <small>${f.sub}</small></button>`).join('');
+  $('varBox').innerHTML = brand().variants.map(v=>`<button class="sw ${v.id===variant().id?'on':''}" data-var="${v.id}"><span class="dot" style="background:${v.bg};color:${v.accent}">${st.brand==='margem'?'a':'P'}</span>${v.nome}</button>`).join('');
+  buildFields();
+  if(typeof atualizarSugestao==='function') atualizarSugestao();
+  $('scale').value = st.scale;
+  $('hold').value = st.hold; $('holdLbl').textContent = st.hold+' s';
+  const lg=st.logo[st.brand];
+  $('logoPrev').classList.toggle('hidden', !lg); $('logoDel').classList.toggle('hidden', !lg);
+  if(lg) $('logoPrev').src=lg;
+  $('caption').value = st.caps[dkey()] || legenda();
+  render();
+}
+function buildFields(){
+  const t=tpl(), d=data();
+  const rows=[['kicker',{label:'Rubrica (cabeçalho)'},'input']];
+  if(t.titulo) rows.push(['titulo',t.titulo, t.titulo.pequeno?'input':'area']);
+  rows.push(['texto',t.texto,'area']);
+  if(t.assin) rows.push(['assin',t.assin,'input']);
+  $('fieldsBox').innerHTML = rows.map(([k,f,kind])=>`
+    <label class="f" for="fld_${k}">${esc(f.label)}</label>
+    ${kind==='area'
+      ? `<textarea id="fld_${k}" data-k="${k}">${esc(d[k]||'')}</textarea>`
+      : `<input type="text" id="fld_${k}" data-k="${k}" value="${esc(d[k]||'')}">`}`).join('');
+}
+
+let raf=0; function schedule(){ if(typeof busy!=='undefined' && busy) return; cancelAnimationFrame(raf); raf=requestAnimationFrame(render); }
+
+document.addEventListener('click', e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.brand){ st.brand=b.dataset.brand; save(); buildAll(); }
+  else if(b.dataset.tpl){ st.tpl[st.brand]=b.dataset.tpl; save(); buildAll(); }
+  else if(b.dataset.fmt){ st.fmt=b.dataset.fmt; save(); buildAll(); }
+  else if(b.dataset.var){ st.variant[st.brand]=b.dataset.var; save(); buildAll(); }
+});
+$('fieldsBox').addEventListener('input', e=>{
+  const k=e.target.dataset.k; if(!k) return;
+  data()[k]=e.target.value; delete st.caps[dkey()];
+  $('caption').value=legenda(); save(); schedule();
+});
+$('scale').addEventListener('input', e=>{ st.scale=+e.target.value; save(); schedule(); });
+$('btnExample').onclick=()=>{ st.data[dkey()]=exemplo(tpl()); delete st.caps[dkey()]; save(); buildAll(); };
+$('btnClear').onclick=()=>{ st.data[dkey()]={kicker:tpl().kicker,titulo:'',texto:'',assin:''}; delete st.caps[dkey()]; save(); buildAll(); };
+$('caption').addEventListener('input', e=>{ st.caps[dkey()]=e.target.value; save(); });
+$('btnCapGen').onclick=()=>{ delete st.caps[dkey()]; $('caption').value=legenda(); save(); toast('Legenda refeita'); };
+
+async function copiar(){
+  const txt=$('caption').value;
+  try{ await navigator.clipboard.writeText(txt); toast('Legenda copiada. Agora é só colar no Instagram.'); }
+  catch(e){
+    const ta=$('caption'); ta.focus(); ta.select();
+    let ok=false; try{ ok=document.execCommand('copy'); }catch(_){}
+    toast(ok?'Legenda copiada.':'Selecionei a legenda: carregue nela e escolha «Copiar».');
+  }
+}
+$('btnCapCopy').onclick=copiar; $('btnCopy2').onclick=copiar;
+
+// logótipo
+$('logoIn').addEventListener('change', e=>{
+  const file=e.target.files[0]; if(!file) return;
+  const r=new FileReader();
+  r.onload=()=>{
+    const im=new Image();
+    im.onload=()=>{
+      const max=700, s=Math.min(1, max/Math.max(im.width,im.height));
+      const c=document.createElement('canvas'); c.width=Math.round(im.width*s); c.height=Math.round(im.height*s);
+      c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+      st.logo[st.brand]=c.toDataURL('image/png'); save(); buildAll(); toast('Logótipo colocado');
+    };
+    im.src=r.result;
+  };
+  r.readAsDataURL(file); e.target.value='';
+});
+$('logoDel').onclick=()=>{ delete st.logo[st.brand]; save(); buildAll(); };
+
+// guardar / partilhar
+function nomeFicheiro(){
+  const d=new Date(), p=n=>String(n).padStart(2,'0');
+  return `${st.brand==='margem'?'margem':'pauta'}-${tpl().id}-${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}.png`;
+}
+function mostrarImagem(){
+  const url=cv.toDataURL('image/png');
+  modal(`<p><b>A sua imagem</b></p>
+    <img src="${url}" alt="Publicação">
+    <p>Para a guardar na Galeria: <b>mantenha o dedo em cima da imagem</b> e escolha «Transferir imagem» ou «Guardar imagem».</p>
+    <button class="btn pri" data-close style="margin-top:8px;width:100%">Fechar</button>`);
+}
+function baixar(blob, nome){
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=nome;
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 5000);
+}
+function oferecer(blob, nome, video){
+  const url=URL.createObjectURL(blob);
+  const file=new File([blob], nome, {type:blob.type||(video?'video/mp4':'image/png')});
+  let podePartilhar=false; try{ podePartilhar = !!(navigator.canShare && navigator.canShare({files:[file]})); }catch(_){}
+  modal(`<p><b>${video?'O seu vídeo está pronto':'A sua imagem está pronta'}</b></p>
+    ${video?`<video src="${url}" controls playsinline autoplay muted loop style="max-width:100%;max-height:52vh;border-radius:10px;margin:10px 0"></video>`:`<img src="${url}" alt="Publicação">`}
+    ${podePartilhar?'<button class="btn pri" id="mShare" style="width:100%;margin-top:6px">📤 Partilhar no Instagram</button>':''}
+    <button class="btn ${podePartilhar?'sec':'pri'}" id="mSave" style="width:100%;margin-top:8px">⬇️ Guardar no telemóvel</button>
+    <button class="btn sec" data-close style="width:100%;margin-top:8px">Fechar</button>
+    ${podePartilhar?'<p class="note">Ao partilhar, a legenda é copiada sozinha: no Instagram, é só colar.</p>':''}`);
+  const sh=$('mShare');
+  if(sh) sh.onclick=async()=>{
+    try{ navigator.clipboard.writeText($('caption').value).catch(()=>{}); }catch(_){}
+    try{ await navigator.share({files:[file]}); }
+    catch(e){ if(!e || e.name!=='AbortError') toast('Não foi possível partilhar. Guarde e publique a partir da Galeria.'); }
+  };
+  $('mSave').onclick=()=>{ baixar(blob, nome); toast('Guardado. Está nas Transferências (e na Galeria).'); };
+}
+$('btnSave').onclick=()=>{
+  render();
+  cv.toBlob(blob=>{ if(blob) oferecer(blob, nomeFicheiro(), false); else toast('Não foi possível criar a imagem.'); }, 'image/png');
+};
+
+
+// ===== vídeo =====
+let busy=false;
+function duracao(){ ANIM={t:1e9}; const fim=render(); ANIM=null; render(); return Math.min(24, Math.max(5, fim+0.8+(+st.hold||3))); }
+function botoes(on, txt){
+  ['btnSave','btnVideo','btnVideo2','btnPlay'].forEach(id=>$(id).disabled=!on);
+  $('btnVideo').textContent = txt || '🎬 Vídeo';
+  $('btnVideo2').textContent = txt || '🎬 Criar vídeo';
+}
+async function animar(gravar){
+  if(busy) return;
+  const dur=duracao();
+  let rec=null, chunks=[], mime='', ext='webm', stream=null;
+  if(gravar){
+    if(!cv.captureStream || !window.MediaRecorder){ modal(`<p>Este navegador não consegue gravar vídeo.</p><p>Experimente abrir a aplicação no <b>Chrome</b> do telemóvel.</p><button class="btn pri" data-close style="width:100%">Fechar</button>`); return; }
+    const tipos=[['video/mp4;codecs=avc1.42E01E','mp4'],['video/mp4;codecs=avc1','mp4'],['video/mp4','mp4'],['video/webm;codecs=vp9','webm'],['video/webm;codecs=vp8','webm'],['video/webm','webm']];
+    for(const [m,e] of tipos){ try{ if(MediaRecorder.isTypeSupported(m)){ mime=m; ext=e; break; } }catch(_){} }
+    try{
+      stream=cv.captureStream(30);
+      rec=new MediaRecorder(stream, mime?{mimeType:mime, videoBitsPerSecond:8000000}:{videoBitsPerSecond:8000000});
+    }catch(err){ modal(`<p>Não foi possível começar a gravar o vídeo neste telemóvel.</p><button class="btn pri" data-close style="width:100%">Fechar</button>`); return; }
+    if(!mime) ext = (rec.mimeType||'').indexOf('mp4')>=0 ? 'mp4' : 'webm';
+    rec.ondataavailable=e=>{ if(e.data && e.data.size) chunks.push(e.data); };
+  }
+  busy=true;
+  ANIM={t:0}; render();
+  if(rec) rec.start(250);
+  const t0=performance.now();
+  await new Promise(res=>{
+    function frame(){
+      const t=(performance.now()-t0)/1000; ANIM={t}; render();
+      if(gravar) botoes(false, `⏺ ${Math.min(Math.ceil(t),Math.ceil(dur))}/${Math.ceil(dur)} s`);
+      else botoes(false, '▶ …');
+      if(t<dur) requestAnimationFrame(frame); else res();
+    }
+    requestAnimationFrame(frame);
+  });
+  let blob=null;
+  if(rec){
+    await new Promise(r=>{ rec.onstop=r; rec.stop(); });
+    try{ stream.getTracks().forEach(tr=>tr.stop()); }catch(_){}
+    blob=new Blob(chunks,{type:(rec.mimeType||mime||'video/webm').split(';')[0]});
+  }
+  ANIM=null; render(); busy=false; botoes(true);
+  if(blob) guardarVideo(blob, ext);
+}
+function videoNome(ext){ return nomeFicheiro().replace(/\.png$/, '.'+ext).replace(/^(margem|pauta)-/, '$1-video-'); }
+function mostrarVideo(blob){
+  const url=URL.createObjectURL(blob);
+  modal(`<p><b>O seu vídeo</b></p><video src="${url}" controls playsinline style="max-width:100%;max-height:58vh;border-radius:10px;margin:10px 0"></video>
+    <p>Não consegui guardá-lo automaticamente. Carregue nos três pontinhos do vídeo (⋮) e escolha «Transferir».</p>
+    <button class="btn pri" data-close style="width:100%">Fechar</button>`);
+}
+function guardarVideo(blob, ext){
+  if(!blob.size){ toast('O vídeo saiu vazio. Tente outra vez.'); return; }
+  oferecer(blob, videoNome(ext), true);
+}
+$('btnVideo').onclick=()=>animar(true);
+$('btnVideo2').onclick=()=>animar(true);
+$('btnPlay').onclick=()=>animar(false);
+$('hold').addEventListener('input', e=>{ st.hold=+e.target.value; $('holdLbl').textContent=st.hold+' s'; save(); });
+
+/* ===================== Instalação ===================== */
+let pedidoInstalar=null;
+window.addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); pedidoInstalar=e; $('btnInstall').classList.remove('hidden'); });
+$('btnInstall').onclick=async()=>{
+  if(!pedidoInstalar) return;
+  pedidoInstalar.prompt();
+  try{ await pedidoInstalar.userChoice; }catch(_){}
+  pedidoInstalar=null; $('btnInstall').classList.add('hidden');
+};
+window.addEventListener('appinstalled', ()=>{ $('btnInstall').classList.add('hidden'); toast('Aplicação instalada!'); });
+if('serviceWorker' in navigator){ window.addEventListener('load', ()=>navigator.serviceWorker.register('./sw.js').catch(()=>{})); }
+
+/* ===================== Sugestões de texto ===================== */
+const SUG = {
+  'margem/antologia':[
+    {texto:'O poeta é um fingidor.\nFinge tão completamente\nQue chega a fingir que é dor\nA dor que deveras sente.', assin:'Fernando Pessoa, «Autopsicografia»'},
+    {texto:'Tudo vale a pena\nSe a alma não é pequena.', assin:'Fernando Pessoa, «Mar Português»'},
+    {texto:'Deus quer, o homem sonha, a obra nasce.', assin:'Fernando Pessoa, «O Infante»'},
+    {texto:'Não sou nada.\nNunca serei nada.\nNão posso querer ser nada.\nÀ parte isso, tenho em mim todos os sonhos do mundo.', assin:'Álvaro de Campos, «Tabacaria»'},
+    {texto:'Para ser grande, sê inteiro: nada\nTeu exclui ou exagera.', assin:'Ricardo Reis'},
+    {texto:'Minha pátria é a língua portuguesa.', assin:'Bernardo Soares, «Livro do Desassossego»'},
+    {texto:'Amor é fogo que arde sem se ver;\nÉ ferida que dói, e não se sente;', assin:'Luís de Camões'},
+    {texto:'Mudam-se os tempos, mudam-se as vontades,', assin:'Luís de Camões'},
+    {texto:'Sobre a nudez forte da verdade, o manto diáfano da fantasia.', assin:'Eça de Queirós, «A Relíquia»'},
+    {texto:'Ser poeta é ser mais alto, é ser maior\nDo que os homens!', assin:'Florbela Espanca, «Ser Poeta»'},
+    {texto:'Nas nossas ruas, ao anoitecer,\nHá tal soturnidade, há tal melancolia,', assin:'Cesário Verde, «O Sentimento dum Ocidental»'}
+  ],
+  'margem/caderno':[
+    {titulo:'Fernando Pessoa', texto:'Um poeta, muitos poetas: Caeiro, Reis, Campos… Conheça as vozes que cabiam numa só pessoa.', assin:'Leia em leramargem.com'},
+    {titulo:'Luís de Camões', texto:'O poeta d\'Os Lusíadas também escreveu alguns dos sonetos de amor mais bonitos da língua portuguesa.', assin:'Leia em leramargem.com'},
+    {titulo:'Eça de Queirós', texto:'Ironia, crítica social e personagens inesquecíveis: o romancista que retratou o Portugal do século XIX.', assin:'Leia em leramargem.com'},
+    {titulo:'Cesário Verde', texto:'O poeta que levou Lisboa, as suas ruas e as suas gentes, para dentro da poesia.', assin:'Leia em leramargem.com'},
+    {titulo:'Antero de Quental', texto:'Poeta, pensador e inquieto: os sonetos de quem procurou respostas para as grandes perguntas.', assin:'Leia em leramargem.com'},
+    {titulo:'Florbela Espanca', texto:'A poeta da paixão e da intensidade, que fez do soneto um lugar de confissão.', assin:'Leia em leramargem.com'}
+  ],
+  'margem/novidade':[
+    {titulo:'Há textos novos dos alunos', texto:'Esta semana há novas vozes a ler. Passe pela margem e descubra-as.', assin:'leramargem.com · link na bio'},
+    {titulo:'Novo Caderno de Autor', texto:'Já está na margem um novo Caderno de Autor. Leia, descubra e partilhe.', assin:'leramargem.com · link na bio'},
+    {titulo:'O «Aguenta, Camões!» cresceu', texto:'Há novas respostas disparatadas (e verdadeiras) à sua espera.', assin:'leramargem.com · link na bio'},
+    {titulo:'Já leu o destaque da semana?', texto:'Um texto escrito por um aluno, escolhido para estar em destaque esta semana.', assin:'leramargem.com · link na bio'},
+    {titulo:'Uma revista feita de vozes', texto:'A margem é o lugar onde os textos dos alunos ganham leitores. Venha ler.', assin:'leramargem.com · link na bio'},
+    {titulo:'Ouvido na aula', texto:'As melhores frases ditas nas aulas estão na margem. Algumas vão fazê-lo sorrir.', assin:'leramargem.com · link na bio'}
+  ],
+  'pauta/dica':[
+    {titulo:'A PAUTA faz as médias por período sozinha.', texto:'Lance as classificações e a PAUTA faz as contas. Os gráficos aparecem logo.', assin:'Saiba mais'},
+    {titulo:'Pode importar a grelha de critérios da sua escola.', texto:'Domínios e ponderações tal como a sua escola decidiu. A PAUTA adapta-se a si.', assin:'Saiba mais'},
+    {titulo:'Serve do 2.º ciclo ao secundário.', texto:'Também para os cursos CEF e profissionais, em qualquer disciplina.', assin:'Saiba mais'},
+    {titulo:'A turma inteira num relance.', texto:'Os gráficos mostram quem está a subir, quem precisa de ajuda e onde estão as dificuldades.', assin:'Saiba mais'},
+    {titulo:'O seu nome nas impressões.', texto:'Cada licença é pessoal: as grelhas impressas saem com o seu nome.', assin:'Saiba mais'}
+  ],
+  'pauta/humor':[
+    {titulo:'Domingo, 23h. Faltam três turmas para corrigir.', texto:'Ainda bem que as contas já não são comigo.', assin:''},
+    {titulo:'Reunião de avaliação daqui a 10 minutos.', texto:'E as médias? Estão feitas desde ontem.', assin:''},
+    {titulo:'«Vou só lançar as notas, é rapidinho.»', texto:'Três horas e duas calculadoras depois… Ou então use a PAUTA.', assin:'Experimente a PAUTA'},
+    {titulo:'— Ó stôra, quanto é que eu tive?', texto:'A resposta está a um toque de distância.', assin:''},
+    {titulo:'Calculadora, folha de cálculo, caderno, post-its…', texto:'Ou só uma PAUTA.', assin:'Saiba mais'},
+    {titulo:'A minha relação com as médias ponderadas:', texto:'Era complicada. Agora a PAUTA trata disso.', assin:''}
+  ],
+  'pauta/promo':[
+    {titulo:'Corrigir testes nunca foi tão rápido.', texto:'Uma licença pessoal, com o seu nome nas impressões. Pagamento por MB Way ou transferência.', assin:'Peça a sua licença'},
+    {titulo:'Menos contas, mais tempo para si.', texto:'A PAUTA faz as médias e os gráficos da turma. Para qualquer disciplina.', assin:'Peça a sua licença'},
+    {titulo:'Feita por uma professora.', texto:'Pensada por quem dá aulas há 28 anos e conhece o fim de período por dentro.', assin:'Conheça a PAUTA'},
+    {titulo:'Fim de período sem dores de cabeça.', texto:'Médias por período, gráficos e grelhas impressas, tudo no mesmo sítio.', assin:'Peça a sua licença'}
+  ],
+  'pauta/novidade':[
+    {titulo:'Nova versão da PAUTA', texto:'Agora pode importar a grelha de critérios da sua escola.', assin:'Atualize já'},
+    {titulo:'Agora também para o 2.º ciclo', texto:'A PAUTA cresceu: do 2.º ciclo ao secundário, incluindo CEF e cursos profissionais.', assin:'Saiba mais'}
+  ]
+};
+const SUG_AVISO = {
+  'margem/ouvido':'Aqui a frase tem de ser verdadeira, dita por um aluno na aula. Por isso não há sugestões: escreva a frase que ouviu.',
+  'margem/camoes':'Aqui a resposta tem de ser verdadeira, escrita por um aluno. Por isso não há sugestões.',
+  'margem/destaque':'O destaque é sempre um texto verdadeiro de um aluno. Por isso não há sugestões: cole um excerto do texto.'
+};
+function atualizarSugestao(){
+  const tem = !!SUG[dkey()];
+  $('btnSug').classList.toggle('hidden', !tem);
+  const av = SUG_AVISO[dkey()];
+  $('sugNote').textContent = av || '';
+  $('sugNote').classList.toggle('hidden', !av);
+}
+$('btnSug').onclick=()=>{
+  const lista=SUG[dkey()]; if(!lista) return;
+  st.sugIdx = st.sugIdx || {};
+  const i = ((st.sugIdx[dkey()] ?? -1) + 1) % lista.length;
+  st.sugIdx[dkey()] = i;
+  const s = lista[i], d = data();
+  ['titulo','texto','assin'].forEach(k=>{ if(s[k]!==undefined) d[k]=s[k]; });
+  delete st.caps[dkey()]; save(); buildAll();
+  toast(`Sugestão ${i+1} de ${lista.length}. Toque outra vez para ver outra.`);
+};
+
+/* ===================== Arranque ===================== */
+buildAll();
+atualizarSugestao();
+const fontes=['italic 400 50px "Playfair Display"','700 50px "Playfair Display"','italic 500 50px "Cormorant Garamond"','400 50px "Cormorant Garamond"','500 20px Inter','600 20px Inter','400 20px Inter','800 50px Montserrat','700 20px Montserrat','500 20px Montserrat','600 20px Montserrat'];
+if(document.fonts){
+  Promise.all(fontes.map(f=>document.fonts.load(f).catch(()=>{}))).then(render);
+  document.fonts.ready.then(render);
+}
+</script>
+</body>
+</html>
