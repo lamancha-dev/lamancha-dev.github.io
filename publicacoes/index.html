@@ -147,7 +147,7 @@
       <button class="btn sec" id="btnPlay">▶ Ver animação</button>
       <button class="btn pri" id="btnVideo2">🎬 Criar vídeo</button>
     </div>
-    <p class="note">Enquanto o vídeo está a ser gravado, deixe o telemóvel na aplicação (não mude de ecrã).</p>
+    <p class="note">Enquanto o vídeo está a ser criado (o botão mostra a percentagem), deixe o telemóvel na aplicação.</p>
   </section>
 
   <section>
@@ -639,6 +639,82 @@ $('btnSave').onclick=()=>{
 };
 
 
+
+/* ===================== Vídeo MP4 completo (imagem a imagem) ===================== */
+function mp4Montar(amostras, chaves, desc, W, H, fps){
+  const enc=(n,b)=>{ const a=new Uint8Array(b); for(let i=b-1;i>=0;i--){ a[i]=n&255; n=Math.floor(n/256); } return a; };
+  const u32=n=>enc(n,4), u16=n=>enc(n,2), u8=n=>new Uint8Array([n]);
+  const str=s=>new Uint8Array([...s].map(c=>c.charCodeAt(0)));
+  const junta=arr=>{ let L=0; arr.forEach(a=>L+=a.length); const o=new Uint8Array(L); let p=0; arr.forEach(a=>{o.set(a,p);p+=a.length;}); return o; };
+  const caixa=(t,...p)=>{ const c=junta(p); return junta([u32(c.length+8), str(t), c]); };
+  const vf=(v,f)=>junta([u8(v), enc(f,3)]);
+  const zeros=n=>new Uint8Array(n);
+  const matriz=junta([u32(0x10000),u32(0),u32(0),u32(0),u32(0x10000),u32(0),u32(0),u32(0),u32(0x40000000)]);
+  const N=amostras.length, ts=fps*1000, durT=N*1000, durM=Math.round(N*1000/fps);
+  const tamanhos=amostras.map(a=>a.length);
+  const ftyp=caixa('ftyp', str('isom'), u32(512), str('isom'), str('iso2'), str('avc1'), str('mp41'));
+  const moov=off=>caixa('moov',
+    caixa('mvhd', vf(0,0), u32(0), u32(0), u32(1000), u32(durM), u32(0x10000), u16(0x100), zeros(10), matriz, zeros(24), u32(2)),
+    caixa('trak',
+      caixa('tkhd', vf(0,3), u32(0), u32(0), u32(1), u32(0), u32(durM), zeros(8), u16(0), u16(0), u16(0), u16(0), matriz, u32(W*65536), u32(H*65536)),
+      caixa('mdia',
+        caixa('mdhd', vf(0,0), u32(0), u32(0), u32(ts), u32(durT), u16(0x55c4), u16(0)),
+        caixa('hdlr', vf(0,0), u32(0), str('vide'), zeros(12), str('VideoHandler'), u8(0)),
+        caixa('minf',
+          caixa('vmhd', vf(0,1), zeros(8)),
+          caixa('dinf', caixa('dref', vf(0,0), u32(1), caixa('url ', vf(0,1)))),
+          caixa('stbl',
+            caixa('stsd', vf(0,0), u32(1),
+              caixa('avc1', zeros(6), u16(1), zeros(16), u16(W), u16(H), u32(0x480000), u32(0x480000), u32(0), u16(1), zeros(32), u16(0x18), u16(0xffff),
+                caixa('avcC', desc))),
+            caixa('stts', vf(0,0), u32(1), u32(N), u32(1000)),
+            caixa('stss', vf(0,0), u32(chaves.length), ...chaves.map(k=>u32(k))),
+            caixa('stsz', vf(0,0), u32(0), u32(N), ...tamanhos.map(t=>u32(t))),
+            caixa('stsc', vf(0,0), u32(1), u32(1), u32(N), u32(1)),
+            caixa('stco', vf(0,0), u32(1), u32(off))
+          )))));
+  const m0=moov(0);
+  const offset=ftyp.length+m0.length+8;
+  const m=moov(offset);
+  let total=0; amostras.forEach(a=>total+=a.length);
+  return new Blob([ftyp, m, u32(total+8), str('mdat'), ...amostras], {type:'video/mp4'});
+}
+async function gravarMP4(dur, ritmo, aoProgresso){
+  const W=cv.width, H=cv.height, fps=30;
+  const opcoes=['avc1.420028','avc1.4d0028','avc1.640028','avc1.420032','avc1.640032'];
+  let cfg=null;
+  for(const c of opcoes){
+    const t={codec:c, width:W, height:H, bitrate:6000000, framerate:fps, avc:{format:'avc'}};
+    try{ const r=await VideoEncoder.isConfigSupported(t); if(r && r.supported){ cfg=t; break; } }catch(_){}
+  }
+  if(!cfg) return null;
+  const amostras=[], chaves=[]; let desc=null, erro=null;
+  const enc=new VideoEncoder({
+    output:(chunk, meta)=>{
+      if(meta && meta.decoderConfig && meta.decoderConfig.description && !desc){
+        const d=meta.decoderConfig.description; desc=new Uint8Array(d.buffer ? d.buffer.slice(d.byteOffset, d.byteOffset+d.byteLength) : d.slice(0));
+      }
+      const b=new Uint8Array(chunk.byteLength); chunk.copyTo(b); amostras.push(b);
+      if(chunk.type==='key') chaves.push(amostras.length);
+    },
+    error:e=>{ erro=e; }
+  });
+  enc.configure(cfg);
+  const N=Math.round(dur*fps);
+  for(let i=0;i<N;i++){
+    if(erro) break;
+    const real=i/fps; ANIM={t:real/ritmo, real, D:dur}; render();
+    const fr=new VideoFrame(cv, {timestamp:Math.round(i*1e6/fps), duration:Math.round(1e6/fps)});
+    enc.encode(fr, {keyFrame: i%(fps*2)===0}); fr.close();
+    while(enc.encodeQueueSize>4 && !erro) await new Promise(r=>setTimeout(r,4));
+    if(i%6===0){ aoProgresso(Math.round(i*100/N)); await new Promise(r=>setTimeout(r,0)); }
+  }
+  try{ await enc.flush(); }catch(e){ erro=e; }
+  try{ enc.close(); }catch(_){}
+  if(erro || !desc || !amostras.length) return null;
+  return mp4Montar(amostras, chaves, desc, W, H, fps);
+}
+
 // ===== vídeo =====
 let busy=false;
 function duracao(){
@@ -656,6 +732,14 @@ function botoes(on, txt){
 async function animar(gravar){
   if(busy) return;
   const {D:dur, f:ritmo}=duracao();
+  if(gravar && window.VideoEncoder && window.VideoFrame){
+    busy=true; botoes(false,'⏳ 0%');
+    let blob=null;
+    try{ blob=await gravarMP4(dur, ritmo, p=>botoes(false, `⏳ ${p}%`)); }catch(_){ blob=null; }
+    ANIM=null; render(); busy=false; botoes(true);
+    if(blob){ guardarVideo(blob,'mp4'); return; }
+    // se não conseguir, usa o método antigo
+  }
   let rec=null, chunks=[], mime='', ext='webm', stream=null;
   if(gravar){
     if(!cv.captureStream || !window.MediaRecorder){ modal(`<p>Este navegador não consegue gravar vídeo.</p><p>Experimente abrir a aplicação no <b>Chrome</b> do telemóvel.</p><button class="btn pri" data-close style="width:100%">Fechar</button>`); return; }
@@ -670,7 +754,7 @@ async function animar(gravar){
   }
   busy=true;
   ANIM={t:0, real:0, D:dur}; render();
-  if(rec) rec.start(250);
+  if(rec) rec.start();
   const t0=performance.now();
   await new Promise(res=>{
     function frame(){
@@ -775,6 +859,53 @@ const SUG = {
     {titulo:'Agora também para o 2.º ciclo', texto:'A PAUTA cresceu: do 2.º ciclo ao secundário, incluindo CEF e cursos profissionais.', assin:'Saiba mais'}
   ]
 };
+/* --- mais sugestões (com humor) --- */
+SUG['pauta/humor'].push(
+  {titulo:'Fim de período: a altura do ano em que a calculadora faz horas extra.', texto:'A PAUTA dá-lhe folga.', assin:''},
+  {titulo:'Professor também tem fim de semana.', texto:'Pelo menos quem usa a PAUTA.', assin:'Experimente'},
+  {titulo:'— Stôra, não dá para arredondar para cima?', texto:'As contas estão feitas. A negociação é consigo.', assin:''},
+  {titulo:'Teste 30%, trabalho 20%, oralidade 15%… espera, quanto era?', texto:'A PAUTA lembra-se das ponderações por si.', assin:'Saiba mais'},
+  {titulo:'Conselho de turma às 18h. Médias prontas às 17h59.', texto:'Com a PAUTA, estavam prontas de manhã.', assin:''},
+  {titulo:'Os alunos têm TikTok. Os professores têm folhas de cálculo com 47 colunas.', texto:'Tinham. Agora há a PAUTA.', assin:'Saiba mais'},
+  {titulo:'Dizem que ensinar é uma arte.', texto:'Fazer médias à mão é que não precisa de ser.', assin:''},
+  {titulo:'Corrigir 28 testes: inevitável.', texto:'Fazer as contas de 28 testes à mão: dispensável.', assin:'Conheça a PAUTA'},
+  {titulo:'O café do fim de período já não é para fazer médias.', texto:'Agora é só para beber com calma. ☕', assin:''},
+  {titulo:'1.º período: entusiasmo. 2.º período: cansaço. 3.º período: médias.', texto:'A PAUTA trata da última parte.', assin:''},
+  {titulo:'Há dois tipos de professores:', texto:'os que fazem médias à mão… e os que já descobriram a PAUTA.', assin:'Mude de equipa'},
+  {titulo:'Eu, a explicar a uma colega como fazia as médias antes:', texto:'«Era uma folha, outra folha, uma calculadora e muita fé.»', assin:''}
+);
+SUG['pauta/dica'].push(
+  {titulo:'Menos contas, mais vida.', texto:'Lance as classificações uma vez. A PAUTA faz o resto: médias, gráficos e sínteses.', assin:'Saiba mais'},
+  {titulo:'A calculadora pode reformar-se.', texto:'As médias por período ficam feitas à medida que lança as notas.', assin:'Saiba mais'},
+  {titulo:'Qualquer disciplina, qualquer escola.', texto:'Importe os critérios e as ponderações da sua escola e a PAUTA segue-os à risca.', assin:'Saiba mais'}
+);
+SUG['pauta/promo'].push(
+  {titulo:'O melhor colega de fim de período.', texto:'Não se queixa, não se engana nas contas e não bebe o seu café.', assin:'Peça a sua licença'},
+  {titulo:'Ofereça-se tempo.', texto:'A PAUTA faz as contas para que possa fazer o que realmente importa: ensinar.', assin:'Peça a sua licença'},
+  {titulo:'Feita por quem também corrige testes ao domingo.', texto:'Uma professora de Português criou a ferramenta que gostava de ter tido há 28 anos.', assin:'Conheça a PAUTA'}
+);
+SUG['margem/novidade'].push(
+  {titulo:'Spoiler: os alunos escrevem bem', texto:'Há textos novos na margem. Vá ler e depois diga-nos que não ficou surpreendido.', assin:'leramargem.com · link na bio'},
+  {titulo:'Ler faz bem', texto:'Textos novos esta semana na margem, sem efeitos secundários conhecidos.', assin:'leramargem.com · link na bio'},
+  {titulo:'O Camões precisa de apoio', texto:'Há respostas novas no «Aguenta, Camões!». Ele aguenta. Nós, às vezes, nem por isso.', assin:'leramargem.com · link na bio'},
+  {titulo:'Pausa para ler', texto:'Cinco minutos, um texto, uma voz nova. A margem tem novidades.', assin:'leramargem.com · link na bio'},
+  {titulo:'Aviso à navegação', texto:'Novas frases do «Ouvido na aula». Ler com moderação (ou não).', assin:'leramargem.com · link na bio'}
+);
+SUG['margem/caderno'].push(
+  {titulo:'Fernando Pessoa', texto:'Um homem, vários poetas e nenhum problema de solidão.', assin:'Leia em leramargem.com'},
+  {titulo:'Luís de Camões', texto:'Escreveu uma epopeia inteira só com um olho. Imagine o que teria feito com os dois.', assin:'Leia em leramargem.com'},
+  {titulo:'Eça de Queirós', texto:'Se vivesse hoje, tinha o perfil mais irónico do Instagram.', assin:'Leia em leramargem.com'},
+  {titulo:'Cesário Verde', texto:'Antes de haver stories, já ele mostrava Lisboa ao fim do dia.', assin:'Leia em leramargem.com'}
+);
+SUG['margem/antologia'].push(
+  {texto:'O mito é o nada que é tudo.', assin:'Fernando Pessoa, «Ulisses»'},
+  {texto:'Pensar incomoda como andar à chuva\nQuando o vento cresce e parece que chove mais.', assin:'Alberto Caeiro, «O Guardador de Rebanhos»'},
+  {texto:'Sou um guardador de rebanhos.\nO rebanho é os meus pensamentos', assin:'Alberto Caeiro, «O Guardador de Rebanhos»'},
+  {texto:'Erros meus, má fortuna, amor ardente\nEm minha perdição se conjuraram;', assin:'Luís de Camões'},
+  {texto:'Alma minha gentil, que te partiste\nTão cedo desta vida, descontente,', assin:'Luís de Camões'},
+  {texto:'Eu quero amar, amar perdidamente!', assin:'Florbela Espanca, «Amar!»'}
+);
+
 const SUG_AVISO = {
   'margem/ouvido':'Aqui a frase tem de ser verdadeira, dita por um aluno na aula. Por isso não há sugestões: escreva a frase que ouviu.',
   'margem/camoes':'Aqui a resposta tem de ser verdadeira, escrita por um aluno. Por isso não há sugestões.',
