@@ -1,5 +1,5 @@
 // Publicações — funciona sem internet e recebe as atualizações sozinha
-const VERSAO = 'publicacoes-v3';
+const VERSAO = 'publicacoes-v4';
 const BASE = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
