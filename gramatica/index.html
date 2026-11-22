@@ -10,19 +10,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
 <style>
 :root{
-  --paper:#f4f6f5;
+  --paper:#f8f3ea;
   --card:#ffffff;
-  --ink:#1c2b31;
-  --soft:#647880;
-  --hair:#e1e8e8;
+  --ink:#2b2420;
+  --soft:#7a6c60;
+  --hair:#ece2d4;
 
-  --azul:#1a5466;  --azul-bg:#e3eff1;
-  --coral:#2f7d7a; --coral-bg:#e2f2f0;
-  --sol:#b8892f;   --sol-bg:#f6efdf;
-  --menta:#1a5466; --menta-bg:#e3eff1;
+  --azul:#1d6276;  --azul-bg:#e1eef1;
+  --coral:#c4552f; --coral-bg:#fbe8de;
+  --sol:#c18a12;   --sol-bg:#faf0d6;
+  --menta:#1d6276; --menta-bg:#e1eef1;
 
-  --sh:0 1px 2px rgba(15,45,55,.05),0 6px 20px rgba(15,45,55,.07);
-  --sh-hover:0 2px 4px rgba(15,45,55,.06),0 14px 34px rgba(15,45,55,.12);
+  --sh:0 1px 2px rgba(70,45,25,.05),0 6px 20px rgba(70,45,25,.07);
+  --sh-hover:0 2px 4px rgba(70,45,25,.06),0 14px 34px rgba(70,45,25,.12);
   --display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
   --text:"Literata","Iowan Old Style","Palatino Linotype",Georgia,serif;
 }
@@ -42,7 +42,7 @@ button{font-family:inherit;}
 .wordmark small{font-size:12px;color:var(--soft);font-weight:600;}
 .topstats{margin-left:auto;display:flex;gap:8px;align-items:center;}
 .chip{border-radius:999px;padding:6px 14px;font-weight:700;font-size:12.5px;background:var(--azul-bg);color:var(--azul);white-space:nowrap;}
-.chip.c2{background:var(--coral-bg);color:#24625f;} .chip.c3{background:var(--sol-bg);color:#8a6420;}
+.chip.c2{background:var(--coral-bg);color:#a3431f;} .chip.c3{background:var(--sol-bg);color:#8a6420;}
 .ring{width:46px;height:46px;flex-shrink:0;}
 .menu-btn{display:none;border:none;background:var(--azul);color:#fff;border-radius:12px;width:44px;height:44px;font-size:20px;cursor:pointer;}
 
@@ -59,7 +59,7 @@ button{font-family:inherit;}
 .navgroup{margin-bottom:18px;}
 .navgroup-head{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;font-weight:700;font-size:14px;margin-bottom:6px;}
 .navgroup-head svg{width:19px;height:19px;}
-.navitem{display:flex;align-items:center;gap:10px;padding:8px 12px;margin:1px 0 1px 6px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:500;color:#3b4d53;transition:background .12s;}
+.navitem{display:flex;align-items:center;gap:10px;padding:8px 12px;margin:1px 0 1px 6px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:500;color:#4a3f37;transition:background .12s;}
 .navitem:hover{background:#fff;}
 .navitem .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .navitem .pct{margin-left:auto;font-size:11px;font-weight:700;color:var(--soft);}
@@ -67,9 +67,10 @@ button{font-family:inherit;}
 
 /* HOME */
 .hello{display:grid;grid-template-columns:1fr 290px;gap:22px;margin-bottom:34px;}
-.hello-main{background:linear-gradient(135deg,#1a5466 0%,#0e3643 100%);color:#fff;border-radius:24px;padding:30px 32px;box-shadow:var(--sh-hover);position:relative;overflow:hidden;}
+.hello-main{background:linear-gradient(135deg,#1d6276 0%,#123f4d 60%,#7a3a22 140%);color:#fff;border-radius:24px;padding:30px 32px;box-shadow:var(--sh-hover);position:relative;overflow:hidden;}
 .hello-main h1{margin:0 0 8px;font-size:33px;line-height:1.08;letter-spacing:-.025em;font-weight:800;max-width:520px;}
-.hello-main h1 em{font-style:normal;color:#f1d39a;}
+.hello-main .hello-sub{font-size:19px;font-weight:700;opacity:1;margin:0 0 10px;}
+.hello-main .hello-sub em{font-style:normal;color:#f4c869;}
 .hello-main p{margin:0;font-size:15px;opacity:.88;max-width:470px;}
 .hello-main .btn{margin-top:20px;}
 .hello-deco{position:absolute;right:-20px;bottom:-50px;font-family:var(--text);font-size:210px;line-height:1;opacity:.09;font-style:italic;pointer-events:none;}
@@ -96,8 +97,8 @@ button{font-family:inherit;}
 .card-top svg{width:24px;height:24px;flex-shrink:0;opacity:.7;}
 .card-bot{padding:12px 20px 18px;display:flex;flex-direction:column;gap:9px;}
 .card-meta{display:flex;justify-content:space-between;font-size:12.5px;font-weight:600;color:var(--soft);}
-.bar{height:8px;border-radius:999px;background:#e4ecec;overflow:hidden;}
-.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--azul),var(--coral));border-radius:999px;transition:width .4s;}
+.bar{height:8px;border-radius:999px;background:#efe6da;overflow:hidden;}
+.bar i{display:block;height:100%;background:var(--g,var(--azul));border-radius:999px;transition:width .4s;}
 .trophy{font-size:12px;font-weight:700;color:var(--azul);}
 
 /* TOPIC */
@@ -124,7 +125,7 @@ button{font-family:inherit;}
 .theory h4{font-family:var(--display);font-size:16px;font-weight:700;margin:18px 0 6px;}
 .theory p{margin:8px 0;}
 .theory b{font-weight:600;color:var(--g);}
-.theory .ex{font-style:italic;color:#4f6268;}
+.theory .ex{font-style:italic;color:#6b5d52;}
 .theory table{width:100%;border-collapse:separate;border-spacing:0;margin:16px 0;font-size:14.5px;border-radius:14px;overflow:hidden;border:1px solid var(--hair);}
 .theory th{background:var(--g-bg);color:var(--g);font-family:var(--display);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;text-align:left;padding:11px 14px;}
 .theory td{padding:10px 14px;vertical-align:top;border-top:1px solid var(--hair);}
@@ -136,6 +137,19 @@ button{font-family:inherit;}
 .theory .destaque{background:var(--sol-bg);border-radius:14px;padding:13px 17px;margin:16px 0;}
 .theory .destaque::before{content:"Atenção · ";font-family:var(--display);font-weight:800;color:#8a6420;}
 .tocta{margin-top:24px;display:flex;justify-content:flex-end;}
+.eli5{background:var(--g-bg);border-radius:22px;padding:24px 28px;margin-bottom:26px;position:relative;}
+.eli5-tag{display:inline-block;background:var(--g);color:#fff;font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;padding:5px 12px;border-radius:999px;margin-bottom:12px;}
+.eli5 p{margin:0;font-family:var(--text);font-size:19px;line-height:1.55;}
+.eli5 b{color:var(--g);}
+.tricks-title{font-size:21px;font-weight:800;margin:0 0 14px;letter-spacing:-.01em;}
+.tricks{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;}
+.trick{background:#fff;border-radius:18px;padding:18px 20px;box-shadow:var(--sh);display:flex;flex-direction:column;gap:8px;}
+.trick-h{display:flex;align-items:center;gap:10px;font-weight:800;font-size:16px;color:var(--g);}
+.trick-h .emo{width:38px;height:38px;border-radius:12px;background:var(--g-bg);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.trick p{margin:0;font-family:var(--text);font-size:15px;line-height:1.5;}
+.trick b{color:var(--g);}
+.trick-ex{margin-top:auto;background:var(--paper);border-radius:12px;padding:10px 12px;font-family:var(--text);font-style:italic;font-size:14px;color:#4a3f37;}
+.trick-ex u,.trick u{text-decoration:none;border-bottom:2px solid var(--g);font-style:normal;font-weight:600;}
 
 .ex-card{background:#fff;border-radius:20px;padding:22px 24px;margin-bottom:16px;box-shadow:var(--sh);}
 .ex-q{display:flex;gap:12px;font-family:var(--text);font-size:16.5px;font-weight:600;margin-bottom:14px;}
@@ -166,7 +180,7 @@ button{font-family:inherit;}
 @keyframes pop{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 .ex-foot{display:flex;justify-content:space-between;align-items:center;margin-top:8px;flex-wrap:wrap;gap:12px;}
 .ex-foot .score{font-weight:700;}
-.finish{background:linear-gradient(135deg,#1a5466,#0e3643);color:#fff;border-radius:18px;padding:18px 22px;box-shadow:var(--sh);margin-bottom:18px;font-weight:700;font-size:17px;display:flex;align-items:center;gap:12px;}
+.finish{background:linear-gradient(135deg,#1d6276,#123f4d);color:#fff;border-radius:18px;padding:18px 22px;box-shadow:var(--sh);margin-bottom:18px;font-weight:700;font-size:17px;display:flex;align-items:center;gap:12px;}
 .finish span{font-size:26px;}
 footer{margin-top:50px;font-size:12px;color:var(--soft);}
 
@@ -206,6 +220,7 @@ footer{margin-top:50px;font-size:12px;color:var(--soft);}
 </div>
 
 <script src="dados.js"></script>
+<script src="facil.js"></script>
 <script>
 /* ===================== ICONS ===================== */
 const I = {
@@ -255,7 +270,7 @@ const pick = a => a[Math.floor(Math.random()*a.length)];
 
 /* ===================== STATE ===================== */
 let view = "home";          // "home" or a topic id
-let tab = "teoria";         // "teoria" | "exercicios"
+let tab = "simples";        // "simples" | "teoria" | "exercicios"
 let lastKey = null;
 let jokeIdx = Math.floor(Math.random()*JOKES.length);
 let store = {};
@@ -290,9 +305,9 @@ function renderTop(){
     <span class="chip c2">${T.total} exercícios</span>
     <span class="chip c3">${T.ok} ${T.ok===1?'certo':'certos'}</span>
     <svg class="ring" viewBox="0 0 46 46" aria-label="Progresso ${T.pct}%">
-      <circle cx="23" cy="23" r="${r}" fill="#fff" stroke="#e4ecec" stroke-width="5"/>
-      <circle cx="23" cy="23" r="${r}" fill="none" stroke="#1a5466" stroke-width="5" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}" transform="rotate(-90 23 23)"/>
-      <text x="23" y="27" text-anchor="middle" font-size="11" font-weight="800" font-family="Bricolage Grotesque, system-ui" fill="#1a5466">${T.pct}%</text>
+      <circle cx="23" cy="23" r="${r}" fill="#fff" stroke="#efe6da" stroke-width="5"/>
+      <circle cx="23" cy="23" r="${r}" fill="none" stroke="#1d6276" stroke-width="5" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}" transform="rotate(-90 23 23)"/>
+      <text x="23" y="27" text-anchor="middle" font-size="11" font-weight="800" font-family="Bricolage Grotesque, system-ui" fill="#1d6276">${T.pct}%</text>
     </svg>`;
 }
 
@@ -302,7 +317,7 @@ function renderSide(){
   let h = `<div class="navhome ${view==='home'?'active':''}" onclick="goHome()">${I.home} Início</div>`;
   for(const name in G){
     const m = GROUPS[name];
-    h += `<div class="navgroup"><div class="navgroup-head" style="background:${m.bg};color:${m.g}">${m.icon}${name}</div>`;
+    h += `<div class="navgroup"><div class="navgroup-head" style="background:${m.g};color:#fff">${m.icon}${name}</div>`;
     G[name].forEach(t=>{
       const s = stats(t);
       h += `<div class="navitem ${view===t.id?'active':''} ${s.pct===100?'done':''}" onclick="openTopic('${t.id}')">
@@ -320,7 +335,7 @@ function renderHome(){
   const next = TOPICS.find(t=>stats(t).pct<100) || TOPICS[0];
   let h = `<section class="hello">
     <div class="hello-main">
-      <h1>A gramática não morde. <em>Prometido.</em></h1>
+      <h1>A gramática não morde.</h1><p class="hello-sub">Antes de desistires, dá-lhe cinco minutos. <em>No máximo, ladra.</em></p>
       <p>${T.done===0 ? "Escolhe um tema, lê a teoria e testa-te com perguntas ao estilo do exame nacional." : `Já fizeste ${T.done} de ${T.total} exercícios. Continua — o exame agradece.`}</p>
       <button class="btn" onclick="openTopic('${next.id}')">${T.done===0?'Começar':'Continuar'}: ${next.titulo} →</button>
       <div class="hello-deco">Aa</div>
@@ -329,12 +344,12 @@ function renderHome(){
   </section>`;
   for(const name in G){
     const m = GROUPS[name];
-    h += `<div class="section-title"><div class="sicon" style="background:${m.bg};color:${m.g}">${m.icon}</div><h2>${name}</h2><span class="n">· ${m.short}</span></div><div class="grid">`;
+    h += `<div class="section-title"><div class="sicon" style="background:${m.g};color:#fff">${m.icon}</div><h2>${name}</h2><span class="n">· ${m.short}</span></div><div class="grid">`;
     G[name].forEach(t=>{
       const s = stats(t);
-      h += `<div class="card" onclick="openTopic('${t.id}')">
+      h += `<div class="card" style="border-top:5px solid ${m.g}" onclick="openTopic('${t.id}')">
         <div class="card-top" style="color:${m.g}"><h3>${t.titulo}</h3>${m.icon}</div>
-        <div class="card-bot">
+        <div class="card-bot" style="--g:${m.g}">
           <div class="card-meta"><span>${s.total} exercícios</span>${s.pct===100?'<span class="trophy">🏆 dominado</span>':`<span>${s.pct}%</span>`}</div>
           ${bar(s.pct)}
         </div></div>`;
@@ -356,11 +371,14 @@ function renderTopic(t){
       <div class="big">${m.icon}</div>
     </div>
     <div class="tabs">
+      ${FACIL[t.id]?`<button class="tabbtn ${tab==='simples'?'on':''}" onclick="setTab('simples')">💡 Em simples</button>`:''}
       <button class="tabbtn ${tab==='teoria'?'on':''}" onclick="setTab('teoria')">${I.book} Teoria</button>
       <button class="tabbtn ${tab==='exercicios'?'on':''}" onclick="setTab('exercicios')">${I.pen} Exercícios <span class="cnt">${s.total}</span></button>
       <div class="prog"><span>${s.done}/${s.total}</span>${bar(s.pct)}</div>
     </div>`;
-  if(tab==="teoria"){
+  if(tab==="simples" && FACIL[t.id]){
+    h += renderSimple(t);
+  } else if(tab==="teoria"){
     h += `<article class="theory">${t.teoria}</article>
       <div class="tocta"><button class="btn" onclick="setTab('exercicios')">Já percebi — toca a praticar ${I.pen}</button></div>`;
   } else {
@@ -418,6 +436,17 @@ function answerShort(tid, i){
 }
 function resetTopic(tid){ delete store[tid]; save(); render(); window.scrollTo(0,0); }
 
+function renderSimple(t){
+  const f = FACIL[t.id];
+  let h = `<section class="eli5"><span class="eli5-tag">💡 Explicado de forma simples</span><p>${f.ideia}</p></section>
+    <h2 class="tricks-title">🔎 Truques para descobrir logo</h2><div class="tricks">`;
+  f.truques.forEach(([emo,tit,como,ex])=>{
+    h += `<div class="trick"><div class="trick-h"><span class="emo">${emo}</span>${tit}</div><p>${como}</p>${ex?`<div class="trick-ex">${ex}</div>`:''}</div>`;
+  });
+  h += `</div><div class="tocta" style="gap:10px;flex-wrap:wrap"><button class="btn" onclick="setTab('teoria')">${I.book} Ver a teoria completa</button><button class="btn" style="background:var(--g);color:#fff" onclick="setTab('exercicios')">${I.pen} Testar já</button></div>`;
+  return h;
+}
+
 /* ===================== NAV ===================== */
 function render(){
   renderTop(); renderSide();
@@ -425,7 +454,7 @@ function render(){
   main.innerHTML = view==="home" ? renderHome() : renderTopic(TOPICS.find(t=>t.id===view));
 }
 function goHome(){ lastKey=null; view="home"; closeMenu(); render(); window.scrollTo(0,0); location.hash=""; }
-function openTopic(id){ lastKey=null; view=id; tab="teoria"; closeMenu(); render(); window.scrollTo(0,0); location.hash=id; }
+function openTopic(id){ lastKey=null; view=id; tab=FACIL[id]?"simples":"teoria"; closeMenu(); render(); window.scrollTo(0,0); location.hash=id; }
 function setTab(x){ lastKey=null; tab=x; render(); window.scrollTo(0,0); }
 function toggleMenu(){ document.getElementById("sidebar").classList.toggle("open"); }
 function closeMenu(){ document.getElementById("sidebar").classList.remove("open"); }
