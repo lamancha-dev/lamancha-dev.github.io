@@ -1,6 +1,6 @@
 /* Guarda a página no telemóvel para abrir mesmo sem internet. */
-const CACHE = "gramatica-v8";
-const FILES = ["./", "index.html", "dados.js", "facil.js", "logo.jpg", "manifest.json", "icon-192.png", "icon-512.png"];
+const CACHE = "gramatica-v9";
+const FILES = ["./", "index.html", "dados.js", "facil.js", "mais.js", "logo.jpg", "manifest.json", "icon-192.png", "icon-512.png"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)));
   self.skipWaiting();

@@ -199,6 +199,43 @@ button{font-family:inherit;}
 .finish span{font-size:26px;}
 footer{margin-top:50px;font-size:12px;color:var(--soft);}
 
+
+.navtools{display:flex;flex-direction:column;gap:4px;margin:-8px 0 18px;}
+.navtool{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:10px;cursor:pointer;font-weight:600;font-size:14px;color:#3b3530;transition:background .12s;}
+.navtool:hover{background:#fff;}
+.navtool.active{background:#fff;box-shadow:var(--sh);font-weight:700;}
+.navtool .badge{margin-left:auto;background:#8f2a3c;color:#fff;border-radius:999px;font-size:11px;font-weight:800;padding:1px 8px;}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:-10px 0 26px;}
+.act{display:flex;align-items:center;gap:16px;background:linear-gradient(150deg,#fff 50%,#eef4f5 100%);border-radius:12px;padding:18px 22px;box-shadow:var(--sh);cursor:pointer;transition:transform .15s,box-shadow .15s;}
+.act:hover{transform:translateY(-3px);box-shadow:var(--sh-hover);}
+.act-ico{font-size:28px;width:52px;height:52px;flex-shrink:0;border-radius:12px;background:var(--azul-bg);display:flex;align-items:center;justify-content:center;}
+.act h3{margin:0 0 2px;font-size:17px;font-weight:800;color:var(--azul);}
+.act p{margin:0;font-size:13.5px;color:var(--soft);}
+.act p b{color:#8f2a3c;}
+.act-go{margin-left:auto;font-weight:800;font-size:13px;color:var(--azul);white-space:nowrap;}
+.act .wm{right:-4px;bottom:-26px;font-size:110px;}
+.daily{margin-bottom:10px;}
+.daily-h{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
+.daily-tag{background:var(--sol);color:#fff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;padding:6px 13px;border-radius:999px;}
+.daily-date{font-size:13.5px;font-weight:600;color:var(--soft);}
+.daily-note{margin:-4px 0 0;font-size:13px;color:var(--soft);font-weight:600;text-align:right;}
+.ex-from{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--soft);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em;}
+.ex-from .dot{width:8px;height:8px;border-radius:50%;}
+.ex-from a{cursor:pointer;color:var(--g);text-transform:none;letter-spacing:0;font-size:13px;}
+.ex-from a:hover{text-decoration:underline;}
+.banner-neutral{background:linear-gradient(135deg,#1d6276,#123f4d);color:#fff;}
+.banner-p{margin:8px 0 0;font-size:15px;opacity:.88;max-width:620px;}
+.result{display:flex;align-items:center;gap:22px;background:#fff;border-radius:12px;padding:20px 26px;box-shadow:var(--sh-hover);margin-bottom:18px;border-left:6px solid var(--sol);}
+.nota{display:flex;align-items:baseline;gap:2px;font-family:var(--display);}
+.nota b{font-size:58px;font-weight:800;line-height:1;color:#1d6276;}
+.nota span{font-size:20px;font-weight:700;color:var(--soft);}
+.result-t{font-weight:800;font-size:18px;}
+.result p{margin:4px 0 0;color:var(--soft);}
+.empty{display:flex;gap:18px;align-items:flex-start;background:#fff;border-radius:12px;padding:24px 26px;box-shadow:var(--sh);}
+.empty > span{font-size:40px;}
+.empty b{font-size:18px;}
+.empty p{margin:6px 0 14px;color:var(--soft);}
+@media (max-width:900px){ .acts{grid-template-columns:1fr;margin-top:0;} .act-go{display:none;} .result{flex-direction:column;align-items:flex-start;gap:8px;} }
 /* Tablets / small laptops */
 @media (max-width:1200px) and (min-width:901px){
   .sidebar{width:250px;}
@@ -248,6 +285,7 @@ footer{margin-top:50px;font-size:12px;color:var(--soft);}
 
 <script src="dados.js"></script>
 <script src="facil.js"></script>
+<script src="mais.js"></script>
 <script>
 /* ===================== ICONS ===================== */
 const I = {
@@ -349,7 +387,12 @@ function renderTop(){
 /* ===================== SIDEBAR ===================== */
 function renderSide(){
   const G = groups();
-  let h = `<div class="navhome ${view==='home'?'active':''}" onclick="goHome()">${I.home} Início</div>`;
+  const nw = wrongKeys().length;
+  let h = `<div class="navhome ${view==='home'?'active':''}" onclick="goHome()">${I.home} Início</div>
+    <div class="navtools">
+      <div class="navtool ${view==='quiz'?'active':''}" onclick="startQuiz()">🎯 Mini-teste</div>
+      <div class="navtool ${view==='review'?'active':''}" onclick="startReview()">🔁 Os meus erros${nw?` <span class="badge">${nw}</span>`:''}</div>
+    </div>`;
   for(const name in G){
     const m = GROUPS[name];
     h += `<div class="navgroup"><div class="navgroup-head" style="background:${m.g};color:#fff">${m.icon}${name}</div>`;
@@ -376,7 +419,12 @@ function renderHome(){
       <div class="hello-deco">Aa</div>
     </div>
     <aside class="joke has-wm"><span class="wm">«»</span><span class="tag">Gramática com humor</span><p id="joke">${JOKES[jokeIdx]}</p><button onclick="nextJoke()">Outra ↻</button></aside>
-  </section>`;
+  </section>
+  <section class="acts">
+    <div class="act has-wm" onclick="startQuiz()"><span class="wm">20</span><span class="act-ico">🎯</span><div><h3>Mini-teste</h3><p>10 perguntas ao calhas, de todos os temas. Nota de 0 a 20 no fim.</p></div><span class="act-go">Começar →</span></div>
+    <div class="act has-wm" onclick="startReview()"><span class="wm">↻</span><span class="act-ico">🔁</span><div><h3>Os meus erros</h3><p>${wrongKeys().length ? `Tens <b>${wrongKeys().length}</b> ${wrongKeys().length===1?'pergunta':'perguntas'} para tentar outra vez.` : 'Ainda não tens erros por rever. Boa!'}</p></div><span class="act-go">Rever →</span></div>
+  </section>
+  ${renderDaily()}`;
   for(const name in G){
     const m = GROUPS[name];
     h += `<div class="section-title"><div class="sicon" style="background:${m.g};color:#fff">${m.icon}</div><h2>${name}</h2><span class="n">· ${m.short}</span></div><div class="grid">`;
@@ -418,7 +466,7 @@ function renderTopic(t){
       <div class="tocta"><button class="btn" onclick="setTab('exercicios')">Já percebi — toca a praticar ${I.pen}</button></div>`;
   } else {
     if(s.done===s.total) h += `<div class="finish"><span>🏆</span>Tema concluído: ${s.ok} de ${s.total} certas. ${s.ok===s.total?'Perfeito!':'Revê as que falhaste e tenta de novo.'}</div>`;
-    t.exercicios.forEach((ex,i)=>{ h += renderEx(t,ex,i); });
+    t.exercicios.forEach((ex,i)=>{ h += renderEx(t,ex,i,"t"); });
     h += `<div class="ex-foot"><span class="score">Certas: ${s.ok}/${s.total}</span>
       <span style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" onclick="setTab('teoria')">${I.book} Rever teoria</button><button class="btn" onclick="resetTopic('${t.id}')">↺ Recomeçar tema</button></span></div>`;
   }
@@ -426,49 +474,123 @@ function renderTopic(t){
   return h;
 }
 
-function renderEx(t, ex, i){
-  const a = (store[t.id]||{})[i];
-  const id = `${t.id}_${i}`;
+/* Exercises can appear in 4 places ("contexts"):
+   t = topic page · q = mini-teste · r = revisão de erros · d = pergunta do dia
+   Every answer is saved to the student's progress (store); q/r/d also keep their own session copy. */
+let session = {q:{}, r:{}, d:{}};
+function ansFor(ctx, tid, i){ return ctx==="t" ? (store[tid]||{})[i] : session[ctx][tid+"_"+i]; }
+
+function renderEx(t, ex, i, ctx="t", num=i+1){
+  const a = ansFor(ctx, t.id, i);
+  const id = `${ctx}_${t.id}_${i}`;
+  const m = GROUPS[t.grupo];
   let body = "";
   if(ex.tipo==="mc"){
     body = `<div class="opts">` + ex.opcoes.map((o,k)=>{
       let cls = "";
       if(a){ if(k===ex.certa) cls="ok"; else if(k===a.choice) cls="bad"+(lastKey===id?" fresh":""); else cls="dim"; }
-      return `<button class="opt ${cls}" ${a?'disabled':''} onclick="answerMC('${t.id}',${i},${k})"><span class="l">${"ABCD"[k]}</span>${o}</button>`;
+      return `<button class="opt ${cls}" ${a?'disabled':''} onclick="answerMC('${ctx}','${t.id}',${i},${k})"><span class="l">${"ABCD"[k]}</span>${o}</button>`;
     }).join("") + `</div>`;
   } else {
-    body = `<div class="answer-row"><input id="in_${id}" placeholder="Escreve a tua resposta…" ${a?'disabled':''} value="${a?escapeAttr(a.text):''}" onkeydown="if(event.key==='Enter')answerShort('${t.id}',${i})">
-      ${a?'':`<button class="btn" onclick="answerShort('${t.id}',${i})">Verificar</button>`}</div>`;
+    body = `<div class="answer-row"><input id="in_${id}" placeholder="Escreve a tua resposta…" ${a?'disabled':''} value="${a?escapeAttr(a.text):''}" onkeydown="if(event.key==='Enter')answerShort('${ctx}','${t.id}',${i})">
+      ${a?'':`<button class="btn" onclick="answerShort('${ctx}','${t.id}',${i})">Verificar</button>`}</div>`;
   }
   let fb = "";
   if(a){
     fb = `<div class="fb ${a.ok?'ok':'bad'} ${lastKey===id?'fresh':''}"><span class="v">${a.ok?'✓ '+a.msg:'✗ '+a.msg}</span><span class="c">${ex.criterio}</span></div>`;
   }
-  return `<div class="ex-card has-wm ${a?'done':''}" id="ex_${id}"><span class="wm">${String(i+1).padStart(2,"0")}</span><div class="ex-q"><span class="num">${i+1}</span><div>${ex.enun}</div></div>${body}${fb}</div>`;
+  const from = ctx==="t" ? "" : `<div class="ex-from"><span class="dot" style="background:${m.g}"></span>${t.grupo} · <a onclick="openTopic('${t.id}')">${t.titulo}</a></div>`;
+  return `<div class="ex-card has-wm ${a?'done':''}" id="ex_${id}" style="${gvars(m)}"><span class="wm">${String(num).padStart(2,"0")}</span>${from}<div class="ex-q"><span class="num">${num}</span><div>${ex.enun}</div></div>${body}${fb}</div>`;
 }
 function escapeAttr(s){ return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
 
-function record(tid, i, data){
+function record(ctx, tid, i, data){
   (store[tid] = store[tid] || {})[i] = data;
-  lastKey = `${tid}_${i}`;
   save();
+  if(ctx!=="t") session[ctx][tid+"_"+i] = data;
+  if(ctx==="d"){ try{ localStorage.setItem("gramatica_am_dia", JSON.stringify({dia:today(), key:tid+"_"+i, data})); }catch(e){} }
+  lastKey = `${ctx}_${tid}_${i}`;
   const keepY = window.scrollY;
   render();
   window.scrollTo(0, keepY);
 }
-function answerMC(tid, i, k){
-  const ex = TOPICS.find(t=>t.id===tid).exercicios[i];
-  const ok = k===ex.certa;
-  record(tid, i, {ok, choice:k, msg: ok?pick(PRAISE):pick(OOPS)});
+function exOf(tid, i){ return TOPICS.find(t=>t.id===tid).exercicios[i]; }
+function answerMC(ctx, tid, i, k){
+  const ok = k===exOf(tid,i).certa;
+  record(ctx, tid, i, {ok, choice:k, msg: ok?pick(PRAISE):pick(OOPS)});
 }
 function norm(s){ return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[.,;:!?«»"]/g,"").replace(/\s+/g," ").trim(); }
-function answerShort(tid, i){
-  const ex = TOPICS.find(t=>t.id===tid).exercicios[i];
-  const val = document.getElementById(`in_${tid}_${i}`).value;
+function answerShort(ctx, tid, i){
+  const val = document.getElementById(`in_${ctx}_${tid}_${i}`).value;
   if(!val.trim()) return;
-  const ok = ex.resposta.some(r=>norm(val).includes(norm(r)));
-  record(tid, i, {ok, text:val, msg: ok?pick(PRAISE):"Compara com o critério — "+pick(OOPS).toLowerCase()});
+  const ok = exOf(tid,i).resposta.some(r=>norm(val).includes(norm(r)));
+  record(ctx, tid, i, {ok, text:val, msg: ok?pick(PRAISE):"Compara com o critério — "+pick(OOPS).toLowerCase()});
 }
+
+/* ---------- all questions, as [topicId, index] ---------- */
+function allKeys(){ const k=[]; TOPICS.forEach(t=>t.exercicios.forEach((_,i)=>k.push([t.id,i]))); return k; }
+function wrongKeys(){ return allKeys().filter(([tid,i])=>{ const a=(store[tid]||{})[i]; return a && !a.ok; }); }
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+/* ---------- Pergunta do dia ---------- */
+function today(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function dailyKey(){
+  const keys = allKeys().filter(([tid,i])=>exOf(tid,i).tipo==="mc");
+  const [y,mo,d] = today().split("-").map(Number);
+  const day = Math.floor(Date.UTC(y,mo-1,d)/86400000);
+  return keys[(day*7919) % keys.length];
+}
+try{ const s=JSON.parse(localStorage.getItem("gramatica_am_dia")||"null"); if(s && s.dia===today()) session.d[s.key]=s.data; }catch(e){}
+
+function renderDaily(){
+  const [tid,i] = dailyKey(); const t = TOPICS.find(x=>x.id===tid);
+  let d = new Date().toLocaleDateString("pt-PT",{weekday:"long",day:"numeric",month:"long"}); d = d.charAt(0).toUpperCase()+d.slice(1);
+  return `<section class="daily"><div class="daily-h"><span class="daily-tag">📅 Pergunta do dia</span><span class="daily-date">${d}</span></div>
+    ${renderEx(t, t.exercicios[i], i, "d", 1)}
+    <p class="daily-note">Amanhã há outra. Volta cá!</p></section>`;
+}
+
+/* ---------- Mini-teste ---------- */
+let quizKeys = [];
+function startQuiz(){
+  quizKeys = shuffle(allKeys().filter(([tid,i])=>exOf(tid,i).tipo==="mc")).slice(0,10);
+  session.q = {}; lastKey=null; view="quiz"; closeMenu(); render(); window.scrollTo(0,0);
+}
+function renderQuiz(){
+  if(!quizKeys.length){ quizKeys = shuffle(allKeys().filter(([tid,i])=>exOf(tid,i).tipo==="mc")).slice(0,10); session.q = {}; }
+  const done = quizKeys.filter(([tid,i])=>session.q[tid+"_"+i]).length;
+  const ok = quizKeys.filter(([tid,i])=>(session.q[tid+"_"+i]||{}).ok).length;
+  let h = `<div class="banner banner-neutral"><div class="crumb"><a onclick="goHome()">Início</a> / Treino</div><h1>🎯 Mini-teste</h1><p class="banner-p">10 perguntas ao calhas, de todos os temas. No fim, tens a tua nota de 0 a 20.</p></div>
+    <div class="tabs"><div class="prog" style="margin-left:0;width:100%"><span>${done}/10</span>${bar(done*10)}</div></div>`;
+  if(done===10) h += quizResult(ok);
+  quizKeys.forEach(([tid,i],n)=>{ const t=TOPICS.find(x=>x.id===tid); h += renderEx(t, t.exercicios[i], i, "q", n+1); });
+  if(done===10) h += `<div class="ex-foot"><span></span><span style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" onclick="startQuiz()">🎯 Novo mini-teste</button><button class="btn" onclick="startReview()">🔁 Rever os meus erros</button></span></div>`;
+  return h + `<footer>As respostas contam para o teu progresso em cada tema.</footer>`;
+}
+function quizResult(ok){
+  const nota = ok*2;
+  const msg = nota>=18 ? "Excelente! Podes ir ao exame de cabeça erguida."
+            : nota>=14 ? "Muito bem! Mais umas revisões e ficas imbatível."
+            : nota>=10 ? "Positiva! Mas dá para mais — revê os erros."
+            : "Ainda não chegaste lá. Revê os erros e tenta outra vez — vais ver que sobe.";
+  return `<div class="result"><div class="nota"><b>${nota}</b><span>/20</span></div><div><div class="result-t">${ok} certas em 10</div><p>${msg}</p></div></div>`;
+}
+
+/* ---------- Os meus erros ---------- */
+let reviewKeys = [];
+function startReview(){ reviewKeys = wrongKeys(); session.r = {}; lastKey=null; view="review"; closeMenu(); render(); window.scrollTo(0,0); }
+function renderReview(){
+  let h = `<div class="banner banner-neutral"><div class="crumb"><a onclick="goHome()">Início</a> / Treino</div><h1>🔁 Os meus erros</h1><p class="banner-p">As perguntas em que falhaste, para tentares outra vez. Quando acertares, saem da lista.</p></div>`;
+  if(!reviewKeys.length){
+    return h + `<div class="empty"><span>🎉</span><div><b>Não tens erros por rever.</b><p>Ou ainda não respondeste a nada, ou estás a ir muito bem! Experimenta um mini-teste.</p><button class="btn" onclick="startQuiz()">🎯 Fazer um mini-teste</button></div></div>`;
+  }
+  const fixed = reviewKeys.filter(([tid,i])=>(session.r[tid+"_"+i]||{}).ok).length;
+  h += `<div class="tabs"><div class="prog" style="margin-left:0;width:100%"><span>${fixed}/${reviewKeys.length} corrigidas</span>${bar(Math.round(100*fixed/reviewKeys.length))}</div></div>`;
+  reviewKeys.forEach(([tid,i],n)=>{ const t=TOPICS.find(x=>x.id===tid); h += renderEx(t, t.exercicios[i], i, "r", n+1); });
+  h += `<div class="ex-foot"><span></span><button class="btn" onclick="startReview()">↻ Atualizar a lista</button></div>`;
+  return h;
+}
+
 function resetTopic(tid){ delete store[tid]; save(); render(); window.scrollTo(0,0); }
 
 function renderSimple(t){
@@ -486,7 +608,10 @@ function renderSimple(t){
 function render(){
   renderTop(); renderSide();
   const main = document.getElementById("main");
-  main.innerHTML = view==="home" ? renderHome() : renderTopic(TOPICS.find(t=>t.id===view));
+  main.innerHTML = view==="home" ? renderHome()
+    : view==="quiz" ? renderQuiz()
+    : view==="review" ? renderReview()
+    : renderTopic(TOPICS.find(t=>t.id===view));
 }
 function goHome(){ lastKey=null; view="home"; closeMenu(); render(); window.scrollTo(0,0); location.hash=""; }
 function openTopic(id){ lastKey=null; view=id; tab=FACIL[id]?"simples":"teoria"; closeMenu(); render(); window.scrollTo(0,0); location.hash=id; }
@@ -496,6 +621,8 @@ function closeMenu(){ document.getElementById("sidebar").classList.remove("open"
 
 const fromHash = location.hash.slice(1);
 if(fromHash && TOPICS.some(t=>t.id===fromHash)) view = fromHash;
+if(fromHash==='mini-teste'){ quizKeys = shuffle(allKeys().filter(([tid,i])=>exOf(tid,i).tipo==='mc')).slice(0,10); view='quiz'; }
+if(fromHash==='erros'){ reviewKeys = wrongKeys(); view='review'; }
 render();
 if('serviceWorker' in navigator && location.protocol==='https:'){ navigator.serviceWorker.register('sw.js'); }
 </script>
