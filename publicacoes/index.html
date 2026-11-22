@@ -256,7 +256,12 @@ const BRANDS = {
         kicker:'Novidade',
         titulo:{label:'Título', ex:'Nova versão da PAUTA'},
         texto:{label:'Texto', ex:'Agora pode importar a grelha de critérios da sua escola.'},
-        assin:{label:'Botão (opcional)', ex:'Atualize já'}}
+        assin:{label:'Botão (opcional)', ex:'Atualize já'}},
+      {id:'store', nome:'Já na Microsoft Store',
+        kicker:'Novidade',
+        titulo:{label:'Título', ex:'A PAUTA já está na Microsoft Store'},
+        texto:{label:'Texto', ex:'Experimente gratuitamente com uma turma fictícia. Para usar com turmas reais, é só adquirir a licença pessoal.'},
+        assin:{label:'Botão (opcional)', ex:'Procure «PAUTA» na Store'}}
     ]
   }
 };
@@ -508,6 +513,7 @@ function legenda(){
     switch(t.id){
       case 'humor': return `${L(d.titulo)}\n\n${L(d.texto)} 😅\n\nQuem nunca? Marque um colega que precisa da PAUTA.\n\n${fim}\n\n${tags} #vidadeprofessor`;
       case 'promo': return `${L(d.titulo)}\n\n${L(d.texto)}\n\n${fim}\n\n${tags}`;
+      case 'store': return `🎉 ${L(d.titulo)}\n\n${L(d.texto)}\n\nProcure «PAUTA» na Microsoft Store ou aceda a apps.microsoft.com/detail/9NWXQXFPZ3T6\n\nQuer a licença? Escreva para pautavaliacao@gmail.com.\n\n${tags} #microsoftstore`;
       default: return `${L(d.kicker)} ${L(d.titulo)}\n\n${L(d.texto)}\n\n${fim}\n\n${tags}`;
     }
   }
