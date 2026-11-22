@@ -221,7 +221,27 @@ const BRANDS = {
         kicker:'Novo na margem',
         titulo:{label:'Título', ex:'Há textos novos dos alunos'},
         texto:{label:'Texto', ex:'Esta semana há novas vozes a ler. Passe pela margem e descubra-as.'},
-        assin:{label:'Linha final (opcional)', ex:'leramargem.com · link na bio'}}
+        assin:{label:'Linha final (opcional)', ex:'leramargem.com · link na bio'}},
+      {id:'confissao', nome:'Confissão de professora', style:'quote',
+        kicker:'Confissão',
+        titulo:null,
+        texto:{label:'Frase', ex:'Ainda acredito que uma boa leitura muda um aluno. Já vi acontecer, mais do que uma vez.'},
+        assin:{label:'Assinatura', ex:'A. M.', traco:true}},
+      {id:'pergunta', nome:'Pergunta ao leitor', style:'prose',
+        kicker:'Pergunte-se',
+        titulo:{label:'Pergunta', ex:'Qual foi o último livro que o surpreendeu?'},
+        texto:{label:'Texto', ex:'Deixe a resposta nos comentários — adoro saber o que anda a ler por aí.'},
+        assin:{label:'Linha final (opcional)', ex:'leramargem.com'}},
+      {id:'bastidores', nome:'Nos bastidores', style:'prose',
+        kicker:'Nos bastidores',
+        titulo:{label:'Título', ex:'Como nasce um texto na margem'},
+        texto:{label:'Texto', ex:'Cada publicação começa numa aula, num comentário de um aluno, numa frase que ficou a ecoar.'},
+        assin:{label:'Linha final (opcional)', ex:'leramargem.com · link na bio'}},
+      {id:'confidencia', nome:'Isto fica entre nós', style:'quote', aspas:true,
+        kicker:'Isto fica entre nós',
+        titulo:null,
+        texto:{label:'Confidência de sala de aula', ex:'Há turmas que entram pela porta e já trazem a aula feita.'},
+        assin:{label:'Assinatura', ex:'A. M.', traco:true}}
     ]
   },
   pauta: {
@@ -261,7 +281,32 @@ const BRANDS = {
         kicker:'Novidade',
         titulo:{label:'Título', ex:'A PAUTA já está na Microsoft Store'},
         texto:{label:'Texto', ex:'Experimente gratuitamente com uma turma fictícia. Para usar com turmas reais, é só adquirir a licença pessoal.'},
-        assin:{label:'Botão (opcional)', ex:'Procure «PAUTA» na Store'}}
+        assin:{label:'Botão (opcional)', ex:'Procure «PAUTA» na Store'}},
+      {id:'testemunho', nome:'Fui eu que a fiz',
+        kicker:'Já experimentei',
+        titulo:{label:'Frase de abertura', ex:'Uso a PAUTA nas minhas 4 turmas, todos os períodos.'},
+        texto:{label:'Texto', ex:'Fui eu que a criei e sou a primeira a confiar nela. Poupa-me horas de contas e de acertos — e funciona mesmo.'},
+        assin:{label:'Assinatura', ex:'Antónia Mancha, professora de Português'}},
+      {id:'calculadora', nome:'Paz com a calculadora',
+        kicker:'Confissão de professora',
+        titulo:{label:'Título', ex:'Já não discuto com a calculadora'},
+        texto:{label:'Texto', ex:'Entre mim e as médias havia sempre uma guerra. A PAUTA pôs-nos a paz. Uso-a eu própria, todos os períodos — e funciona mesmo.'},
+        assin:{label:'Botão (opcional)', ex:'Experimente também'}},
+      {id:'desafio', nome:'Aceite o desafio',
+        kicker:'Aposta',
+        titulo:{label:'Título', ex:'Aposto que corrige mais rápido do que a senhora'},
+        texto:{label:'Texto', ex:'Testei nas minhas próprias turmas e nunca mais voltei atrás. Prometo: funciona mesmo.'},
+        assin:{label:'Botão (opcional)', ex:'Aceite o desafio'}},
+      {id:'domingo', nome:'Salvou-me o domingo',
+        kicker:'Vida de professor',
+        titulo:{label:'A situação', ex:'Domingo à noite, mala cheia de testes por corrigir.'},
+        texto:{label:'O remate', ex:'A PAUTA salvou-me mais domingos do que consigo contar. E isto não é publicidade: é a minha vida real de professora.'},
+        assin:{label:'Botão (opcional)', ex:'Salve o seu também'}},
+      {id:'tempo', nome:'Quanto tempo gasta?',
+        kicker:'Pergunte-se',
+        titulo:{label:'Título', ex:'Quanto tempo gasta a fazer médias à mão?'},
+        texto:{label:'Texto', ex:'Eu gastava uma tarde inteira. Agora a PAUTA faz isso em segundos — e sou eu que a uso, todos os dias.'},
+        assin:{label:'Botão (opcional)', ex:'Experimente já'}}
     ]
   }
 };
@@ -505,6 +550,10 @@ function legenda(){
       case 'destaque': return `Destaque da semana ✍️\n\n«${L(d.titulo)}», de ${L(d.assin).replace(/^—\s*/,'')}.\n\n${L(d.texto)}\n\nLeia o texto completo em leramargem.com (link na bio).\n\n${tags} #novasvozes #escrita`;
       case 'antologia': return `Antologia da Face 📖\n\n${aspas(L(d.texto))}\n— ${L(d.assin)}\n\nleramargem.com (link na bio)\n\n${tags} #poesia`;
       case 'caderno': return `Caderno de Autor 🖋️\n\n${L(d.titulo)}\n${L(d.texto)}\n\nleramargem.com (link na bio)\n\n${tags} #cadernodeautor`;
+      case 'confissao': return `Confissão 🤍\n\n${aspas(L(d.texto))}\n— ${L(d.assin)}\n\nleramargem.com (link na bio)\n\n${tags} #confissao`;
+      case 'pergunta': return `${L(d.titulo)} 💬\n\n${L(d.texto)}\n\nleramargem.com (link na bio)\n\n${tags} #perguntadodia`;
+      case 'bastidores': return `Nos bastidores 🎬\n\n${L(d.titulo)}\n${L(d.texto)}\n\nleramargem.com (link na bio)\n\n${tags} #bastidores`;
+      case 'confidencia': return `Isto fica entre nós 🤫\n\n${aspas(L(d.texto))}\n— ${L(d.assin)}\n\nleramargem.com (link na bio)\n\n${tags} #salademestres`;
       default: return `${L(d.titulo)}\n\n${L(d.texto)}\n\nleramargem.com (link na bio)\n\n${tags}`;
     }
   } else {
@@ -514,6 +563,11 @@ function legenda(){
       case 'humor': return `${L(d.titulo)}\n\n${L(d.texto)} 😅\n\nQuem nunca? Marque um colega que precisa da PAUTA.\n\n${fim}\n\n${tags} #vidadeprofessor`;
       case 'promo': return `${L(d.titulo)}\n\n${L(d.texto)}\n\n${fim}\n\n${tags}`;
       case 'store': return `🎉 ${L(d.titulo)}\n\n${L(d.texto)}\n\nProcure «PAUTA» na Microsoft Store ou aceda a apps.microsoft.com/detail/9NWXQXFPZ3T6\n\nQuer a licença? Escreva para pautavaliacao@gmail.com.\n\n${tags} #microsoftstore`;
+      case 'testemunho': return `${L(d.titulo)} 🙋‍♀️\n\n${L(d.texto)}\n\nNão é só mais uma app: é a ferramenta que eu própria uso todas as semanas.\n\n${fim}\n\n${tags} #funcionamesmo`;
+      case 'calculadora': return `${L(d.titulo)} 😅\n\n${L(d.texto)}\n\n${fim}\n\n${tags} #funcionamesmo #vidadeprofessor`;
+      case 'desafio': return `${L(d.titulo)} 😏\n\n${L(d.texto)}\n\nAceita a aposta? Experimente e diga-me se tenho razão.\n\n${fim}\n\n${tags} #funcionamesmo #desafio`;
+      case 'domingo': return `${L(d.titulo)} 🌙\n\n${L(d.texto)}\n\n${fim}\n\n${tags} #funcionamesmo #vidadeprofessor`;
+      case 'tempo': return `${L(d.titulo)} ⏱️\n\n${L(d.texto)}\n\n${fim}\n\n${tags} #funcionamesmo`;
       default: return `${L(d.kicker)} ${L(d.titulo)}\n\n${L(d.texto)}\n\n${fim}\n\n${tags}`;
     }
   }
