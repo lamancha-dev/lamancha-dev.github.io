@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Gramática do Secundário — Prof.ª Antónia Mancha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#fff8ec;
+  --card:#ffffff;
+  --ink:#17131f;
+  --soft:#5f5866;
+  --line:#17131f;
+
+  --azul:#3d5af1;  --azul-bg:#dfe5ff;
+  --coral:#f0476b; --coral-bg:#ffe1e8;
+  --sol:#ffc533;   --sol-bg:#fff1c7;
+  --menta:#14c38e; --menta-bg:#d8f7ec;
+
+  --shadow:4px 4px 0 var(--ink);
+  --shadow-lg:6px 6px 0 var(--ink);
+  --display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --text:"Literata","Iowan Old Style","Palatino Linotype",Georgia,serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;}
+body{font-family:var(--display);background:var(--paper);color:var(--ink);line-height:1.55;
+  background-image:radial-gradient(rgba(23,19,31,.07) 1px,transparent 1px);background-size:18px 18px;}
+button{font-family:inherit;}
+
+/* ============ HEADER ============ */
+.topbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:2.5px solid var(--ink);}
+.topbar-in{display:flex;align-items:center;gap:16px;padding:12px 26px;}
+.logo{width:56px;height:56px;background:#fff;border:2.5px solid var(--ink);border-radius:16px;overflow:hidden;flex-shrink:0;box-shadow:3px 3px 0 var(--ink);cursor:pointer;}
+.logo img{width:100%;height:100%;object-fit:contain;padding:3px;}
+.wordmark{cursor:pointer;line-height:1.05;}
+.wordmark b{display:block;font-size:26px;font-weight:800;letter-spacing:-.02em;}
+.wordmark b span{background:var(--sol);padding:0 6px;border-radius:6px;}
+.wordmark small{font-size:12px;color:var(--soft);font-weight:600;}
+.topstats{margin-left:auto;display:flex;gap:10px;align-items:center;}
+.chip{border:2px solid var(--ink);border-radius:999px;padding:6px 14px;font-weight:800;font-size:13px;background:#fff;white-space:nowrap;}
+.chip.c1{background:var(--azul-bg);} .chip.c2{background:var(--coral-bg);} .chip.c3{background:var(--menta-bg);}
+.ring{width:46px;height:46px;flex-shrink:0;}
+.menu-btn{display:none;border:2px solid var(--ink);background:var(--sol);border-radius:12px;width:44px;height:44px;font-size:20px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);}
+
+/* ============ LAYOUT ============ */
+.layout{display:flex;align-items:flex-start;}
+.sidebar{width:300px;flex-shrink:0;padding:22px 18px 40px;position:sticky;top:83px;height:calc(100vh - 83px);overflow-y:auto;}
+.main{flex:1;min-width:0;padding:28px 40px 60px;max-width:1000px;}
+
+/* ============ SIDEBAR ============ */
+.navhome{display:flex;align-items:center;gap:10px;padding:11px 14px;margin-bottom:18px;border:2.5px solid var(--ink);border-radius:14px;background:#fff;font-weight:800;cursor:pointer;box-shadow:var(--shadow);transition:transform .12s,box-shadow .12s;}
+.navhome:hover{transform:translate(-2px,-2px);box-shadow:var(--shadow-lg);}
+.navhome.active{background:var(--ink);color:#fff;}
+.navhome svg{width:18px;height:18px;}
+.navgroup{margin-bottom:18px;}
+.navgroup-head{display:flex;align-items:center;gap:10px;padding:10px 14px;border:2.5px solid var(--ink);border-radius:14px;font-weight:800;font-size:14px;box-shadow:var(--shadow);margin-bottom:8px;}
+.navgroup-head svg{width:20px;height:20px;}
+.navitem{display:flex;align-items:center;gap:10px;padding:8px 12px;margin:2px 0 2px 8px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:600;border:2px solid transparent;transition:background .12s,border-color .12s;}
+.navitem:hover{background:#fff;border-color:var(--ink);}
+.navitem .dot{width:10px;height:10px;border-radius:50%;border:2px solid var(--ink);flex-shrink:0;}
+.navitem .pct{margin-left:auto;font-size:11px;font-weight:800;color:var(--soft);}
+.navitem.active{background:#fff;border-color:var(--ink);box-shadow:3px 3px 0 var(--ink);}
+.navitem.done .pct{color:var(--ink);}
+
+/* ============ HOME ============ */
+.hello{display:grid;grid-template-columns:1fr 300px;gap:22px;margin-bottom:34px;align-items:stretch;}
+.hello-main{background:var(--azul);color:#fff;border:2.5px solid var(--ink);border-radius:22px;padding:28px 30px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden;}
+.hello-main h1{margin:0 0 8px;font-size:34px;line-height:1.05;letter-spacing:-.025em;font-weight:800;max-width:520px;}
+.hello-main h1 em{font-style:normal;background:var(--sol);color:var(--ink);padding:0 8px;border-radius:8px;}
+.hello-main p{margin:0;font-size:15px;opacity:.92;max-width:470px;font-weight:500;}
+.hello-main .btn{margin-top:18px;}
+.hello-deco{position:absolute;right:-30px;bottom:-40px;font-family:var(--text);font-size:210px;font-weight:600;line-height:1;opacity:.13;font-style:italic;pointer-events:none;}
+.joke{background:var(--sol);border:2.5px solid var(--ink);border-radius:22px;padding:22px 22px 18px;box-shadow:var(--shadow-lg);transform:rotate(1.6deg);display:flex;flex-direction:column;}
+.joke .tag{display:inline-block;align-self:flex-start;background:var(--ink);color:#fff;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:4px 10px;border-radius:999px;margin-bottom:10px;}
+.joke p{margin:0;font-family:var(--text);font-size:16px;line-height:1.45;flex:1;}
+.joke button{align-self:flex-end;margin-top:12px;border:2px solid var(--ink);background:#fff;border-radius:999px;padding:5px 12px;font-weight:800;font-size:12px;cursor:pointer;}
+.joke button:hover{background:var(--ink);color:#fff;}
+
+.btn{display:inline-flex;align-items:center;gap:8px;border:2.5px solid var(--ink);background:#fff;color:var(--ink);border-radius:12px;padding:10px 18px;font-weight:800;font-size:14px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);transition:transform .1s,box-shadow .1s;}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink);}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink);}
+
+.section-title{display:flex;align-items:center;gap:12px;margin:34px 0 16px;}
+.section-title .sicon{width:44px;height:44px;border:2.5px solid var(--ink);border-radius:13px;display:flex;align-items:center;justify-content:center;box-shadow:3px 3px 0 var(--ink);}
+.section-title .sicon svg{width:24px;height:24px;}
+.section-title h2{margin:0;font-size:24px;font-weight:800;letter-spacing:-.02em;}
+.section-title .n{font-size:13px;color:var(--soft);font-weight:700;margin-left:4px;}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;}
+.card{background:#fff;border:2.5px solid var(--ink);border-radius:18px;box-shadow:var(--shadow);cursor:pointer;overflow:hidden;transition:transform .12s,box-shadow .12s;display:flex;flex-direction:column;}
+.card:hover{transform:translate(-3px,-3px);box-shadow:7px 7px 0 var(--ink);}
+.card-top{padding:16px 18px 14px;border-bottom:2.5px solid var(--ink);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;min-height:96px;}
+.card-top h3{margin:0;font-size:17px;line-height:1.2;font-weight:800;letter-spacing:-.01em;}
+.card-top svg{width:26px;height:26px;flex-shrink:0;opacity:.9;}
+.card-bot{padding:12px 18px 16px;display:flex;flex-direction:column;gap:9px;}
+.card-meta{display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;color:var(--soft);}
+.bar{height:12px;border:2px solid var(--ink);border-radius:999px;background:#fff;overflow:hidden;}
+.bar i{display:block;height:100%;background:var(--menta);border-right:2px solid var(--ink);transition:width .4s;}
+.bar i.zero{border-right:none;}
+.trophy{font-size:12px;font-weight:800;background:var(--menta-bg);border:2px solid var(--ink);border-radius:999px;padding:2px 9px;}
+
+/* ============ TOPIC ============ */
+.banner{border:2.5px solid var(--ink);border-radius:22px;padding:24px 28px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden;margin-bottom:22px;}
+.banner .crumb{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;opacity:.85;display:flex;align-items:center;gap:8px;}
+.banner .crumb a{cursor:pointer;text-decoration:underline;text-underline-offset:3px;}
+.banner h1{margin:6px 0 0;font-size:32px;line-height:1.08;letter-spacing:-.025em;font-weight:800;max-width:640px;}
+.banner .big{position:absolute;right:18px;top:50%;transform:translateY(-50%) rotate(-8deg);width:120px;height:120px;opacity:.18;}
+.banner .big svg{width:100%;height:100%;}
+
+.tabs{display:flex;gap:12px;margin-bottom:22px;flex-wrap:wrap;align-items:center;}
+.tabbtn{display:flex;align-items:center;gap:8px;border:2.5px solid var(--ink);border-radius:999px;padding:9px 20px;font-weight:800;font-size:14.5px;background:#fff;cursor:pointer;box-shadow:3px 3px 0 var(--ink);transition:transform .1s,box-shadow .1s;}
+.tabbtn svg{width:17px;height:17px;}
+.tabbtn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink);}
+.tabbtn.on{background:var(--ink);color:#fff;transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink);}
+.tabbtn .cnt{background:var(--sol);color:var(--ink);border:2px solid var(--ink);border-radius:999px;font-size:11.5px;padding:0 8px;}
+.tabs .prog{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:800;min-width:220px;}
+.tabs .prog .bar{flex:1;}
+
+.theory{background:#fff;border:2.5px solid var(--ink);border-radius:20px;padding:30px 34px;box-shadow:var(--shadow-lg);font-family:var(--text);font-size:16px;}
+.theory h3{font-family:var(--display);font-size:19px;font-weight:800;letter-spacing:-.01em;margin:28px 0 12px;display:inline-block;background:linear-gradient(transparent 55%,var(--g-bg) 55%);padding:0 4px;}
+.theory h3:first-child{margin-top:0;}
+.theory h4{font-family:var(--display);font-size:16px;font-weight:800;margin:18px 0 6px;}
+.theory p{margin:8px 0;}
+.theory b{font-weight:600;background:var(--g-bg);padding:0 3px;border-radius:3px;}
+.theory .ex{font-style:italic;color:#4a4352;}
+.theory table{width:100%;border-collapse:separate;border-spacing:0;margin:16px 0;font-size:14.5px;border:2.5px solid var(--ink);border-radius:14px;overflow:hidden;}
+.theory th{background:var(--g);color:var(--g-on);font-family:var(--display);font-size:12.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;text-align:left;padding:11px 14px;border-bottom:2.5px solid var(--ink);}
+.theory td{padding:10px 14px;vertical-align:top;border-bottom:1.5px solid #e9e2d6;}
+.theory tr:last-child td{border-bottom:none;}
+.theory tr:nth-child(odd) td{background:#fffcf6;}
+.theory td:first-child{font-family:var(--display);font-weight:700;}
+.theory ul{padding-left:22px;margin:8px 0;}
+.theory li{margin:6px 0;}
+.theory .def{border:2px solid var(--ink);border-radius:12px;padding:12px 16px;margin:12px 0;background:#fff;box-shadow:3px 3px 0 var(--g);}
+.theory .def b{background:none;font-family:var(--display);font-weight:800;}
+.theory .destaque{background:var(--sol-bg);border:2px dashed var(--ink);border-radius:12px;padding:12px 16px;margin:16px 0;}
+.theory .destaque::before{content:"⚠️ Atenção  ";font-family:var(--display);font-weight:800;}
+.tocta{margin-top:24px;display:flex;justify-content:flex-end;}
+
+.ex-card{background:#fff;border:2.5px solid var(--ink);border-radius:18px;padding:20px 22px;margin-bottom:18px;box-shadow:var(--shadow);}
+.ex-card.done{background:#fffdf8;}
+.ex-q{display:flex;gap:12px;font-family:var(--text);font-size:16.5px;font-weight:600;margin-bottom:14px;}
+.num{width:32px;height:32px;flex-shrink:0;border:2.5px solid var(--ink);border-radius:10px;background:var(--g);color:var(--g-on);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;}
+.ex-q u{text-decoration:none;background:var(--sol);padding:0 4px;border-radius:4px;}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.opt{display:flex;align-items:center;gap:10px;text-align:left;border:2px solid var(--ink);background:#fff;border-radius:12px;padding:10px 12px;font-size:14.5px;font-weight:600;cursor:pointer;transition:transform .1s,box-shadow .1s,background .1s;}
+.opt .l{width:26px;height:26px;flex-shrink:0;border:2px solid var(--ink);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;background:var(--paper);}
+.opt:hover:not(:disabled){transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--ink);background:var(--g-bg);}
+.opt:disabled{cursor:default;color:var(--ink);}
+.opt.ok{background:var(--menta);}
+.opt.ok .l{background:#fff;}
+.opt.bad{background:var(--coral);color:#fff;}
+.opt.bad.fresh{animation:shake .35s;}
+.opt.bad .l{background:#fff;color:var(--ink);}
+.opt.dim{opacity:.45;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.answer-row{display:flex;gap:10px;}
+.answer-row input{flex:1;border:2px solid var(--ink);border-radius:12px;padding:11px 14px;font-size:15px;font-family:var(--text);background:var(--paper);}
+.answer-row input:focus{outline:none;box-shadow:3px 3px 0 var(--g);background:#fff;}
+.fb{margin-top:14px;border:2px solid var(--ink);border-radius:12px;padding:12px 16px;font-size:14.5px;}
+.fb.fresh{animation:pop .25s;}
+.fb.ok{background:var(--menta-bg);}
+.fb.bad{background:var(--coral-bg);}
+.fb .v{font-weight:800;display:block;margin-bottom:4px;}
+.fb .c{font-family:var(--text);}
+@keyframes pop{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+.ex-foot{display:flex;justify-content:space-between;align-items:center;margin-top:8px;flex-wrap:wrap;gap:12px;}
+.ex-foot .score{font-weight:800;}
+.finish{background:var(--menta);border:2.5px solid var(--ink);border-radius:18px;padding:18px 22px;box-shadow:var(--shadow);margin-bottom:18px;font-weight:800;font-size:17px;display:flex;align-items:center;gap:12px;}
+.finish span{font-size:28px;}
+
+footer{margin-top:50px;font-size:12px;color:var(--soft);font-weight:600;}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:900px){
+  .menu-btn{display:block;}
+  .topstats .chip{display:none;}
+  .topbar-in{padding:10px 14px;gap:12px;}
+  .wordmark b{font-size:21px;}
+  .wordmark small{display:none;}
+  .logo{width:46px;height:46px;}
+  .sidebar{position:fixed;top:69px;left:0;height:calc(100vh - 69px);background:var(--paper);z-index:15;border-right:2.5px solid var(--ink);transform:translateX(-105%);transition:transform .2s;}
+  .sidebar.open{transform:none;}
+  .main{padding:20px 16px 50px;}
+  .hello{grid-template-columns:1fr;}
+  .joke{transform:none;}
+  .hello-main h1{font-size:27px;}
+  .banner h1{font-size:25px;}
+  .banner .big{width:80px;height:80px;}
+  .theory{padding:22px 18px;font-size:15.5px;}
+  .theory table{display:block;overflow-x:auto;}
+  .opts{grid-template-columns:1fr;}
+  .tabs .prog{margin-left:0;width:100%;}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <button class="menu-btn" onclick="toggleMenu()" aria-label="Menu">☰</button>
+    <div class="logo" onclick="goHome()"><img src="logo.jpg" alt="Antónia Mancha — Professora"></div>
+    <div class="wordmark" onclick="goHome()"><b><span>Gramática</span></b><small>Ensino secundário · 10.º, 11.º e 12.º anos</small></div>
+    <div class="topstats" id="topstats"></div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar"></nav>
+  <main class="main" id="main"></main>
+</div>
+
+<script src="dados.js"></script>
+<script>
+/* ===================== ICONS ===================== */
+const I = {
+  morf:`<svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7.5" height="7.5" rx="2" stroke="currentColor" stroke-width="2.2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2" stroke="currentColor" stroke-width="2.2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2" stroke="currentColor" stroke-width="2.2"/><path d="M13.5 17.25h7.5M17.25 13.5V21" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+  sint:`<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="4.5" r="2.5" stroke="currentColor" stroke-width="2.2"/><circle cx="5" cy="19" r="2.5" stroke="currentColor" stroke-width="2.2"/><circle cx="19" cy="19" r="2.5" stroke="currentColor" stroke-width="2.2"/><path d="M12 7v4M12 11L5.8 16.6M12 11l6.2 5.6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+  texto:`<svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v11H9.5L5 20v-4H4z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M8 9h8M8 12.3h5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+  home:`<svg viewBox="0 0 24 24" fill="none"><path d="M4 11.5 12 4l8 7.5M6.5 10v9.5h11V10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  book:`<svg viewBox="0 0 24 24" fill="none"><path d="M3.5 5.5c2.5-1.2 5.5-1.2 8.5 0v14c-3-1.2-6-1.2-8.5 0zM20.5 5.5c-2.5-1.2-5.5-1.2-8.5 0v14c3-1.2 6-1.2 8.5 0z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>`,
+  pen:`<svg viewBox="0 0 24 24" fill="none"><path d="M4 20l1.2-4.6L16 4.6l3.4 3.4L8.6 18.8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M13.6 7l3.4 3.4" stroke="currentColor" stroke-width="2"/></svg>`
+};
+
+/* Each grammar domain gets one vivid colour; "on" is the text colour that reads on it */
+const GROUPS = {
+  "Morfologia":       {g:"var(--azul)",  bg:"var(--azul-bg)",  on:"#fff",          icon:I.morf,  short:"Palavras por dentro"},
+  "Sintaxe":          {g:"var(--coral)", bg:"var(--coral-bg)", on:"#fff",          icon:I.sint,  short:"Quem faz o quê na frase"},
+  "Texto e discurso": {g:"var(--sol)",   bg:"var(--sol-bg)",   on:"var(--ink)",    icon:I.texto, short:"Para lá da frase"}
+};
+function gvars(m){ return `--g:${m.g};--g-bg:${m.bg};--g-on:${m.on};`; }
+
+/* ===================== HUMOUR ===================== */
+const JOKES = [
+  "O sujeito nulo expletivo é o único sujeito que nunca é culpado de nada. Choveu? Não foi ninguém.",
+  "Uma vírgula entre o sujeito e o predicado é como sentar-se entre um casal no cinema: não se faz.",
+  "A mesóclise existe para provar que o português gosta de complicar. Di-lo-ia eu, di-lo-ias tu.",
+  "Anáfora: quando o texto se lembra do que disse. Catáfora: quando faz suspense.",
+  "O complemento oblíquo não sai da frase. É o colega que nunca sai do grupo de WhatsApp.",
+  "«Havia muitas pessoas» — o verbo haver, impessoal, recusa-se a ir para o plural. Questão de princípio.",
+  "O modificador apositivo vem sempre entre vírgulas. É tímido, mas tem coisas interessantes a dizer.",
+  "Valor aspetual habitual: estudar gramática todos os dias. Valor aspetual perfetivo: ter estudado."
+];
+const PRAISE = [
+  "Até o Fernando Pessoa aplaudia — e eram vários.",
+  "Isso é resposta de quem vai ao exame de cabeça erguida.",
+  "Certíssimo. O examinador sorriu algures.",
+  "Nem a próclise te engana.",
+  "Impecável. Podes emoldurar.",
+  "Boa! Assim até dá gosto corrigir."
+];
+const OOPS = [
+  "Quase. A gramática prega partidas a todos.",
+  "Não foi desta — mas lê a explicação e já não te apanham.",
+  "Até o Camões reescrevia. Vê o critério.",
+  "Essa engana meio país. Agora já sabes.",
+  "Respira, relê a teoria e volta à carga."
+];
+const pick = a => a[Math.floor(Math.random()*a.length)];
+
+/* ===================== STATE ===================== */
+let view = "home";          // "home" or a topic id
+let tab = "teoria";         // "teoria" | "exercicios"
+let lastKey = null;
+let jokeIdx = Math.floor(Math.random()*JOKES.length);
+let store = {};
+try { store = JSON.parse(localStorage.getItem("gramatica_am_v2") || "{}"); } catch(e) { store = {}; }
+function save(){ try { localStorage.setItem("gramatica_am_v2", JSON.stringify(store)); } catch(e){} }
+// store[topicId][idx] = {ok:true|false, choice:n | text:"..."}
+
+function stats(t){
+  const s = store[t.id] || {};
+  const done = Object.keys(s).length;
+  const ok = Object.values(s).filter(x=>x.ok).length;
+  return {done, ok, total:t.exercicios.length, pct:Math.round(100*done/t.exercicios.length)};
+}
+function totals(){
+  let done=0, ok=0, total=0;
+  TOPICS.forEach(t=>{ const s=stats(t); done+=s.done; ok+=s.ok; total+=s.total; });
+  return {done, ok, total, pct: total?Math.round(100*done/total):0};
+}
+function groups(){
+  const g = {};
+  TOPICS.forEach(t=>{ (g[t.grupo] = g[t.grupo] || []).push(t); });
+  return g;
+}
+function bar(p){ return `<div class="bar"><i class="${p===0?'zero':''}" style="width:${p}%"></i></div>`; }
+
+/* ===================== HEADER ===================== */
+function renderTop(){
+  const T = totals();
+  const r = 18, c = 2*Math.PI*r, off = c*(1-T.pct/100);
+  document.getElementById("topstats").innerHTML = `
+    <span class="chip c1">${TOPICS.length} temas</span>
+    <span class="chip c2">${T.total} exercícios</span>
+    <span class="chip c3">${T.ok} ${T.ok===1?'certo':'certos'}</span>
+    <svg class="ring" viewBox="0 0 46 46" aria-label="Progresso ${T.pct}%">
+      <circle cx="23" cy="23" r="${r}" fill="#fff" stroke="#17131f" stroke-width="2.5"/>
+      <circle cx="23" cy="23" r="${r}" fill="none" stroke="#14c38e" stroke-width="6" stroke-dasharray="${c}" stroke-dashoffset="${off}" transform="rotate(-90 23 23)"/>
+      <text x="23" y="27" text-anchor="middle" font-size="11" font-weight="800" font-family="Bricolage Grotesque, system-ui" fill="#17131f">${T.pct}%</text>
+    </svg>`;
+}
+
+/* ===================== SIDEBAR ===================== */
+function renderSide(){
+  const G = groups();
+  let h = `<div class="navhome ${view==='home'?'active':''}" onclick="goHome()">${I.home} Início</div>`;
+  for(const name in G){
+    const m = GROUPS[name];
+    h += `<div class="navgroup"><div class="navgroup-head" style="background:${m.g};color:${m.on}">${m.icon}${name}</div>`;
+    G[name].forEach(t=>{
+      const s = stats(t);
+      h += `<div class="navitem ${view===t.id?'active':''} ${s.pct===100?'done':''}" onclick="openTopic('${t.id}')">
+        <span class="dot" style="background:${s.pct===100?'var(--menta)':m.g}"></span><span>${t.titulo}</span>
+        <span class="pct">${s.pct===100?'✓':(s.pct?s.pct+'%':'')}</span></div>`;
+    });
+    h += `</div>`;
+  }
+  document.getElementById("sidebar").innerHTML = h;
+}
+
+/* ===================== HOME ===================== */
+function renderHome(){
+  const G = groups(), T = totals();
+  const next = TOPICS.find(t=>stats(t).pct<100) || TOPICS[0];
+  let h = `<section class="hello">
+    <div class="hello-main">
+      <h1>A gramática não morde. <em>Prometido.</em></h1>
+      <p>${T.done===0 ? "Escolhe um tema, lê a teoria e testa-te com perguntas ao estilo do exame nacional." : `Já fizeste ${T.done} de ${T.total} exercícios. Continua — o exame agradece.`}</p>
+      <button class="btn" onclick="openTopic('${next.id}')">${T.done===0?'Começar':'Continuar'}: ${next.titulo} →</button>
+      <div class="hello-deco">Aa</div>
+    </div>
+    <aside class="joke"><span class="tag">Gramática com humor</span><p id="joke">${JOKES[jokeIdx]}</p><button onclick="nextJoke()">Outra ↻</button></aside>
+  </section>`;
+  for(const name in G){
+    const m = GROUPS[name];
+    h += `<div class="section-title"><div class="sicon" style="background:${m.g};color:${m.on}">${m.icon}</div><h2>${name}</h2><span class="n">· ${m.short}</span></div><div class="grid">`;
+    G[name].forEach(t=>{
+      const s = stats(t);
+      h += `<div class="card" onclick="openTopic('${t.id}')">
+        <div class="card-top" style="background:${m.bg}"><h3>${t.titulo}</h3>${m.icon}</div>
+        <div class="card-bot">
+          <div class="card-meta"><span>${s.total} exercícios</span>${s.pct===100?'<span class="trophy">🏆 dominado</span>':`<span>${s.pct}%</span>`}</div>
+          ${bar(s.pct)}
+        </div></div>`;
+    });
+    h += `</div>`;
+  }
+  h += `<footer>Conteúdos: «Resumo da Gramática — Ensino Secundário», Prof.ª Antónia Mancha. O teu progresso fica guardado neste dispositivo.</footer>`;
+  return h;
+}
+function nextJoke(){ jokeIdx = (jokeIdx+1)%JOKES.length; document.getElementById("joke").textContent = JOKES[jokeIdx]; }
+
+/* ===================== TOPIC ===================== */
+function renderTopic(t){
+  const m = GROUPS[t.grupo], s = stats(t);
+  let h = `<div style="${gvars(m)}">
+    <div class="banner" style="background:${m.g};color:${m.on}">
+      <div class="crumb"><a onclick="goHome()">Início</a> / ${t.grupo}</div>
+      <h1>${t.titulo}</h1>
+      <div class="big">${m.icon}</div>
+    </div>
+    <div class="tabs">
+      <button class="tabbtn ${tab==='teoria'?'on':''}" onclick="setTab('teoria')">${I.book} Teoria</button>
+      <button class="tabbtn ${tab==='exercicios'?'on':''}" onclick="setTab('exercicios')">${I.pen} Exercícios <span class="cnt">${s.total}</span></button>
+      <div class="prog"><span>${s.done}/${s.total}</span>${bar(s.pct)}</div>
+    </div>`;
+  if(tab==="teoria"){
+    h += `<article class="theory">${t.teoria}</article>
+      <div class="tocta"><button class="btn" onclick="setTab('exercicios')">Já percebi — toca a praticar ${I.pen}</button></div>`;
+  } else {
+    if(s.done===s.total) h += `<div class="finish"><span>🏆</span>Tema concluído: ${s.ok} de ${s.total} certas. ${s.ok===s.total?'Perfeito!':'Revê as que falhaste e tenta de novo.'}</div>`;
+    t.exercicios.forEach((ex,i)=>{ h += renderEx(t,ex,i); });
+    h += `<div class="ex-foot"><span class="score">Certas: ${s.ok}/${s.total}</span>
+      <span style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" onclick="setTab('teoria')">${I.book} Rever teoria</button><button class="btn" onclick="resetTopic('${t.id}')">↺ Recomeçar tema</button></span></div>`;
+  }
+  h += `<footer>Conteúdos: «Resumo da Gramática — Ensino Secundário», Prof.ª Antónia Mancha.</footer></div>`;
+  return h;
+}
+
+function renderEx(t, ex, i){
+  const a = (store[t.id]||{})[i];
+  const id = `${t.id}_${i}`;
+  let body = "";
+  if(ex.tipo==="mc"){
+    body = `<div class="opts">` + ex.opcoes.map((o,k)=>{
+      let cls = "";
+      if(a){ if(k===ex.certa) cls="ok"; else if(k===a.choice) cls="bad"+(lastKey===id?" fresh":""); else cls="dim"; }
+      return `<button class="opt ${cls}" ${a?'disabled':''} onclick="answerMC('${t.id}',${i},${k})"><span class="l">${"ABCD"[k]}</span>${o}</button>`;
+    }).join("") + `</div>`;
+  } else {
+    body = `<div class="answer-row"><input id="in_${id}" placeholder="Escreve a tua resposta…" ${a?'disabled':''} value="${a?escapeAttr(a.text):''}" onkeydown="if(event.key==='Enter')answerShort('${t.id}',${i})">
+      ${a?'':`<button class="btn" onclick="answerShort('${t.id}',${i})">Verificar</button>`}</div>`;
+  }
+  let fb = "";
+  if(a){
+    fb = `<div class="fb ${a.ok?'ok':'bad'} ${lastKey===id?'fresh':''}"><span class="v">${a.ok?'✓ '+a.msg:'✗ '+a.msg}</span><span class="c">${ex.criterio}</span></div>`;
+  }
+  return `<div class="ex-card ${a?'done':''}" id="ex_${id}"><div class="ex-q"><span class="num">${i+1}</span><div>${ex.enun}</div></div>${body}${fb}</div>`;
+}
+function escapeAttr(s){ return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
+
+function record(tid, i, data){
+  (store[tid] = store[tid] || {})[i] = data;
+  lastKey = `${tid}_${i}`;
+  save();
+  const keepY = window.scrollY;
+  render();
+  window.scrollTo(0, keepY);
+}
+function answerMC(tid, i, k){
+  const ex = TOPICS.find(t=>t.id===tid).exercicios[i];
+  const ok = k===ex.certa;
+  record(tid, i, {ok, choice:k, msg: ok?pick(PRAISE):pick(OOPS)});
+}
+function norm(s){ return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[.,;:!?«»"]/g,"").replace(/\s+/g," ").trim(); }
+function answerShort(tid, i){
+  const ex = TOPICS.find(t=>t.id===tid).exercicios[i];
+  const val = document.getElementById(`in_${tid}_${i}`).value;
+  if(!val.trim()) return;
+  const ok = ex.resposta.some(r=>norm(val).includes(norm(r)));
+  record(tid, i, {ok, text:val, msg: ok?pick(PRAISE):"Compara com o critério — "+pick(OOPS).toLowerCase()});
+}
+function resetTopic(tid){ delete store[tid]; save(); render(); window.scrollTo(0,0); }
+
+/* ===================== NAV ===================== */
+function render(){
+  renderTop(); renderSide();
+  const main = document.getElementById("main");
+  main.innerHTML = view==="home" ? renderHome() : renderTopic(TOPICS.find(t=>t.id===view));
+}
+function goHome(){ lastKey=null; view="home"; closeMenu(); render(); window.scrollTo(0,0); location.hash=""; }
+function openTopic(id){ lastKey=null; view=id; tab="teoria"; closeMenu(); render(); window.scrollTo(0,0); location.hash=id; }
+function setTab(x){ lastKey=null; tab=x; render(); window.scrollTo(0,0); }
+function toggleMenu(){ document.getElementById("sidebar").classList.toggle("open"); }
+function closeMenu(){ document.getElementById("sidebar").classList.remove("open"); }
+
+const fromHash = location.hash.slice(1);
+if(fromHash && TOPICS.some(t=>t.id===fromHash)) view = fromHash;
+render();
+</script>
+</body>
+</html>
