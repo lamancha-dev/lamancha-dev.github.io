@@ -358,7 +358,7 @@ function renderHome(){
   const next = TOPICS.find(t=>stats(t).pct<100) || TOPICS[0];
   let h = `<section class="hello">
     <div class="hello-main">
-      <h1>A gramática não morde.</h1><p class="hello-sub">Antes de desistires, dá-lhe cinco minutos. <em>No máximo, ladra.</em></p>
+      <h1>A gramática não morde.</h1><p class="hello-sub">Antes de desistires, dá-lhe <em>cinco minutos</em>.</p>
       <p>${T.done===0 ? "Escolhe um tema, lê a teoria e testa-te com perguntas ao estilo do exame nacional." : `Já fizeste ${T.done} de ${T.total} exercícios. Continua — o exame agradece.`}</p>
       <button class="btn" onclick="openTopic('${next.id}')">${T.done===0?'Começar':'Continuar'}: ${next.titulo} →</button>
       <div class="hello-deco">Aa</div>
