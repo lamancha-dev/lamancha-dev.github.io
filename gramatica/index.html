@@ -143,6 +143,15 @@ button{font-family:inherit;}
 .theory .destaque{background:var(--sol-bg);border-radius:8px;padding:13px 17px;margin:16px 0;}
 .theory .destaque::before{content:"Atenção · ";font-family:var(--display);font-weight:800;color:#8a6420;}
 .tocta{margin-top:24px;display:flex;justify-content:flex-end;}
+.wm{position:absolute;pointer-events:none;font-family:var(--text);font-style:italic;font-weight:600;line-height:.8;color:var(--g,var(--azul));opacity:.07;letter-spacing:-.04em;white-space:nowrap;user-select:none;}
+.has-wm{position:relative;overflow:hidden;}
+.has-wm > *:not(.wm){position:relative;z-index:1;}
+.card .wm{right:14px;top:10px;font-size:68px;opacity:.13;}
+.joke .wm{left:16px;bottom:-34px;font-size:130px;opacity:.16;color:var(--sol);font-style:normal;}
+.theory .wm{right:26px;top:22px;font-size:160px;opacity:.07;}
+.eli5 .wm{right:24px;top:50%;transform:translateY(-50%);font-size:150px;font-style:normal;opacity:.1;}
+.ex-card .wm{right:20px;top:10px;font-size:64px;font-style:normal;opacity:.08;}
+.trick .wm{right:8px;bottom:-14px;font-size:80px;opacity:.06;}
 .eli5{background:#fff;border-left:6px solid var(--g);border-radius:12px;padding:24px 28px;margin-bottom:26px;position:relative;box-shadow:var(--sh);}
 .eli5-tag{display:inline-block;background:var(--g);color:#fff;font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;padding:5px 12px;border-radius:999px;margin-bottom:12px;}
 .eli5 p{margin:0;font-family:var(--text);font-size:19px;line-height:1.55;}
@@ -246,6 +255,14 @@ const GROUPS = {
 };
 function gvars(m){ return `--g:${m.g};--g-bg:${m.bg};--g-on:${m.on};`; }
 
+/* Typographic mark shown faintly behind each topic's boxes */
+const MARK = {
+  "classes-palavras":"Aa", "adjacencia-verbal":"-lo", "processos-fonologicos":"/a/",
+  "formacao-palavras":"in-", "funcoes-frase":"S+P", "funcoes-gv":"CD",
+  "funcoes-nominal-adjetival":"N", "frase-complexa":"&", "atos-ilocutorios":"!",
+  "modalidade-deixis":"eu", "coerencia-coesao":"¶", "valor-aspetual":"…"
+};
+
 /* ===================== HUMOUR ===================== */
 const JOKES = [
   "O sujeito nulo expletivo é o único sujeito que nunca é culpado de nada. Choveu? Não foi ninguém.",
@@ -346,15 +363,15 @@ function renderHome(){
       <button class="btn" onclick="openTopic('${next.id}')">${T.done===0?'Começar':'Continuar'}: ${next.titulo} →</button>
       <div class="hello-deco">Aa</div>
     </div>
-    <aside class="joke"><span class="tag">Gramática com humor</span><p id="joke">${JOKES[jokeIdx]}</p><button onclick="nextJoke()">Outra ↻</button></aside>
+    <aside class="joke has-wm"><span class="wm">«»</span><span class="tag">Gramática com humor</span><p id="joke">${JOKES[jokeIdx]}</p><button onclick="nextJoke()">Outra ↻</button></aside>
   </section>`;
   for(const name in G){
     const m = GROUPS[name];
     h += `<div class="section-title"><div class="sicon" style="background:${m.g};color:#fff">${m.icon}</div><h2>${name}</h2><span class="n">· ${m.short}</span></div><div class="grid">`;
     G[name].forEach(t=>{
       const s = stats(t);
-      h += `<div class="card" style="border-top:5px solid ${m.g}" onclick="openTopic('${t.id}')">
-        <div class="card-top" style="color:${m.g}"><h3>${t.titulo}</h3>${m.icon}</div>
+      h += `<div class="card has-wm" style="border-top:5px solid ${m.g};--g:${m.g}" onclick="openTopic('${t.id}')"><span class="wm">${MARK[t.id]||"Aa"}</span>
+        <div class="card-top" style="color:${m.g}"><h3 style="padding-right:88px">${t.titulo}</h3></div>
         <div class="card-bot" style="--g:${m.g}">
           <div class="card-meta"><span>${s.total} exercícios</span>${s.pct===100?'<span class="trophy">🏆 dominado</span>':`<span>${s.pct}%</span>`}</div>
           ${bar(s.pct)}
@@ -385,7 +402,7 @@ function renderTopic(t){
   if(tab==="simples" && FACIL[t.id]){
     h += renderSimple(t);
   } else if(tab==="teoria"){
-    h += `<article class="theory">${t.teoria}</article>
+    h += `<article class="theory has-wm"><span class="wm">${MARK[t.id]||"§"}</span>${t.teoria}</article>
       <div class="tocta"><button class="btn" onclick="setTab('exercicios')">Já percebi — toca a praticar ${I.pen}</button></div>`;
   } else {
     if(s.done===s.total) h += `<div class="finish"><span>🏆</span>Tema concluído: ${s.ok} de ${s.total} certas. ${s.ok===s.total?'Perfeito!':'Revê as que falhaste e tenta de novo.'}</div>`;
@@ -415,7 +432,7 @@ function renderEx(t, ex, i){
   if(a){
     fb = `<div class="fb ${a.ok?'ok':'bad'} ${lastKey===id?'fresh':''}"><span class="v">${a.ok?'✓ '+a.msg:'✗ '+a.msg}</span><span class="c">${ex.criterio}</span></div>`;
   }
-  return `<div class="ex-card ${a?'done':''}" id="ex_${id}"><div class="ex-q"><span class="num">${i+1}</span><div>${ex.enun}</div></div>${body}${fb}</div>`;
+  return `<div class="ex-card has-wm ${a?'done':''}" id="ex_${id}"><span class="wm">${String(i+1).padStart(2,"0")}</span><div class="ex-q"><span class="num">${i+1}</span><div>${ex.enun}</div></div>${body}${fb}</div>`;
 }
 function escapeAttr(s){ return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
 
@@ -444,7 +461,7 @@ function resetTopic(tid){ delete store[tid]; save(); render(); window.scrollTo(0
 
 function renderSimple(t){
   const f = FACIL[t.id];
-  let h = `<section class="eli5"><span class="eli5-tag">💡 Explicado de forma simples</span><p>${f.ideia}</p></section>
+  let h = `<section class="eli5 has-wm"><span class="wm">?</span><span class="eli5-tag">💡 Explicado de forma simples</span><p>${f.ideia}</p></section>
     <h2 class="tricks-title">🔎 Truques para descobrir logo</h2><div class="tricks">`;
   f.truques.forEach(([emo,tit,como,ex])=>{
     h += `<div class="trick"><div class="trick-h"><span class="emo">${emo}</span>${tit}</div><p>${como}</p>${ex?`<div class="trick-ex">${ex}</div>`:''}</div>`;
