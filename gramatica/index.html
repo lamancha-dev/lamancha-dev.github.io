@@ -208,7 +208,13 @@ footer{margin-top:50px;font-size:12px;color:var(--soft);}
 .acts{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:-10px 0 26px;}
 .act{display:flex;align-items:center;gap:16px;background:linear-gradient(150deg,#fff 50%,#eef4f5 100%);border-radius:12px;padding:18px 22px;box-shadow:var(--sh);cursor:pointer;transition:transform .15s,box-shadow .15s;}
 .act:hover{transform:translateY(-3px);box-shadow:var(--sh-hover);}
-.act-ico{font-size:28px;width:52px;height:52px;flex-shrink:0;border-radius:12px;background:var(--azul-bg);display:flex;align-items:center;justify-content:center;}
+.act-ico{width:52px;height:52px;flex-shrink:0;border-radius:12px;background:var(--azul);color:#fff;display:flex;align-items:center;justify-content:center;}
+.act-ico svg{width:26px;height:26px;}
+.act-ico-2{background:var(--coral);}
+.navtool svg{width:18px;height:18px;flex-shrink:0;}
+.ttl-ico{display:flex;align-items:center;gap:12px;}
+.ttl-ico svg{width:34px;height:34px;}
+.btn svg{width:17px;height:17px;}
 .act h3{margin:0 0 2px;font-size:17px;font-weight:800;color:var(--azul);}
 .act p{margin:0;font-size:13.5px;color:var(--soft);}
 .act p b{color:#8f2a3c;}
@@ -294,6 +300,8 @@ const I = {
   texto:`<svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v11H9.5L5 20v-4H4z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M8 9h8M8 12.3h5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>`,
   home:`<svg viewBox="0 0 24 24" fill="none"><path d="M4 11.5 12 4l8 7.5M6.5 10v9.5h11V10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   book:`<svg viewBox="0 0 24 24" fill="none"><path d="M3.5 5.5c2.5-1.2 5.5-1.2 8.5 0v14c-3-1.2-6-1.2-8.5 0zM20.5 5.5c-2.5-1.2-5.5-1.2-8.5 0v14c3-1.2 6-1.2 8.5 0z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>`,
+  quiz:`<svg viewBox="0 0 24 24" fill="none"><rect x="5" y="4" width="14" height="17" rx="2.5" stroke="currentColor" stroke-width="2"/><path d="M9 4V3h6v1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8.5 10.5l1.6 1.6 3-3M8.5 16h7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  redo:`<svg viewBox="0 0 24 24" fill="none"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M4 4v4.5h4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 10l4 4M14 10l-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
   pen:`<svg viewBox="0 0 24 24" fill="none"><path d="M4 20l1.2-4.6L16 4.6l3.4 3.4L8.6 18.8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M13.6 7l3.4 3.4" stroke="currentColor" stroke-width="2"/></svg>`
 };
 
@@ -390,8 +398,8 @@ function renderSide(){
   const nw = wrongKeys().length;
   let h = `<div class="navhome ${view==='home'?'active':''}" onclick="goHome()">${I.home} Início</div>
     <div class="navtools">
-      <div class="navtool ${view==='quiz'?'active':''}" onclick="startQuiz()">🎯 Mini-teste</div>
-      <div class="navtool ${view==='review'?'active':''}" onclick="startReview()">🔁 Os meus erros${nw?` <span class="badge">${nw}</span>`:''}</div>
+      <div class="navtool ${view==='quiz'?'active':''}" onclick="startQuiz()">${I.quiz} Mini-teste</div>
+      <div class="navtool ${view==='review'?'active':''}" onclick="startReview()">${I.redo} Os meus erros${nw?` <span class="badge">${nw}</span>`:''}</div>
     </div>`;
   for(const name in G){
     const m = GROUPS[name];
@@ -421,8 +429,8 @@ function renderHome(){
     <aside class="joke has-wm"><span class="wm">«»</span><span class="tag">Gramática com humor</span><p id="joke">${JOKES[jokeIdx]}</p><button onclick="nextJoke()">Outra ↻</button></aside>
   </section>
   <section class="acts">
-    <div class="act has-wm" onclick="startQuiz()"><span class="wm">20</span><span class="act-ico">🎯</span><div><h3>Mini-teste</h3><p>10 perguntas ao calhas, de todos os temas. Nota de 0 a 20 no fim.</p></div><span class="act-go">Começar →</span></div>
-    <div class="act has-wm" onclick="startReview()"><span class="wm">↻</span><span class="act-ico">🔁</span><div><h3>Os meus erros</h3><p>${wrongKeys().length ? `Tens <b>${wrongKeys().length}</b> ${wrongKeys().length===1?'pergunta':'perguntas'} para tentar outra vez.` : 'Ainda não tens erros por rever. Boa!'}</p></div><span class="act-go">Rever →</span></div>
+    <div class="act has-wm" onclick="startQuiz()"><span class="wm">20</span><span class="act-ico">${I.quiz}</span><div><h3>Mini-teste</h3><p>10 perguntas ao calhas, de todos os temas. Nota de 0 a 20 no fim.</p></div><span class="act-go">Começar →</span></div>
+    <div class="act has-wm" onclick="startReview()"><span class="wm">↻</span><span class="act-ico act-ico-2">${I.redo}</span><div><h3>Os meus erros</h3><p>${wrongKeys().length ? `Tens <b>${wrongKeys().length}</b> ${wrongKeys().length===1?'pergunta':'perguntas'} para tentar outra vez.` : 'Ainda não tens erros por rever. Boa!'}</p></div><span class="act-go">Rever →</span></div>
   </section>
   ${renderDaily()}`;
   for(const name in G){
@@ -560,11 +568,11 @@ function renderQuiz(){
   if(!quizKeys.length){ quizKeys = shuffle(allKeys().filter(([tid,i])=>exOf(tid,i).tipo==="mc")).slice(0,10); session.q = {}; }
   const done = quizKeys.filter(([tid,i])=>session.q[tid+"_"+i]).length;
   const ok = quizKeys.filter(([tid,i])=>(session.q[tid+"_"+i]||{}).ok).length;
-  let h = `<div class="banner banner-neutral"><div class="crumb"><a onclick="goHome()">Início</a> / Treino</div><h1>🎯 Mini-teste</h1><p class="banner-p">10 perguntas ao calhas, de todos os temas. No fim, tens a tua nota de 0 a 20.</p></div>
+  let h = `<div class="banner banner-neutral"><div class="crumb"><a onclick="goHome()">Início</a> / Treino</div><h1 class="ttl-ico">${I.quiz} Mini-teste</h1><p class="banner-p">10 perguntas ao calhas, de todos os temas. No fim, tens a tua nota de 0 a 20.</p></div>
     <div class="tabs"><div class="prog" style="margin-left:0;width:100%"><span>${done}/10</span>${bar(done*10)}</div></div>`;
   if(done===10) h += quizResult(ok);
   quizKeys.forEach(([tid,i],n)=>{ const t=TOPICS.find(x=>x.id===tid); h += renderEx(t, t.exercicios[i], i, "q", n+1); });
-  if(done===10) h += `<div class="ex-foot"><span></span><span style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" onclick="startQuiz()">🎯 Novo mini-teste</button><button class="btn" onclick="startReview()">🔁 Rever os meus erros</button></span></div>`;
+  if(done===10) h += `<div class="ex-foot"><span></span><span style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" onclick="startQuiz()">${I.quiz} Novo mini-teste</button><button class="btn" onclick="startReview()">${I.redo} Rever os meus erros</button></span></div>`;
   return h + `<footer>As respostas contam para o teu progresso em cada tema.</footer>`;
 }
 function quizResult(ok){
@@ -580,9 +588,9 @@ function quizResult(ok){
 let reviewKeys = [];
 function startReview(){ reviewKeys = wrongKeys(); session.r = {}; lastKey=null; view="review"; closeMenu(); render(); window.scrollTo(0,0); }
 function renderReview(){
-  let h = `<div class="banner banner-neutral"><div class="crumb"><a onclick="goHome()">Início</a> / Treino</div><h1>🔁 Os meus erros</h1><p class="banner-p">As perguntas em que falhaste, para tentares outra vez. Quando acertares, saem da lista.</p></div>`;
+  let h = `<div class="banner banner-neutral"><div class="crumb"><a onclick="goHome()">Início</a> / Treino</div><h1 class="ttl-ico">${I.redo} Os meus erros</h1><p class="banner-p">As perguntas em que falhaste, para tentares outra vez. Quando acertares, saem da lista.</p></div>`;
   if(!reviewKeys.length){
-    return h + `<div class="empty"><span>🎉</span><div><b>Não tens erros por rever.</b><p>Ou ainda não respondeste a nada, ou estás a ir muito bem! Experimenta um mini-teste.</p><button class="btn" onclick="startQuiz()">🎯 Fazer um mini-teste</button></div></div>`;
+    return h + `<div class="empty"><span>🎉</span><div><b>Não tens erros por rever.</b><p>Ou ainda não respondeste a nada, ou estás a ir muito bem! Experimenta um mini-teste.</p><button class="btn" onclick="startQuiz()">${I.quiz} Fazer um mini-teste</button></div></div>`;
   }
   const fixed = reviewKeys.filter(([tid,i])=>(session.r[tid+"_"+i]||{}).ok).length;
   h += `<div class="tabs"><div class="prog" style="margin-left:0;width:100%"><span>${fixed}/${reviewKeys.length} corrigidas</span>${bar(Math.round(100*fixed/reviewKeys.length))}</div></div>`;
