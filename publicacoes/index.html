@@ -308,51 +308,61 @@ const BRANDS = {
         texto:{label:'Texto', ex:'Eu gastava uma tarde inteira. Agora a PAUTA faz isso em segundos — e sou eu que a uso, todos os dias.'},
         assin:{label:'Botão (opcional)', ex:'Experimente já'}},
       {id:'promo1', nome:'Promo · Sextou',
+        foto:'../divulgacao-pauta/imagens/stock/professor_exausto_1.jpg',
         kicker:'Só até 31 de dezembro: 12,50€',
         titulo:{label:'Título', ex:'Sextou e ainda tens 3 pautas por fechar?'},
         texto:{label:'Texto', ex:'A PAUTA calcula tudo sozinha a partir dos critérios da sua escola — médias, síntese por turma, gráficos — e devolve-te o fim de semana.'},
         assin:{label:'Botão (opcional)', ex:'Garanta já a sua licença'}},
       {id:'promo2', nome:'Promo · Testemunho',
+        foto:'../divulgacao-pauta/imagens/stock/professora_exausta_1.jpg',
         kicker:'Só até 31 de dezembro: 12,50€',
         titulo:{label:'Título', ex:'Antes passava horas a verificar médias à mão.'},
         texto:{label:'Texto', ex:'Agora é a PAUTA que faz isso por mim. Se também está farta(o) de perder fins de semana com contas, resolve-se em minutos.'},
         assin:{label:'Assinatura', ex:'Testemunho de uma colega que já usa a PAUTA'}},
       {id:'promo3', nome:'Promo · Importar grelha',
+        foto:'../divulgacao-pauta/imagens/stock/professor_exausto_2.jpg',
         kicker:'Só até 31 de dezembro: 12,50€',
         titulo:{label:'Título', ex:'Cada escola tem os seus critérios.'},
         texto:{label:'Texto', ex:'A PAUTA adapta-se à sua escola, não o contrário: importe a grelha de avaliação e pronto, calcula tudo à sua maneira.'},
         assin:{label:'Botão (opcional)', ex:'Quero experimentar'}},
       {id:'promo4', nome:'Promo · Antes/depois',
+        foto:'../divulgacao-pauta/imagens/stock/professora_adormecida.jpg',
         kicker:'Só até 31 de dezembro: 12,50€',
         titulo:{label:'Antes', ex:'Pilhas de testes, café frio, calculadora, uma noite inteira para fechar a pauta.'},
         texto:{label:'Depois', ex:'Lança as notas, a aplicação faz as contas, e o serão é seu outra vez. Qual destes dois já foi o seu fim de semana?'},
         assin:{label:'Botão (opcional)', ex:'Experimente a PAUTA'}},
       {id:'promo5', nome:'Promo · Médias e gráficos',
+        foto:'../divulgacao-pauta/imagens/stock/professora_exausta_2.jpg',
         kicker:'Só até 31 de dezembro: 12,50€',
         titulo:{label:'Título', ex:'Médias, gráficos e síntese por turma.'},
         texto:{label:'Texto', ex:'Tudo pronto para os conselhos de turma, sem ter de montar nada à mão. Feita por uma professora, para professores.'},
         assin:{label:'Botão (opcional)', ex:'Conheça a PAUTA'}},
       {id:'promo6', nome:'Promo · Cansaço',
+        foto:'../divulgacao-pauta/imagens/stock/professora_adormecida.jpg',
         kicker:'Só até 31 de dezembro: 12,50€',
         titulo:{label:'Título', ex:'Quando a pauta vence pelo cansaço...'},
         texto:{label:'Texto', ex:'A PAUTA calcula médias e sínteses por turma em segundos, para não acabares a corrigir em cima da secretária.'},
         assin:{label:'Botão (opcional)', ex:'Oferta de lançamento'}},
       {id:'promo7', nome:'Promo · Colegas já usam',
+        foto:'../divulgacao-pauta/imagens/stock/professor_exausto_3.jpg',
         kicker:'Só até 31 de dezembro: 12,50€',
         titulo:{label:'Título', ex:'Já são vários os colegas a usar a PAUTA.'},
         texto:{label:'Texto', ex:'Para corrigir testes e fechar pautas mais depressa. Se ainda corrige tudo à mão, está na hora de poupar tempo.'},
         assin:{label:'Botão (opcional)', ex:'Veja como funciona'}},
       {id:'promo8', nome:'Promo · Fim do período',
+        foto:'../divulgacao-pauta/imagens/stock/professora_exausta_1.jpg',
         kicker:'Só até 31 de dezembro: 12,50€',
         titulo:{label:'Título', ex:'É este o aspeto de uma secretária no fim do período?'},
         texto:{label:'Texto', ex:'A PAUTA organiza tudo — critérios, médias, pautas — e poupa-te as pilhas de papel.'},
         assin:{label:'Botão (opcional)', ex:'Quero organizar já'}},
       {id:'promo9', nome:'Promo · Foto familiar',
+        foto:'../divulgacao-pauta/imagens/stock/professor_exausto_1.jpg',
         kicker:'Só até 31 de dezembro: 12,50€',
         titulo:{label:'Título', ex:'Se esta foto te é familiar, a PAUTA foi feita para ti.'},
         texto:{label:'Texto', ex:'Chega de pilhas de papéis e contas à mão — lança as notas e deixa o resto com a aplicação.'},
         assin:{label:'Botão (opcional)', ex:'Experimente já'}},
       {id:'promo10', nome:'Promo · Café a alívio',
+        foto:'../divulgacao-pauta/imagens/stock/professor_exausto_3.jpg',
         kicker:'Só até 31 de dezembro: 12,50€',
         titulo:{label:'Título', ex:'☕➡️😵➡️😌 Este é o percurso de quem ainda corrige testes à mão.'},
         texto:{label:'Texto', ex:'A PAUTA salta direto para o alívio. Experimente antes que o período acabe.'},
@@ -384,6 +394,20 @@ function logoImg(){
   const src = st.logo[st.brand]; if(!src) return null;
   if(logoImgs[st.brand] && logoImgs[st.brand].src===src) return logoImgs[st.brand].complete ? logoImgs[st.brand] : null;
   const im = new Image(); im.onload = ()=>render(); im.src = src; logoImgs[st.brand]=im; return null;
+}
+const fotoImgs = {};
+function fotoImg(src){
+  if(!src) return null;
+  let im = fotoImgs[src];
+  if(!im){ im = new Image(); im.onload = ()=>render(); im.src = src; fotoImgs[src] = im; }
+  return im.complete ? im : null;
+}
+function drawCover(img,x,y,w,h){
+  const ir = img.width/img.height, r = w/h;
+  let sw,sh,sx,sy;
+  if(ir>r){ sh=img.height; sw=sh*r; sx=(img.width-sw)/2; sy=0; }
+  else { sw=img.width; sh=sw/r; sx=0; sy=(img.height-sh)/2; }
+  ctx.drawImage(img, sx,sy,sw,sh, x,y,w,h);
 }
 function setLS(v){ try{ ctx.letterSpacing = v; }catch(e){} }
 
@@ -524,18 +548,36 @@ function drawMargem(W,H,d,t,v,k){
 }
 
 function drawPauta(W,H,d,t,v,k){
-  ctx.fillStyle=v.bg; ctx.fillRect(0,0,W,H);
-  // círculos decorativos (crescem no vídeo)
-  const pc=P(0,1.1);
-  if(pc>0){
-    ctx.fillStyle=v.circle; ctx.beginPath(); ctx.arc(W-30, 30, 280*pc, 0, Math.PI*2); ctx.fill();
+  if(t.foto){
+    // Modelo com foto de fundo: desenha a foto, escurece por baixo para o
+    // texto se ler bem, e ignora a cor/variante escolhida (fica sempre
+    // texto claro sobre a foto).
+    const foto = fotoImg(t.foto);
+    if(foto) drawCover(foto, 0,0,W,H);
+    else { ctx.fillStyle='#16392A'; ctx.fillRect(0,0,W,H); }
+    const grad = ctx.createLinearGradient(0,0,0,H);
+    grad.addColorStop(0,'rgba(10,20,15,0.55)');
+    grad.addColorStop(0.55,'rgba(10,20,15,0.55)');
+    grad.addColorStop(1,'rgba(6,14,10,0.94)');
+    ctx.fillStyle=grad; ctx.fillRect(0,0,W,H);
+    v = Object.assign({}, v, {
+      accent:'#F28C28', pillInk:'#16392A', ink:'#FFFFFF',
+      muted:'rgba(255,255,255,.92)', btnBg:'#F28C28', btnInk:'#FFFFFF', dot:'#F28C28'
+    });
+  } else {
+    ctx.fillStyle=v.bg; ctx.fillRect(0,0,W,H);
+    // círculos decorativos (crescem no vídeo)
+    const pc=P(0,1.1);
+    if(pc>0){
+      ctx.fillStyle=v.circle; ctx.beginPath(); ctx.arc(W-30, 30, 280*pc, 0, Math.PI*2); ctx.fill();
+      ctx.strokeStyle=v.lines; ctx.lineWidth=3;
+      ctx.beginPath(); ctx.arc(W-30, 30, 370*pc, 0, Math.PI*2); ctx.stroke();
+    }
+    // linhas de pauta (desenham-se da esquerda para a direita)
     ctx.strokeStyle=v.lines; ctx.lineWidth=3;
-    ctx.beginPath(); ctx.arc(W-30, 30, 370*pc, 0, Math.PI*2); ctx.stroke();
+    const ly = H-300;
+    for(let i=0;i<5;i++){ const p=P(0.2+i*0.12,0.9); if(p<=0) continue; ctx.beginPath(); ctx.moveTo(0, ly+i*20); ctx.lineTo((360-i*30)*p, ly+i*20); ctx.stroke(); }
   }
-  // linhas de pauta (desenham-se da esquerda para a direita)
-  ctx.strokeStyle=v.lines; ctx.lineWidth=3;
-  const ly = H-300;
-  for(let i=0;i<5;i++){ const p=P(0.2+i*0.12,0.9); if(p<=0) continue; ctx.beginPath(); ctx.moveTo(0, ly+i*20); ctx.lineTo((360-i*30)*p, ly+i*20); ctx.stroke(); }
   const mx=96, cw=W-2*mx, story=H>1500;
   // etiqueta
   const ky = story ? 220 : 140;
