@@ -110,6 +110,12 @@
   </section>
 
   <section>
+    <h2>Onde vai publicar</h2>
+    <div class="chips" id="destBox"></div>
+    <p class="note">Como as páginas não estão ligadas automaticamente, escolha aqui para onde é esta publicação — fica só um lembrete visual no canto da imagem, para não se confundir ao publicar.</p>
+  </section>
+
+  <section>
     <h2>3. Cores</h2>
     <div class="swatches" id="varBox"></div>
   </section>
@@ -176,6 +182,12 @@ const FORMATOS = [
   {id:'quadrado', nome:'Quadrado', sub:'1:1', h:1080},
   {id:'retrato',  nome:'Retrato',  sub:'4:5', h:1350},
   {id:'story',    nome:'Story',    sub:'9:16', h:1920}
+];
+
+const DESTINOS = [
+  {id:'instagram', nome:'Instagram', cor:'#E1306C'},
+  {id:'facebook',  nome:'Facebook',  cor:'#1877F2'},
+  {id:'ambos',     nome:'Os dois',   cor:'#6B4FA0'}
 ];
 
 const BRANDS = {
@@ -418,7 +430,7 @@ const BRANDS = {
 
 /* ===================== Estado guardado ===================== */
 const KEY = 'publicacoes-insta-v1';
-let st = {brand:'margem', tpl:{margem:'ouvido', pauta:'dica'}, fmt:'retrato',
+let st = {brand:'margem', tpl:{margem:'ouvido', pauta:'dica'}, fmt:'retrato', destino:'instagram',
           variant:{margem:'papel', pauta:'verde'}, scale:100, hold:3, vdur:15, data:{}, logo:{}, caps:{}};
 try{ const s = JSON.parse(localStorage.getItem(KEY)||'null'); if(s) st = Object.assign(st, s); }catch(e){}
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} }
@@ -517,7 +529,72 @@ function render(){
     ctx.setTransform(z,0,0,z, W/2*(1-z), H/2*(1-z));
   }
   if(st.brand==='margem') drawMargem(W,H,d,t,v,k); else drawPauta(W,H,d,t,v,k);
+  drawDestino(W,H);
+  if(st.brand==='pauta') drawChamadaAtencao(W,H,t);
   return seqCursor;
+}
+
+/* ===================== Destino + chamada de atenção ===================== */
+function drawDestino(W,H){
+  const dest = DESTINOS.find(x=>x.id===st.destino) || DESTINOS[0];
+  ctx.save();
+  ctx.font='800 26px Montserrat'; setLS('1px');
+  const label = dest.id==='ambos' ? 'IG + FACE' : dest.nome.toUpperCase();
+  const icon = dest.id==='facebook' ? 'f' : (dest.id==='ambos' ? '◆' : '◎');
+  const tw = ctx.measureText(label).width;
+  const padX=26, pw = tw+padX*2+46, ph=58, px=W-pw-36, py=36;
+  ctx.fillStyle='rgba(10,12,10,0.38)'; rr(px,py,pw,ph,ph/2); ctx.fill();
+  ctx.fillStyle=dest.cor; ctx.beginPath(); ctx.arc(px+ph/2, py+ph/2, 15, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle='#fff'; ctx.font='800 20px Montserrat'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText(icon, px+ph/2, py+ph/2+1);
+  ctx.font='800 26px Montserrat'; ctx.textAlign='left';
+  ctx.fillStyle='#fff'; ctx.fillText(label, px+ph+4, py+ph/2+1);
+  ctx.textBaseline='alphabetic'; setLS('0px');
+  ctx.restore();
+}
+
+function drawChamadaAtencao(W,H,t){
+  const story = H>1500;
+  ctx.save();
+  // setas a descer, num canto livre do topo, a apontar para o título — sem tapar botão nem texto
+  const ax = 170, ay0 = 76;
+  ctx.strokeStyle='#FFD23F'; ctx.lineWidth=8; ctx.lineCap='round'; ctx.lineJoin='round';
+  for(let i=0;i<3;i++){
+    const oy = ay0 + i*22, op = 1 - i*0.3;
+    ctx.globalAlpha = Math.max(0.3, op);
+    ctx.beginPath();
+    ctx.moveTo(ax-16, oy);
+    ctx.lineTo(ax, oy+14);
+    ctx.lineTo(ax+16, oy);
+    ctx.stroke();
+  }
+  ctx.globalAlpha=1;
+  // texto de incentivo por cima das setas
+  ctx.font='800 24px Montserrat'; setLS('0.5px'); ctx.textAlign='center'; ctx.fillStyle='#FFD23F';
+  ctx.fillText('OLHA ISTO', ax, ay0-14);
+  setLS('0px');
+  // selo chamativo no canto (estrela/explosão), tipo "autocolante" — só nos modelos de promoção
+  if(/^promo/.test(t.id)){
+    const sx = story ? W-170 : W-150, sy = story ? 300 : 230, sr = story ? 110 : 96;
+    ctx.save();
+    ctx.translate(sx,sy); ctx.rotate(-0.12);
+    ctx.fillStyle='#FF3B3B';
+    const spikes=10;
+    ctx.beginPath();
+    for(let i=0;i<spikes*2;i++){
+      const r = i%2===0 ? sr : sr*0.72;
+      const a = Math.PI*i/spikes;
+      const px=Math.cos(a)*r, py=Math.sin(a)*r;
+      i===0 ? ctx.moveTo(px,py) : ctx.lineTo(px,py);
+    }
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.font='800 22px Montserrat'; ctx.fillText('ÚLTIMOS', 0, -14);
+    ctx.font='800 26px Montserrat'; ctx.fillText('DIAS!', 0, 16);
+    ctx.textBaseline='alphabetic';
+    ctx.restore();
+  }
+  ctx.restore();
 }
 
 function drawMargem(W,H,d,t,v,k){
@@ -722,6 +799,7 @@ function buildAll(){
   document.querySelectorAll('#brandBox button').forEach(b=>b.classList.toggle('on', b.dataset.brand===st.brand));
   $('tplBox').innerHTML = brand().templates.map(t=>`<button class="chip ${t.id===tpl().id?'on':''}" data-tpl="${t.id}">${esc(t.nome)}</button>`).join('');
   $('fmtBox').innerHTML = FORMATOS.map(f=>`<button class="chip ${f.id===fmt().id?'on':''}" data-fmt="${f.id}">${f.nome} <small>${f.sub}</small></button>`).join('');
+  $('destBox').innerHTML = DESTINOS.map(x=>`<button class="chip ${x.id===st.destino?'on':''}" data-dest="${x.id}" style="${x.id===st.destino?`background:${x.cor};border-color:${x.cor};color:#fff`:''}">${x.nome}</button>`).join('');
   $('varBox').innerHTML = brand().variants.map(v=>`<button class="sw ${v.id===variant().id?'on':''}" data-var="${v.id}"><span class="dot" style="background:${v.bg};color:${v.accent}">${st.brand==='margem'?'a':'P'}</span>${v.nome}</button>`).join('');
   buildFields();
   if(typeof atualizarSugestao==='function') atualizarSugestao();
@@ -753,6 +831,7 @@ document.addEventListener('click', e=>{
   if(b.dataset.brand){ st.brand=b.dataset.brand; save(); buildAll(); }
   else if(b.dataset.tpl){ st.tpl[st.brand]=b.dataset.tpl; save(); buildAll(); }
   else if(b.dataset.fmt){ st.fmt=b.dataset.fmt; save(); buildAll(); }
+  else if(b.dataset.dest){ st.destino=b.dataset.dest; save(); buildAll(); }
   else if(b.dataset.var){ st.variant[st.brand]=b.dataset.var; save(); buildAll(); }
 });
 $('fieldsBox').addEventListener('input', e=>{
