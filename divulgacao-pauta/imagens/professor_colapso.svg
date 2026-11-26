@@ -1,0 +1,76 @@
+<svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff3e0"/>
+      <stop offset="1" stop-color="#ffe0b2"/>
+    </linearGradient>
+  </defs>
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+
+  <!-- desk -->
+  <rect x="60" y="760" width="960" height="40" fill="#8d6e63"/>
+  <rect x="60" y="800" width="960" height="220" fill="#6d4c41"/>
+
+  <!-- stacks of test papers -->
+  <g>
+    <rect x="120" y="640" width="150" height="18" fill="#fff" stroke="#ccc"/>
+    <rect x="128" y="618" width="150" height="18" fill="#fff" stroke="#ccc" transform="rotate(-4 203 627)"/>
+    <rect x="112" y="598" width="150" height="18" fill="#fff" stroke="#ccc" transform="rotate(3 187 607)"/>
+    <rect x="118" y="578" width="150" height="18" fill="#fff" stroke="#ccc" transform="rotate(-2 193 587)"/>
+    <text x="150" y="635" font-family="Helvetica, Arial" font-size="13" fill="#d32f2f">7 valores</text>
+  </g>
+  <g>
+    <rect x="800" y="650" width="150" height="18" fill="#fff" stroke="#ccc"/>
+    <rect x="792" y="628" width="150" height="18" fill="#fff" stroke="#ccc" transform="rotate(4 867 637)"/>
+    <rect x="806" y="608" width="150" height="18" fill="#fff" stroke="#ccc" transform="rotate(-3 881 617)"/>
+    <rect x="796" y="588" width="150" height="18" fill="#fff" stroke="#ccc" transform="rotate(2 871 597)"/>
+    <text x="830" y="645" font-family="Helvetica, Arial" font-size="13" fill="#d32f2f">14 valores</text>
+  </g>
+
+  <!-- scattered papers around -->
+  <rect x="300" y="700" width="90" height="110" fill="#fff" stroke="#ddd" transform="rotate(-12 345 755)"/>
+  <rect x="650" y="705" width="90" height="110" fill="#fff" stroke="#ddd" transform="rotate(10 695 760)"/>
+  <rect x="480" y="730" width="90" height="110" fill="#fff" stroke="#ddd" transform="rotate(-6 525 785)"/>
+
+  <!-- coffee cup, empty, tipped -->
+  <ellipse cx="420" cy="770" rx="26" ry="10" fill="#4e342e"/>
+  <rect x="394" y="745" width="52" height="30" rx="6" fill="#fff" stroke="#bbb"/>
+
+  <!-- teacher: slumped over desk, head on arms -->
+  <g>
+    <!-- chair back barely visible -->
+    <rect x="500" y="650" width="130" height="16" rx="8" fill="#5d4037"/>
+    <!-- body / cardigan -->
+    <path d="M500 760 Q565 690 630 760 L630 800 L500 800 Z" fill="#8e63c7"/>
+    <!-- arms crossed on desk -->
+    <ellipse cx="565" cy="755" rx="70" ry="22" fill="#8e63c7"/>
+    <!-- head resting on arms, face sideways -->
+    <circle cx="565" cy="715" r="48" fill="#f3c6a0"/>
+    <!-- messy hair -->
+    <path d="M520 695 Q515 655 565 660 Q615 655 610 695 Q600 670 565 675 Q530 670 520 695 Z" fill="#4a3429"/>
+    <path d="M522 672 q-14 -10 -6 -22" stroke="#4a3429" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <path d="M608 672 q14 -10 6 -22" stroke="#4a3429" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <!-- closed/dazed eyes -->
+    <path d="M543 718 q8 6 16 0" stroke="#4a3429" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M580 718 q8 6 16 0" stroke="#4a3429" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <!-- dark circles -->
+    <ellipse cx="548" cy="728" rx="9" ry="5" fill="#b08968" opacity="0.5"/>
+    <ellipse cx="590" cy="728" rx="9" ry="5" fill="#b08968" opacity="0.5"/>
+    <!-- open mouth, exhausted -->
+    <ellipse cx="565" cy="738" rx="7" ry="5" fill="#7a4a3a"/>
+  </g>
+
+  <!-- red pen fallen from hand -->
+  <rect x="455" y="748" width="46" height="7" fill="#d32f2f" transform="rotate(25 478 752)"/>
+
+  <!-- sweat / stress marks -->
+  <path d="M500 660 q-10 -14 2 -26" stroke="#4fc3f7" stroke-width="6" fill="none" stroke-linecap="round"/>
+
+  <!-- speech bubble -->
+  <g>
+    <path d="M700 480 h300 a24 24 0 0 1 24 24 v110 a24 24 0 0 1 -24 24 h-170 l-40 44 l6 -44 h-90 a24 24 0 0 1 -24 -24 v-110 a24 24 0 0 1 24 -24 z" fill="#ffffff" stroke="#263238" stroke-width="4"/>
+    <text x="725" y="535" font-family="Helvetica, Arial" font-size="34" font-weight="bold" fill="#263238">Preciso</text>
+    <text x="725" y="575" font-family="Helvetica, Arial" font-size="34" font-weight="bold" fill="#263238">da PAUTA...</text>
+    <text x="725" y="610" font-family="Helvetica, Arial" font-size="22" fill="#546e7a">para ontem! 😵</text>
+  </g>
+</svg>
