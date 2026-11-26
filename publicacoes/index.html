@@ -157,13 +157,14 @@
   </section>
 
   <section>
-    <h2>7. Legenda para o Instagram</h2>
+    <h2>7. Legenda</h2>
+    <div class="chips" id="capPlatBox"></div>
     <textarea id="caption" style="min-height:170px"></textarea>
     <div class="row">
       <button class="btn sec" id="btnCapGen">Fazer nova legenda</button>
       <button class="btn sec" id="btnCapCopy">Copiar legenda</button>
     </div>
-    <p class="note">Pode mudar a legenda à vontade antes de a copiar.</p>
+    <p class="note">Cada rede tem a sua legenda própria — escolha acima qual quer ver ou copiar. Pode mudar a legenda à vontade antes de a copiar.</p>
   </section>
 </div>
 
@@ -281,7 +282,7 @@ const BRANDS = {
         assin:{label:'Botão (opcional)', ex:''}},
       {id:'promo', nome:'Licença / venda',
         kicker:'Oferta de lançamento',
-        titulo:{label:'Título', ex:'Só até 31 de dezembro: 12,50€'},
+        titulo:{label:'Título', ex:'Uma licença pessoal, para sempre'},
         texto:{label:'Texto', ex:'Uma licença pessoal, para sempre, com o seu nome nas impressões. Pagamento por MB Way ou transferência.'},
         assin:{label:'Botão (opcional)', ex:'Garanta já a sua licença'}},
       {id:'novidade', nome:'Novidade',
@@ -321,106 +322,106 @@ const BRANDS = {
         assin:{label:'Botão (opcional)', ex:'Experimente já'}},
       {id:'promo1', nome:'Promo · Sextou',
         foto:'../divulgacao-pauta/imagens/stock/professor_exausto_1.jpg',
-        kicker:'🚨 Últimos dias: 12,50€',
+        kicker:'🚨 Sextou e a pauta espera',
         titulo:{label:'Título', ex:'Sextou e ainda tens 3 pautas por fechar?'},
         texto:{label:'Texto', ex:'A PAUTA calcula tudo sozinha a partir dos critérios da sua escola — médias, síntese por turma, gráficos — e devolve-te o fim de semana.'},
         assin:{label:'Botão (opcional)', ex:'Garanta já a sua licença'}},
       {id:'promo2', nome:'Promo · Testemunho',
         foto:'../divulgacao-pauta/imagens/stock/professora_exausta_1.jpg',
-        kicker:'⏳ Oferta foge a 31/12',
+        kicker:'🙋‍♀️ Testemunho real',
         titulo:{label:'Título', ex:'Antes passava horas a verificar médias à mão.'},
         texto:{label:'Texto', ex:'Agora é a PAUTA que faz isso por mim. Se também está farta(o) de perder fins de semana com contas, resolve-se em minutos.'},
         assin:{label:'Assinatura', ex:'Testemunho de uma colega que já usa a PAUTA'}},
       {id:'promo3', nome:'Promo · Importar grelha',
-        kicker:'🔥 Só até 31 de dezembro',
+        kicker:'🔥 Critérios complicados?',
         titulo:{label:'Título', ex:'A sua escola inventou critérios só seus? Nós também ficámos surpreendidos.'},
         texto:{label:'Texto', ex:'A PAUTA importa a grelha da sua escola e finge que sempre soube calcular aquilo. Resultado: as mesmas contas, sem o desespero.'},
         assin:{label:'Botão (opcional)', ex:'Quero experimentar'}},
       {id:'promo4', nome:'Promo · Antes/depois',
         foto:'../divulgacao-pauta/imagens/stock/professora_adormecida.jpg',
-        kicker:'😱 Antes que seja tarde: 12,50€',
+        kicker:'😱 Antes / depois',
         titulo:{label:'Antes', ex:'Pilhas de testes, café frio, calculadora, uma noite inteira para fechar a pauta.'},
         texto:{label:'Depois', ex:'Lança as notas, a aplicação faz as contas, e o serão é seu outra vez. Qual destes dois já foi o seu fim de semana?'},
         assin:{label:'Botão (opcional)', ex:'Experimente a PAUTA'}},
       {id:'promo5', nome:'Promo · Médias e gráficos',
-        kicker:'📣 Oferta relâmpago até 31/12',
+        kicker:'📣 Sem Excel, sem rezas',
         titulo:{label:'Título', ex:'Gráficos bonitos sem abrir o Excel nem rezar.'},
         texto:{label:'Texto', ex:'A PAUTA faz a síntese de turma sozinha. Você só tem de fingir, no conselho de turma, que foi trabalhoso.'},
         assin:{label:'Botão (opcional)', ex:'Conheça a PAUTA'}},
       {id:'promo6', nome:'Promo · Cansaço',
         foto:'../divulgacao-pauta/imagens/stock/professora_adormecida.jpg',
-        kicker:'⏰ Contagem decrescente: 12,50€',
+        kicker:'😴 Quando o cansaço vence',
         titulo:{label:'Título', ex:'Quando a pauta vence pelo cansaço...'},
         texto:{label:'Texto', ex:'A PAUTA calcula médias e sínteses por turma em segundos, para não acabares a corrigir em cima da secretária.'},
-        assin:{label:'Botão (opcional)', ex:'Oferta de lançamento'}},
+        assin:{label:'Botão (opcional)', ex:'Experimente a PAUTA'}},
       {id:'promo7', nome:'Promo · Colegas já usam',
         foto:'../divulgacao-pauta/imagens/stock/professor_exausto_3.jpg',
-        kicker:'🎯 Última chamada: 12,50€',
+        kicker:'🎯 Já usam, e não é pouca gente',
         titulo:{label:'Título', ex:'Já são vários os colegas a usar a PAUTA.'},
         texto:{label:'Texto', ex:'Para corrigir testes e fechar pautas mais depressa. Se ainda corrige tudo à mão, está na hora de poupar tempo.'},
         assin:{label:'Botão (opcional)', ex:'Veja como funciona'}},
       {id:'promo8', nome:'Promo · Fim do período',
         foto:'../divulgacao-pauta/imagens/stock/professora_exausta_1.jpg',
-        kicker:'🚀 Só até 31 de dezembro',
+        kicker:'🚀 Fim de período',
         titulo:{label:'Título', ex:'É este o aspeto de uma secretária no fim do período?'},
         texto:{label:'Texto', ex:'A PAUTA organiza tudo — critérios, médias, pautas — e poupa-te as pilhas de papel.'},
         assin:{label:'Botão (opcional)', ex:'Quero organizar já'}},
       {id:'promo9', nome:'Promo · Foto familiar',
         foto:'../divulgacao-pauta/imagens/stock/professor_exausto_1.jpg',
-        kicker:'😂 Oferta sem brincadeira: 12,50€',
+        kicker:'😂 Reconhece-se nesta foto?',
         titulo:{label:'Título', ex:'Se esta foto te é familiar, a PAUTA foi feita para ti.'},
         texto:{label:'Texto', ex:'Chega de pilhas de papéis e contas à mão — lança as notas e deixa o resto com a aplicação.'},
         assin:{label:'Botão (opcional)', ex:'Experimente já'}},
       {id:'promo10', nome:'Promo · Café a alívio',
         foto:'../divulgacao-pauta/imagens/stock/professor_exausto_3.jpg',
-        kicker:'🔥🔥 Últimos dias da promo',
+        kicker:'☕ O percurso do cansaço',
         titulo:{label:'Título', ex:'☕➡️😵➡️😌 Este é o percurso de quem ainda corrige testes à mão.'},
-        texto:{label:'Texto', ex:'A PAUTA salta direto para o alívio. Experimente antes que o período acabe.'},
+        texto:{label:'Texto', ex:'A PAUTA salta direto para o alívio. Experimente já.'},
         assin:{label:'Botão (opcional)', ex:'Garanta já a sua licença'}},
       {id:'promo11', nome:'Promo · Contagem decrescente',
         foto:'../divulgacao-pauta/imagens/stock/professor_exausto_1.jpg',
-        kicker:'⏳ O relógio está a correr',
-        titulo:{label:'Título', ex:'Faltam poucos dias para o preço voltar ao normal.'},
-        texto:{label:'Texto', ex:'12,50€, licença para sempre, só até 31 de dezembro. Depois disso, o preço sobe.'},
-        assin:{label:'Botão (opcional)', ex:'Não perca o prazo'}},
+        kicker:'🔑 Licença para sempre',
+        titulo:{label:'Título', ex:'Uma licença pessoal, para sempre, com o seu nome nas impressões.'},
+        texto:{label:'Texto', ex:'Paga-se uma vez, usa-se em todos os períodos — sem mensalidades nem surpresas.'},
+        assin:{label:'Botão (opcional)', ex:'Peça a sua licença'}},
       {id:'promo12', nome:'Promo · Pergunta direta',
         foto:'../divulgacao-pauta/imagens/stock/professora_exausta_2.jpg',
-        kicker:'🚨 12,50€ só até 31/12',
+        kicker:'🚨 Pergunta direta',
         titulo:{label:'Título', ex:'Quantas horas gastou este período a fazer contas?'},
         texto:{label:'Texto', ex:'Se a resposta lhe dói, a PAUTA está pronta a assumir essa parte por si.'},
         assin:{label:'Botão (opcional)', ex:'Pare de contar à mão'}},
       {id:'promo13', nome:'Promo · Presente de Natal',
         foto:'../divulgacao-pauta/imagens/stock/professora_adormecida.jpg',
-        kicker:'🎄 Oferta de Natal (a sério)',
+        kicker:'🎄 Um presente a sério',
         titulo:{label:'Título', ex:'O presente que vai dar a si mesma este Natal?'},
-        texto:{label:'Texto', ex:'Uma licença da PAUTA por 12,50€ — e férias sem pautas por fechar.'},
+        texto:{label:'Texto', ex:'Uma licença da PAUTA — e férias sem pautas por fechar.'},
         assin:{label:'Botão (opcional)', ex:'Ofereça a si mesma'}},
       {id:'promo14', nome:'Promo · Recomendação de colega',
         foto:'../divulgacao-pauta/imagens/stock/professor_exausto_2.jpg',
-        kicker:'🙋‍♀️ Promoção quase a fugir',
+        kicker:'🙋‍♀️ Recomendação de colega',
         titulo:{label:'Título', ex:'Foi uma colega que me falou da PAUTA.'},
-        texto:{label:'Texto', ex:'E agora sou eu que ando a falar dela a toda a gente. Peça a sua licença antes que a oferta acabe.'},
+        texto:{label:'Texto', ex:'E agora sou eu que ando a falar dela a toda a gente. Peça já a sua licença.'},
         assin:{label:'Assinatura', ex:'Mais uma professora satisfeita'}},
       {id:'promo15', nome:'Promo · Comparação direta',
         foto:'../divulgacao-pauta/imagens/stock/professora_exausta_1.jpg',
-        kicker:'💸 12,50€ enquanto é tempo',
-        titulo:{label:'Título', ex:'Uma tarde a somar pontos ou 12,50€ a resolver tudo?'},
+        kicker:'💸 A escolha parece óbvia',
+        titulo:{label:'Título', ex:'Uma tarde a somar pontos ou a aplicação a resolver tudo?'},
         texto:{label:'Texto', ex:'A escolha parece óbvia, mas só quem já usou a PAUTA sabe o quanto tempo isto poupa de verdade.'},
         assin:{label:'Botão (opcional)', ex:'Escolha o seu tempo'}},
       {id:'promo16', nome:'Promo · Confissão de domingo',
         foto:'../divulgacao-pauta/imagens/stock/professor_exausto_3.jpg',
-        kicker:'😴 Última oportunidade: 12,50€',
+        kicker:'😴 Confissão de domingo',
         titulo:{label:'Título', ex:'É domingo e ainda não abri a mala dos testes.'},
         texto:{label:'Texto', ex:'Com a PAUTA, quando abro, é só para lançar as notas — as contas já estão feitas.'},
         assin:{label:'Botão (opcional)', ex:'Recupere os seus domingos'}},
-      {id:'promo17', nome:'Promo · Objeção ao preço',
-        kicker:'🤑 Isto quase parece grátis',
-        titulo:{label:'Título', ex:'12,50€ parece pouco para tanto tempo poupado?'},
-        texto:{label:'Texto', ex:'É mesmo pouco — tão pouco que, lá dentro, já há quem ache que é erro de preço. Aproveite antes que corrijam.'},
-        assin:{label:'Botão (opcional)', ex:'Aproveite agora'}},
+      {id:'promo17', nome:'Promo · Vale a pena',
+        kicker:'🤑 Mais barato que a dor de cabeça',
+        titulo:{label:'Título', ex:'Parece pouco para tanto tempo poupado?'},
+        texto:{label:'Texto', ex:'É mesmo pouco — e quem já experimenta a PAUTA não volta às contas à mão.'},
+        assin:{label:'Botão (opcional)', ex:'Experimente agora'}},
       {id:'promo18', nome:'Promo · Convite direto',
         foto:'../divulgacao-pauta/imagens/stock/professora_exausta_2.jpg',
-        kicker:'📢 Última semana da promo',
+        kicker:'📢 Convite direto',
         titulo:{label:'Título', ex:'Marque uma colega que precisa mesmo disto.'},
         texto:{label:'Texto', ex:'Ela vai agradecer-lhe — e a si própria também, quando fechar a próxima pauta em minutos.'},
         assin:{label:'Botão (opcional)', ex:'Partilhe com uma colega'}}
@@ -430,7 +431,7 @@ const BRANDS = {
 
 /* ===================== Estado guardado ===================== */
 const KEY = 'publicacoes-insta-v1';
-let st = {brand:'margem', tpl:{margem:'ouvido', pauta:'dica'}, fmt:'retrato', destino:'instagram',
+let st = {brand:'margem', tpl:{margem:'ouvido', pauta:'dica'}, fmt:'retrato', destino:'instagram', capPlat:'instagram',
           variant:{margem:'papel', pauta:'verde'}, scale:100, hold:3, vdur:15, data:{}, logo:{}, caps:{}};
 try{ const s = JSON.parse(localStorage.getItem(KEY)||'null'); if(s) st = Object.assign(st, s); }catch(e){}
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} }
@@ -589,8 +590,8 @@ function drawChamadaAtencao(W,H,t){
     }
     ctx.closePath(); ctx.fill();
     ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.font='800 22px Montserrat'; ctx.fillText('ÚLTIMOS', 0, -14);
-    ctx.font='800 26px Montserrat'; ctx.fillText('DIAS!', 0, 16);
+    ctx.font='800 22px Montserrat'; ctx.fillText('LICENÇA', 0, -14);
+    ctx.font='800 22px Montserrat'; ctx.fillText('P/ SEMPRE', 0, 16);
     ctx.textBaseline='alphabetic';
     ctx.restore();
   }
@@ -754,7 +755,23 @@ function drawPauta(W,H,d,t,v,k){
 }
 
 /* ===================== Legendas ===================== */
-function legenda(){
+function legenda(plataforma){
+  const p = plataforma || st.capPlat || 'instagram';
+  const base = legendaIG();
+  if(p==='instagram') return base;
+  return legendaParaFacebook(base);
+}
+function legendaParaFacebook(base){
+  const link = st.brand==='margem' ? 'leramargem.com' : 'lamancha-dev.github.io';
+  return base
+    // no Facebook o link pode ir direto no texto — troca "<site> (link na bio)" por um único "👉 <site>"
+    .replace(new RegExp(`${link.replace(/\./g,'\\.')} \\(link na bio\\)`, 'g'), `👉 ${link}`)
+    .replace(/\(link na bio\)/g, `👉 ${link}`)
+    // remove a linha final de hashtags (no Facebook usam-se poucas ou nenhumas)
+    .replace(/\n\n#[^\n]*$/, '')
+    .trim();
+}
+function legendaIG(){
   const d=data(), t=tpl(), L=s=>(s||'').trim();
   if(st.brand==='margem'){
     const tags='#leramargem #portugues #literatura #escola #alunos #leitura';
@@ -808,7 +825,12 @@ function buildAll(){
   const lg=st.logo[st.brand];
   $('logoPrev').classList.toggle('hidden', !lg); $('logoDel').classList.toggle('hidden', !lg);
   if(lg) $('logoPrev').src=lg;
-  $('caption').value = st.caps[dkey()] || legenda();
+  $('capPlatBox').innerHTML = [
+    {id:'instagram', nome:'📸 Instagram'},
+    {id:'facebook', nome:'📘 Facebook'}
+  ].map(x=>`<button class="chip ${x.id===st.capPlat?'on':''}" data-capplat="${x.id}">${x.nome}</button>`).join('');
+  const capsAqui = st.caps[dkey()] || {};
+  $('caption').value = capsAqui[st.capPlat] || legenda(st.capPlat);
   render();
 }
 function buildFields(){
@@ -833,21 +855,26 @@ document.addEventListener('click', e=>{
   else if(b.dataset.fmt){ st.fmt=b.dataset.fmt; save(); buildAll(); }
   else if(b.dataset.dest){ st.destino=b.dataset.dest; save(); buildAll(); }
   else if(b.dataset.var){ st.variant[st.brand]=b.dataset.var; save(); buildAll(); }
+  else if(b.dataset.capplat){ st.capPlat=b.dataset.capplat; save(); buildAll(); }
 });
 $('fieldsBox').addEventListener('input', e=>{
   const k=e.target.dataset.k; if(!k) return;
   data()[k]=e.target.value; delete st.caps[dkey()];
-  $('caption').value=legenda(); save(); schedule();
+  $('caption').value=legenda(st.capPlat); save(); schedule();
 });
 $('scale').addEventListener('input', e=>{ st.scale=+e.target.value; save(); schedule(); });
 $('btnExample').onclick=()=>{ st.data[dkey()]=exemplo(tpl()); delete st.caps[dkey()]; save(); buildAll(); };
 $('btnClear').onclick=()=>{ st.data[dkey()]={kicker:tpl().kicker,titulo:'',texto:'',assin:''}; delete st.caps[dkey()]; save(); buildAll(); };
-$('caption').addEventListener('input', e=>{ st.caps[dkey()]=e.target.value; save(); });
-$('btnCapGen').onclick=()=>{ delete st.caps[dkey()]; $('caption').value=legenda(); save(); toast('Legenda refeita'); };
+$('caption').addEventListener('input', e=>{ const c=(st.caps[dkey()] ||= {}); c[st.capPlat]=e.target.value; save(); });
+$('btnCapGen').onclick=()=>{
+  const c=(st.caps[dkey()] ||= {}); delete c[st.capPlat];
+  $('caption').value=legenda(st.capPlat); save(); toast('Legenda refeita');
+};
 
 async function copiar(){
   const txt=$('caption').value;
-  try{ await navigator.clipboard.writeText(txt); toast('Legenda copiada. Agora é só colar no Instagram.'); }
+  const rede = st.capPlat==='facebook' ? 'Facebook' : 'Instagram';
+  try{ await navigator.clipboard.writeText(txt); toast(`Legenda copiada. Agora é só colar no ${rede}.`); }
   catch(e){
     const ta=$('caption'); ta.focus(); ta.select();
     let ok=false; try{ ok=document.execCommand('copy'); }catch(_){}

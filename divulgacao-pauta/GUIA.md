@@ -98,20 +98,15 @@ Ainda no Graph API Explorer, com a tua Página escolhida:
 A partir daqui já não precisas de fazer mais nada — ele publica sozinho às
 segundas, quartas e sextas, sempre o próximo post da lista.
 
-## Como funciona depois de 31 de dezembro
+## Como funciona a lista de posts
 
-Há duas listas de posts:
+Há uma única lista, `posts.json`, com os posts de divulgação da PAUTA (sem
+preço nem data de promoção). O robô publica sempre o próximo post da lista
+e guarda em `estado.json` onde ficou, para continuar dali da próxima vez;
+quando chega ao fim, recomeça do início.
 
-- `posts_promocao.json` — usada até **31 de dezembro de 2026**, com a oferta
-  de lançamento (12,50€).
-- `posts_evergreen.json` — a partir de **1 de janeiro de 2027**, o robô muda
-  sozinho para esta lista (sem promoção), para a divulgação continuar depois
-  da oferta terminar.
-
-Cada lista tem o seu próprio "marcador" de onde vai (para não se perder o
-lugar ao mudar de lista), e cada uma repete do início quando chega ao fim.
-Quando a promoção acabar (ou quiseres lançar outra), diz-me e eu atualizo a
-lista `posts_evergreen.json` ou crio uma nova promoção.
+Se quiseres acrescentar, mudar ou retirar algum post (ou lançar outra
+promoção mais tarde), diz-me e eu atualizo a lista.
 
 ## Como editar os textos ou acrescentar testemunhos novos
 

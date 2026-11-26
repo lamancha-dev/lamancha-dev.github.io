@@ -2,13 +2,9 @@
 """
 Publica automaticamente um post da PAUTA no Facebook e no Instagram.
 
-Até 31 de dezembro de 2026, publica a lista de posts "promocao" (com a
-oferta de lançamento). A partir de 1 de janeiro de 2027, muda sozinho
-para a lista "evergreen" (posts sem promoção, para continuar a
-divulgação depois de a oferta acabar).
-
-Cada lista tem o seu próprio contador em estado.json, para que mudar de
-lista não "perca o lugar" na outra.
+Usa sempre a lista posts.json, uma após a outra, guardando em
+estado.json qual foi o último post publicado para continuar dali na
+próxima vez.
 """
 import json
 import os
@@ -20,10 +16,9 @@ import requests
 
 PASTA = Path(__file__).parent
 ESTADO_FICHEIRO = PASTA / "estado.json"
+POSTS_FICHEIRO = PASTA / "posts.json"
 BASE_IMAGENS = "https://lamancha-dev.github.io/"
 GRAPH_API = "https://graph.facebook.com/v21.0"
-
-FIM_DA_PROMOCAO = date(2026, 12, 31)
 
 
 def carregar_json(caminho):
@@ -83,24 +78,10 @@ def main():
         )
         sys.exit(1)
 
-    hoje = date.today()
-    em_promocao = hoje <= FIM_DA_PROMOCAO
-
-    if em_promocao:
-        lista_nome = "promocao"
-        posts_ficheiro = PASTA / "posts_promocao.json"
-        chave_indice = "proximo_indice_promocao"
-    else:
-        lista_nome = "evergreen"
-        posts_ficheiro = PASTA / "posts_evergreen.json"
-        chave_indice = "proximo_indice_evergreen"
-
-    print(f"📅 Hoje é {hoje.isoformat()} → a usar a lista '{lista_nome}'.")
-
-    posts = carregar_json(posts_ficheiro)
+    posts = carregar_json(POSTS_FICHEIRO)
     estado = carregar_json(ESTADO_FICHEIRO)
 
-    indice = estado.get(chave_indice, 0) % len(posts)
+    indice = estado.get("proximo_indice", 0) % len(posts)
     post = posts[indice]
     imagem_url = BASE_IMAGENS + post["imagem"]
 
@@ -116,10 +97,9 @@ def main():
     except Exception as e:
         erros.append(f"Instagram: {e}")
 
-    # Avança sempre para o próximo post desta lista da próxima vez, mesmo
-    # que uma das redes tenha falhado, para não ficar presa a repetir o
-    # mesmo post. O contador da outra lista fica intocado.
-    estado[chave_indice] = (indice + 1) % len(posts)
+    # Avança sempre para o próximo post da próxima vez, mesmo que uma das
+    # redes tenha falhado, para não ficar presa a repetir o mesmo post.
+    estado["proximo_indice"] = (indice + 1) % len(posts)
     guardar_json(ESTADO_FICHEIRO, estado)
 
     if erros:
