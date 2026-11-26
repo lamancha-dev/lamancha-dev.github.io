@@ -275,6 +275,11 @@ const BRANDS = {
         titulo:{label:'Título', ex:'Avalie uma turma inteira sem pagar nada'},
         texto:{label:'Texto', ex:'A demonstração é a aplicação a sério, só que com uma turma fictícia. Nada fica guardado — experimente hoje mesmo, sem instalar nada.'},
         assin:{label:'Botão (opcional)', ex:'Experimente grátis → link na bio'}},
+      {id:'tutoriais', nome:'Vídeos-tutorial',
+        kicker:'Passo a passo',
+        titulo:{label:'Título', ex:'Veja-me a usar a PAUTA, passo a passo'},
+        texto:{label:'Texto', ex:'Pôs onze vídeos curtos no site, um por cada tarefa: adicionar alunos, criar um momento de avaliação, fazer as sínteses, comparar turmas e muito mais.'},
+        assin:{label:'Botão (opcional)', ex:'Veja os vídeos → link na bio'}},
       {id:'store', nome:'Já na Microsoft Store',
         kicker:'Novidade',
         titulo:{label:'Título', ex:'A PAUTA já está na Microsoft Store'},
@@ -678,6 +683,7 @@ function legendaIG(){
     const fim='Saiba mais em lamancha-dev.github.io (link na bio) ou escreva para pautavaliacao@gmail.com.';
     switch(t.id){
       case 'experimente': return `✨ ${L(d.titulo)}\n\n${L(d.texto)}\n\nExperimente agora mesmo, sem instalar nada: link na bio, ou aceda diretamente a lamancha-dev.github.io/pauta/?demo=1\n\n${tags} #experimentegratis`;
+      case 'tutoriais': return `🎥 ${L(d.titulo)}\n\n${L(d.texto)}\n\nVeja em lamancha-dev.github.io, na secção «Veja-me a usar a PAUTA, passo a passo» (link na bio).\n\n${tags} #tutorial #passoapasso`;
       case 'humor': return `${L(d.titulo)}\n\n${L(d.texto)} 😅\n\nQuem nunca? Marque um colega que precisa da PAUTA.\n\n${fim}\n\n${tags} #vidadeprofessor`;
       case 'promo': return `${L(d.titulo)}\n\n${L(d.texto)}\n\n${fim}\n\n${tags}`;
       case 'store': return `🎉 ${L(d.titulo)}\n\n${L(d.texto)}\n\nProcure «PAUTA» na Microsoft Store ou aceda a apps.microsoft.com/detail/9NWXQXFPZ3T6\n\nQuer a licença? Escreva para pautavaliacao@gmail.com.\n\n${tags} #microsoftstore`;
@@ -1000,6 +1006,12 @@ const SUG = {
     {titulo:'Avalie uma turma inteira, de graça.', texto:'Sem pagar nada e sem compromisso. Se gostar, a licença é sua para sempre, por um pagamento único.', assin:'Experimente grátis'},
     {titulo:'A pergunta mais fácil de responder:', texto:'Vale a pena experimentar? Sim — é grátis, é rápido e não precisa de instalar nada.', assin:'Experimente já → link na bio'},
     {titulo:'Duvide à vontade.', texto:'Prefiro que experimente antes de comprar. Entre, mexa na turma fictícia e veja se lhe poupa tempo de verdade.', assin:'Antónia Mancha, professora de Português'}
+  ],
+  'pauta/tutoriais':[
+    {titulo:'Não sabe por onde começar?', texto:'Gravei-me a usar a PAUTA, tarefa a tarefa: alunos, critérios, sínteses, balanço, exportar… Onze vídeos curtos no site.', assin:'Veja os vídeos → link na bio'},
+    {titulo:'Prefiro mostrar a explicar.', texto:'Por isso gravei-me, de verdade, a fazer cada parte da PAUTA. Vídeos curtos, um por tarefa, no site.', assin:'Veja os vídeos → link na bio'},
+    {titulo:'Dúvidas sobre como se usa?', texto:'Já respondi às mais comuns em vídeo: criar um teste, importar a grelha da escola, fazer as sínteses… Tudo no site.', assin:'Veja os vídeos → link na bio'},
+    {titulo:'Onze vídeos, onze tarefas.', texto:'Do adicionar alunos ao comparar turmas, cada vídeo mostra uma única coisa, do princípio ao fim.', assin:'Veja os vídeos → link na bio'}
   ],
   'margem/antologia':[
     {texto:'O poeta é um fingidor.\nFinge tão completamente\nQue chega a fingir que é dor\nA dor que deveras sente.', assin:'Fernando Pessoa, «Autopsicografia»'},
