@@ -677,6 +677,7 @@ function legendaIG(){
     const tags='#pautavaliacao #professores #avaliacao #educacao #escola #docentes';
     const fim='Saiba mais em lamancha-dev.github.io (link na bio) ou escreva para pautavaliacao@gmail.com.';
     switch(t.id){
+      case 'experimente': return `✨ ${L(d.titulo)}\n\n${L(d.texto)}\n\nExperimente agora mesmo, sem instalar nada: link na bio, ou aceda diretamente a lamancha-dev.github.io/pauta/?demo=1\n\n${tags} #experimentegratis`;
       case 'humor': return `${L(d.titulo)}\n\n${L(d.texto)} 😅\n\nQuem nunca? Marque um colega que precisa da PAUTA.\n\n${fim}\n\n${tags} #vidadeprofessor`;
       case 'promo': return `${L(d.titulo)}\n\n${L(d.texto)}\n\n${fim}\n\n${tags}`;
       case 'store': return `🎉 ${L(d.titulo)}\n\n${L(d.texto)}\n\nProcure «PAUTA» na Microsoft Store ou aceda a apps.microsoft.com/detail/9NWXQXFPZ3T6\n\nQuer a licença? Escreva para pautavaliacao@gmail.com.\n\n${tags} #microsoftstore`;
