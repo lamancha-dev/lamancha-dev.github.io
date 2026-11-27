@@ -78,6 +78,8 @@
   .toast.show{opacity:1}
   .logoPrev{max-height:56px;max-width:160px;border-radius:6px;background:#eee;padding:4px;vertical-align:middle}
   .hidden{display:none!important}
+  .vidcard video{width:100%;border-radius:12px;background:#000;display:block;margin-bottom:10px}
+  .vidcard h3{font-size:16px;margin:0 0 10px}
 </style>
 </head>
 <body>
@@ -88,6 +90,12 @@
     <button class="btn pri hidden" id="btnInstall" style="margin-top:12px;width:100%">📲 Instalar no telemóvel</button>
   </header>
 
+  <div class="brand" id="modeBox">
+    <button data-mode="editor" class="on">Criar publicação</button>
+    <button data-mode="tutoriais">Vídeos-tutorial</button>
+  </div>
+
+<div id="editorPanel">
   <div class="brand" id="brandBox">
     <button data-brand="margem">a margem<span class="sub">@leramargem</span></button>
     <button data-brand="pauta">PAUTA<span class="sub">@pautavaliacao</span></button>
@@ -168,7 +176,70 @@
   </section>
 </div>
 
-<div class="bar">
+<div id="tutoriaisPanel" class="hidden">
+  <section>
+    <h2>Vídeos-tutorial da PAUTA</h2>
+    <p class="note" style="margin-top:0">Os mesmos onze vídeos que estão no site, já com música. Veja, descarregue ou partilhe direto a partir daqui.</p>
+  </section>
+  <section class="vidcard">
+    <h3>1. Adicionar alunos</h3>
+    <video src="../tutoriais/01-alunos.mp4" controls playsinline preload="none" poster="../tutoriais/01-alunos.jpg"></video>
+    <div class="row"><a class="btn sec" href="../tutoriais/01-alunos.mp4" download>⬇️ Descarregar</a></div>
+  </section>
+  <section class="vidcard">
+    <h3>2. Pôr o logótipo</h3>
+    <video src="../tutoriais/02-logotipo.mp4" controls playsinline preload="none" poster="../tutoriais/02-logotipo.jpg"></video>
+    <div class="row"><a class="btn sec" href="../tutoriais/02-logotipo.mp4" download>⬇️ Descarregar</a></div>
+  </section>
+  <section class="vidcard">
+    <h3>3. Configurar a turma</h3>
+    <video src="../tutoriais/03-turma.mp4" controls playsinline preload="none" poster="../tutoriais/03-turma.jpg"></video>
+    <div class="row"><a class="btn sec" href="../tutoriais/03-turma.mp4" download>⬇️ Descarregar</a></div>
+  </section>
+  <section class="vidcard">
+    <h3>4. Criar um momento de avaliação</h3>
+    <video src="../tutoriais/04-momento.mp4" controls playsinline preload="none" poster="../tutoriais/04-momento.jpg"></video>
+    <div class="row"><a class="btn sec" href="../tutoriais/04-momento.mp4" download>⬇️ Descarregar</a></div>
+  </section>
+  <section class="vidcard">
+    <h3>5. Importar a grelha da escola</h3>
+    <video src="../tutoriais/05-criterios.mp4" controls playsinline preload="none" poster="../tutoriais/05-criterios.jpg"></video>
+    <div class="row"><a class="btn sec" href="../tutoriais/05-criterios.mp4" download>⬇️ Descarregar</a></div>
+  </section>
+  <section class="vidcard">
+    <h3>6. Fazer as sínteses descritivas</h3>
+    <video src="../tutoriais/06-sinteses.mp4" controls playsinline preload="none" poster="../tutoriais/06-sinteses.jpg"></video>
+    <div class="row"><a class="btn sec" href="../tutoriais/06-sinteses.mp4" download>⬇️ Descarregar</a></div>
+  </section>
+  <section class="vidcard">
+    <h3>7. Ver o balanço da turma</h3>
+    <video src="../tutoriais/07-balanco.mp4" controls playsinline preload="none" poster="../tutoriais/07-balanco.jpg"></video>
+    <div class="row"><a class="btn sec" href="../tutoriais/07-balanco.mp4" download>⬇️ Descarregar</a></div>
+  </section>
+  <section class="vidcard">
+    <h3>8. Corrigir e ver as médias</h3>
+    <video src="../tutoriais/08-corrigir.mp4" controls playsinline preload="none" poster="../tutoriais/08-corrigir.jpg"></video>
+    <div class="row"><a class="btn sec" href="../tutoriais/08-corrigir.mp4" download>⬇️ Descarregar</a></div>
+  </section>
+  <section class="vidcard">
+    <h3>9. Exportar ou imprimir a pauta</h3>
+    <video src="../tutoriais/09-exportar.mp4" controls playsinline preload="none" poster="../tutoriais/09-exportar.jpg"></video>
+    <div class="row"><a class="btn sec" href="../tutoriais/09-exportar.mp4" download>⬇️ Descarregar</a></div>
+  </section>
+  <section class="vidcard">
+    <h3>10. Copiar para outras turmas</h3>
+    <video src="../tutoriais/10-copiar.mp4" controls playsinline preload="none" poster="../tutoriais/10-copiar.jpg"></video>
+    <div class="row"><a class="btn sec" href="../tutoriais/10-copiar.mp4" download>⬇️ Descarregar</a></div>
+  </section>
+  <section class="vidcard">
+    <h3>11. Comparar turmas</h3>
+    <video src="../tutoriais/11-comparar.mp4" controls playsinline preload="none" poster="../tutoriais/11-comparar.jpg"></video>
+    <div class="row"><a class="btn sec" href="../tutoriais/11-comparar.mp4" download>⬇️ Descarregar</a></div>
+  </section>
+</div>
+</div>
+
+<div class="bar" id="barEditor">
   <button class="btn pri" id="btnSave">🖼️ Imagem</button>
   <button class="btn pri" id="btnVideo">🎬 Vídeo</button>
   <button class="btn sec" id="btnCopy2">📋 Legenda</button>
@@ -743,6 +814,14 @@ let raf=0; function schedule(){ if(typeof busy!=='undefined' && busy) return; ca
 
 document.addEventListener('click', e=>{
   const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.mode){
+    document.querySelectorAll('#modeBox button').forEach(x=>x.classList.toggle('on', x===b));
+    const isTut = b.dataset.mode==='tutoriais';
+    $('editorPanel').classList.toggle('hidden', isTut);
+    $('tutoriaisPanel').classList.toggle('hidden', !isTut);
+    $('barEditor').classList.toggle('hidden', isTut);
+    return;
+  }
   if(b.dataset.brand){ st.brand=b.dataset.brand; save(); buildAll(); }
   else if(b.dataset.tpl){ st.tpl[st.brand]=b.dataset.tpl; save(); buildAll(); }
   else if(b.dataset.fmt){ st.fmt=b.dataset.fmt; save(); buildAll(); }
