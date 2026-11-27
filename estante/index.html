@@ -1479,23 +1479,38 @@
     }catch(e){ /* tenta outra vez no próximo frame */ }
     scanRAF = requestAnimationFrame(tickScan);
   }
+  let scanBusy = false;
   document.getElementById('btnScanIsbn').onclick = async ()=>{
+    if(scanBusy) return; // evita abrir duas vezes se tocar depressa
     if(!('BarcodeDetector' in window)){
-      alert('O seu telemóvel ou browser não suporta a leitura de código de barras aqui. Pode escrever o ISBN à mão e clicar em "Procurar dados".');
+      scanModal.showModal();
+      scanHintEl.textContent = 'O seu telemóvel ou browser não suporta a leitura de código de barras aqui. Feche esta janela e escreva o ISBN à mão, depois clique em "Procurar dados".';
       return;
     }
+    scanBusy = true;
+    // Abre a janela já com a câmara a "ligar", para nunca ficar sem resposta visível.
+    scanModal.showModal();
+    scanHintEl.textContent = 'A ligar a câmara, aguarde...';
     try{
       scanDetector = new BarcodeDetector({formats:['ean_13','ean_8']});
       scanStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
       scanVideo.srcObject = scanStream;
-      scanModal.showModal();
+      await scanVideo.play().catch(()=>{});
       scanHintEl.textContent = 'Aponte a câmara para o código de barras (ISBN) na contracapa do livro.';
       scanRAF = requestAnimationFrame(tickScan);
     }catch(e){
-      alert('Não foi possível aceder à câmara: ' + e.message);
+      scanHintEl.textContent = 'Não foi possível aceder à câmara (' + (e && e.message ? e.message : 'erro desconhecido') + '). Verifique se deu autorização à câmara nas definições do browser, ou feche esta janela e escreva o ISBN à mão.';
+    } finally {
+      scanBusy = false;
     }
   };
   document.getElementById('closeScan').onclick = stopScan;
+  // Garante que a câmara é sempre libertada, mesmo que a janela feche de outra forma
+  // (por exemplo com a tecla Esc ou o botão de recuar do telemóvel).
+  scanModal.addEventListener('close', ()=>{
+    if(scanRAF){ cancelAnimationFrame(scanRAF); scanRAF = null; }
+    if(scanStream){ scanStream.getTracks().forEach(t=>t.stop()); scanStream = null; }
+  });
 
   bookForm.addEventListener('submit', async e=>{
     e.preventDefault();
