@@ -743,7 +743,19 @@
     }
     return null;
   }
-  function loadSettings(){ return {...DEFAULTS,...(disk('GET','settings')||{})}; }
+  // Cores usadas como "predefinição" em versões anteriores da Estante — se as suas
+  // definições guardadas ainda tiverem uma destas (porque nunca escolheu cor própria,
+  // só ficaram gravadas ao abrir "Definições" numa versão antiga), substitui-se sempre
+  // pela predefinição atual, para as atualizações de visual chegarem a todos.
+  const OLD_DEFAULT_BG = ['#0f1115', '#faf3e8', '#f7f6f2'];
+  const OLD_DEFAULT_ACCENT = ['#c89b3c', '#b5622d', '#2f4d4a'];
+  function loadSettings(){
+    const saved = disk('GET','settings') || {};
+    const s = {...DEFAULTS, ...saved};
+    if(saved.bg === undefined || OLD_DEFAULT_BG.includes(saved.bg)) s.bg = DEFAULTS.bg;
+    if(saved.accent === undefined || OLD_DEFAULT_ACCENT.includes(saved.accent)) s.accent = DEFAULTS.accent;
+    return s;
+  }
   function saveSettings(s){ disk('POST','settings',s); }
   function applySettings(){
     const s = loadSettings();
