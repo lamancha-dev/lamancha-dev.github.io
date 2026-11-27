@@ -11,16 +11,16 @@
 <title>Estante</title>
 <style>
   :root{
-    --bg:#faf3e8;
-    --bg-soft:#f3e8d8;
+    --bg:#f7f6f2;
+    --bg-soft:#eeece4;
     --panel:#ffffff;
-    --panel-2:#fbf6ee;
-    --border:#e7d9c2;
-    --text:#3b2c1d;
-    --text-dim:#8a7560;
-    --accent:#b5622d;
-    --accent-soft:#b5622d1e;
-    --danger:#c0493f;
+    --panel-2:#f3f2ec;
+    --border:#ddd9cd;
+    --text:#2a2d33;
+    --text-dim:#767a6f;
+    --accent:#2f4d4a;
+    --accent-soft:#2f4d4a1a;
+    --danger:#b23a3a;
     --loan:#3d6fa0;
     --loan-soft:#3d6fa01e;
     --radius:10px;
@@ -45,22 +45,22 @@
     position:sticky; top:0; height:100vh; overflow-y:auto;
     padding:26px 18px;
   }
-  .sidebar-brand{display:flex; align-items:center; gap:12px; margin-bottom:8px; padding:0 6px;}
-  .sidebar-brand .mark{width:46px;height:46px;border-radius:12px; display:flex;align-items:center;justify-content:center; flex-shrink:0;}
+  .sidebar-brand{display:flex; align-items:center; gap:14px; margin-bottom:10px; padding:0 6px;}
+  .sidebar-brand .mark{width:68px;height:68px;border-radius:14px; display:flex;align-items:center;justify-content:center; flex-shrink:0;}
   .sidebar-brand .mark img{width:100%;height:100%;object-fit:contain;}
-  .sidebar-brand h1{font-size:19px; font-weight:700; letter-spacing:.2px;}
+  .sidebar-brand h1{font-size:20px; font-weight:700; letter-spacing:.2px;}
   .sidebar-brand p{margin:0; font-size:11px; color:var(--text-dim);}
 
   .personal-logo{
-    display:flex; align-items:center; gap:10px; margin:14px 6px 18px 6px; padding:12px 10px;
+    display:flex; align-items:center; gap:12px; margin:16px 6px 20px 6px; padding:14px 12px;
     background:var(--panel-2); border:1px solid var(--border); border-radius:12px;
   }
   .personal-logo img{
-    width:54px; height:54px; border-radius:50%; object-fit:cover;
-    border:2px solid #fff; box-shadow:0 2px 8px rgba(70,45,20,0.18);
+    width:80px; height:80px; border-radius:50%; object-fit:cover;
+    border:2px solid #fff; box-shadow:0 2px 8px rgba(40,50,60,0.18);
     flex-shrink:0;
   }
-  .personal-logo span{font-size:12.5px; color:var(--text); font-weight:600; line-height:1.3;}
+  .personal-logo span{font-size:13px; color:var(--text); font-weight:600; line-height:1.3;}
 
   nav.side-tabs{display:flex; flex-direction:column; gap:3px; margin-top:6px;}
   nav.side-tabs button{
@@ -141,8 +141,8 @@
     padding:36px 26px 10px 26px;
     border-radius:10px;
     background:
-      repeating-linear-gradient(90deg, rgba(90,55,20,0.05) 0px, rgba(90,55,20,0.05) 2px, transparent 2px, transparent 7px),
-      linear-gradient(180deg, #d9a765 0%, #cf9955 45%, #c08b48 100%);
+      repeating-linear-gradient(90deg, rgba(60,50,35,0.04) 0px, rgba(60,50,35,0.04) 2px, transparent 2px, transparent 7px),
+      linear-gradient(180deg, #d9d2bf 0%, #cfc5ab 45%, #bdb192 100%);
   }
   .list-view .grid{background:none; box-shadow:none; padding:0;}
   .card-title, .card-author{text-shadow:none;}
@@ -157,7 +157,7 @@
   .card:hover{transform:translateY(-6px); filter:drop-shadow(0 14px 12px rgba(0,0,0,0.35));}
   .cover{
     aspect-ratio:2/3; width:100%;
-    background:linear-gradient(135deg, #fdf8f0, #f0e2c8);
+    background:linear-gradient(135deg, #fbfaf6, #ece7d8);
     display:flex; align-items:center; justify-content:center; position:relative;
     padding:14px; text-align:center; overflow:hidden;
     border-radius:3px 5px 5px 3px;
@@ -165,7 +165,7 @@
       0 8px 14px -6px rgba(90,55,20,0.35);
   }
   .cover img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
-  .cover .spine{font-size:12px; line-height:1.4; color:#6b4a28; font-weight:600; max-height:100%; overflow:hidden; position:relative; z-index:1;}
+  .cover .spine{font-size:12px; line-height:1.4; color:#5a5340; font-weight:600; max-height:100%; overflow:hidden; position:relative; z-index:1;}
   .cover .status-dot{
     position:absolute; top:8px; right:8px; width:10px; height:10px; border-radius:50%;
     border:2px solid #fff; z-index:2;
@@ -180,15 +180,15 @@
   /* Tábua de prateleira contínua por baixo de cada fila de livros */
   .ledge{
     height:14px; margin:0 -13px 0 -13px;
-    background:linear-gradient(180deg, #a9793f 0%, #8a5f30 55%, #6e4a26 100%);
+    background:linear-gradient(180deg, #8f8569 0%, #756c54 55%, #5c5440 100%);
     border-radius:2px;
-    box-shadow:0 10px 14px -4px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -2px 0 rgba(0,0,0,0.25);
+    box-shadow:0 10px 14px -4px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -2px 0 rgba(0,0,0,0.25);
   }
   .list-view .ledge{display:none;}
   .card-body{padding:10px 4px 0 10px; flex:1; display:flex; flex-direction:column; gap:4px;}
-  .card-title{font-size:13.5px; font-weight:700; line-height:1.3; color:#2b1a0d;
+  .card-title{font-size:13.5px; font-weight:700; line-height:1.3; color:#2a2d33;
     display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
-  .card-author{font-size:12px; color:#6b4a28;}
+  .card-author{font-size:12px; color:#6e6652;}
   .list-view .card-title{color:var(--text);}
   .list-view .card-author{color:var(--text-dim);}
   .card-tags{display:flex; gap:4px; flex-wrap:wrap; margin-top:4px;}
@@ -239,7 +239,7 @@
 
   .detail-cover{
     width:140px; aspect-ratio:2/3; border-radius:8px; margin:0 auto 10px auto;
-    background:linear-gradient(135deg, #fdf8f0, #f0e2c8);
+    background:linear-gradient(135deg, #fbfaf6, #ece7d8);
     display:flex; align-items:center; justify-content:center; text-align:center; padding:10px;
     font-size:12px; color:var(--text-dim); font-weight:600; overflow:hidden; position:relative;
   }
@@ -627,11 +627,11 @@
     <div class="field-row">
       <div class="field">
         <label>Cor de fundo</label>
-        <input type="color" id="s-bg" value="#faf3e8" style="height:40px; padding:4px;">
+        <input type="color" id="s-bg" value="#f7f6f2" style="height:40px; padding:4px;">
       </div>
       <div class="field">
         <label>Cor de destaque</label>
-        <input type="color" id="s-accent" value="#b5622d" style="height:40px; padding:4px;">
+        <input type="color" id="s-accent" value="#2f4d4a" style="height:40px; padding:4px;">
       </div>
     </div>
     <div style="background:var(--panel-2); border:1px solid var(--border); border-radius:10px; padding:10px 12px; font-size:12.5px; color:var(--text-dim); line-height:1.5;">
@@ -655,7 +655,7 @@
 (function(){
   const STORAGE_KEY = 'biblioteca_antonia_v1';
   const SETTINGS_KEY = 'biblioteca_settings_v1';
-  const DEFAULTS = {name:'Estante', bg:'#faf3e8', accent:'#b5622d', personalLogo:null, personalLogoLabel:'Biblioteca pessoal'};
+  const DEFAULTS = {name:'Estante', bg:'#f7f6f2', accent:'#2f4d4a', personalLogo:null, personalLogoLabel:'Biblioteca pessoal'};
   const DB_NAME = 'bibliotecaCoversDB';
   const DB_STORE = 'covers';
 
