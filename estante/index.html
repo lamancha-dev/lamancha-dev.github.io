@@ -530,7 +530,7 @@
             <button type="button" id="btnScanIsbn" class="btn-ghost" style="white-space:nowrap;" title="Ler o código de barras com a câmara">📷 Digitalizar</button>
             <button type="button" id="btnIsbnLookup" class="btn-ghost" style="white-space:nowrap;">Procurar dados</button>
           </div>
-          <span id="isbnStatus" style="font-size:11.5px; color:var(--text-dim);"></span>
+          <span id="isbnStatus" style="font-size:13.5px; font-weight:700; color:var(--text-dim); display:inline-block; margin-top:2px;"></span>
         </div>
         <div class="field">
           <label>Idioma</label>
@@ -1403,13 +1403,22 @@
     };
   }
   const isbnStatusEl = document.getElementById('isbnStatus');
+  function setIsbnStatus(text, kind){
+    isbnStatusEl.textContent = text;
+    isbnStatusEl.style.color = kind==='erro' ? 'var(--danger)' : kind==='ok' ? '#2f7a44' : 'var(--text-dim)';
+  }
   document.getElementById('btnIsbnLookup').onclick = async ()=>{
     const isbn = document.getElementById('f-isbn').value.trim().replace(/[^0-9Xx]/g, '');
-    if(!isbn){ isbnStatusEl.textContent = 'Escreva primeiro um ISBN.'; return; }
-    isbnStatusEl.textContent = 'A procurar...';
+    if(!isbn){ setIsbnStatus('Escreva primeiro um ISBN.', 'erro'); return; }
+    setIsbnStatus('A procurar...', 'neutro');
     try{
-      const info = await lookupIsbn(isbn);
-      if(!info || info.error){ isbnStatusEl.textContent = 'Não foram encontrados dados para este ISBN.'; return; }
+      let info = await lookupIsbn(isbn).catch(()=>null);
+      if(!info || info.error){
+        // tenta mais uma vez — a Open Library por vezes falha à primeira, sobretudo em rede móvel
+        await new Promise(r=>setTimeout(r, 900));
+        info = await lookupIsbn(isbn).catch(()=>null);
+      }
+      if(!info || info.error){ setIsbnStatus('❌ Não foram encontrados dados para este ISBN. Pode preencher à mão.', 'erro'); return; }
       if(info.title && !document.getElementById('f-title').value.trim()) document.getElementById('f-title').value = info.title;
       if(info.author && !document.getElementById('f-author').value.trim()) document.getElementById('f-author').value = info.author;
       if(info.publisher && !document.getElementById('f-publisher').value.trim()) document.getElementById('f-publisher').value = info.publisher;
@@ -1433,9 +1442,9 @@
           } else { pendingCoverDataUrl = info.cover_url; }
         }catch(e){ pendingCoverDataUrl = info.cover_url; /* usa o link direto se não conseguir descarregar os bytes */ }
       }
-      isbnStatusEl.textContent = 'Dados encontrados.';
+      setIsbnStatus('✔ Dados encontrados: ' + (info.title || 'título preenchido') + '.', 'ok');
     }catch(e){
-      isbnStatusEl.textContent = 'Sem ligação à internet neste momento.';
+      setIsbnStatus('❌ Sem ligação à internet neste momento. Tente outra vez.', 'erro');
     }
   };
 
