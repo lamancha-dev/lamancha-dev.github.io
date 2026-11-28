@@ -12,6 +12,12 @@
 <link rel="apple-touch-icon" href="icon-192.png?v=5">
 <title>Estante</title>
 <style>
+  /* Engrossa visualmente os ícones com artwork exato (desenhos preenchidos,
+     fill-rule="evenodd"), que a espessura original deixa muito finos e
+     delicados — aplica um contorno fixo em pixels de ecrã (independente do
+     viewBox de cada ícone), para ficarem com mais peso visual em qualquer
+     tamanho, tal como os ícones de traço. */
+  svg path[fill-rule]{stroke:currentColor; stroke-width:2px; vector-effect:non-scaling-stroke; paint-order:stroke fill;}
   :root{
     --bg:#f2f3f4;
     --bg-soft:#eceef0;
