@@ -487,7 +487,10 @@
         <div class="cover-upload">
           <div class="cover-preview" id="coverPreview">sem imagem</div>
           <div style="display:flex; flex-direction:column; gap:6px;">
-            <label class="btn btn-ghost" for="f-cover" style="width:fit-content;">Escolher imagem
+            <label class="btn btn-ghost" for="f-cover-camera" style="width:fit-content;">📷 Tirar foto
+              <input type="file" id="f-cover-camera" accept="image/*" capture="environment" style="display:none;">
+            </label>
+            <label class="btn btn-ghost" for="f-cover" style="width:fit-content;">Escolher da galeria
               <input type="file" id="f-cover" accept="image/*">
             </label>
             <button type="button" class="btn-ghost" id="removeCover" style="width:fit-content; font-size:12px;">Remover imagem</button>
@@ -1347,6 +1350,7 @@
     document.getElementById('f-quotes').value = book ? book.quotes||'' : '';
     pendingCoverDataUrl = undefined;
     document.getElementById('f-cover').value = '';
+    document.getElementById('f-cover-camera').value = '';
     coverPreviewEl.innerHTML = 'sem imagem';
     if(book){
       const existing = await getCover(book.id);
@@ -1363,7 +1367,7 @@
   document.getElementById('closeForm').onclick = ()=>bookDialog.close();
   document.getElementById('cancelForm').onclick = ()=>bookDialog.close();
 
-  document.getElementById('f-cover').addEventListener('change', async e=>{
+  async function handleCoverFile(e){
     const file = e.target.files[0];
     if(!file) return;
     try{
@@ -1376,14 +1380,18 @@
     }catch(err){
       showToast('Não foi possível processar a imagem.');
     }
-  });
+  }
+  document.getElementById('f-cover').addEventListener('change', handleCoverFile);
+  document.getElementById('f-cover-camera').addEventListener('change', handleCoverFile);
   document.getElementById('removeCover').onclick = ()=>{
     pendingCoverDataUrl = null;
     coverPreviewEl.innerHTML = 'sem imagem';
     document.getElementById('f-cover').value = '';
+    document.getElementById('f-cover-camera').value = '';
   };
 
-  // Procura de dados pelo ISBN diretamente na Open Library, a partir do browser.
+  // Procura de dados pelo ISBN em várias fontes, a partir do browser — tenta todas,
+  // uma a seguir à outra, até encontrar algo, e combina o que cada uma tiver.
   async function lookupIsbnGoogleBooks(isbn){
     try{
       const url = 'https://www.googleapis.com/books/v1/volumes?q=isbn:'+encodeURIComponent(isbn);
@@ -1402,31 +1410,80 @@
       };
     }catch(e){ return null; }
   }
-  async function lookupIsbn(isbn){
-    const url = 'https://openlibrary.org/api/books?bibkeys=ISBN:'+encodeURIComponent(isbn)+'&format=json&jscmd=data';
-    const resp = await fetch(url);
-    if(!resp.ok) throw new Error('offline');
-    const raw = await resp.json();
-    const info = raw['ISBN:'+isbn];
-    let result = null;
-    if(info){
+  async function lookupIsbnOpenLibraryBooks(isbn){
+    try{
+      const url = 'https://openlibrary.org/api/books?bibkeys=ISBN:'+encodeURIComponent(isbn)+'&format=json&jscmd=data';
+      const resp = await fetch(url);
+      if(!resp.ok) return null;
+      const raw = await resp.json();
+      const info = raw['ISBN:'+isbn];
+      if(!info) return null;
       const authors = info.authors || [];
       const publishers = info.publishers || [];
       const cover = info.cover || {};
-      result = {
+      return {
         title: info.title || '',
         author: authors[0] ? authors[0].name : '',
         publisher: publishers[0] ? publishers[0].name : '',
         year: info.publish_date ? String(info.publish_date).slice(-4) : '',
         cover_url: cover.large || cover.medium || cover.small || ''
       };
+    }catch(e){ return null; }
+  }
+  // A API de pesquisa (search.json) da Open Library indexa muitas vezes edições
+  // (sobretudo portuguesas/recentes) que a API de livros (acima) não encontra.
+  async function lookupIsbnOpenLibrarySearch(isbn){
+    try{
+      const url = 'https://openlibrary.org/search.json?isbn='+encodeURIComponent(isbn)+'&fields=title,author_name,first_publish_year,publisher,cover_i';
+      const resp = await fetch(url);
+      if(!resp.ok) return null;
+      const raw = await resp.json();
+      const doc = raw.docs && raw.docs[0];
+      if(!doc) return null;
+      return {
+        title: doc.title || '',
+        author: (doc.author_name && doc.author_name[0]) || '',
+        publisher: (doc.publisher && doc.publisher[0]) || '',
+        year: doc.first_publish_year ? String(doc.first_publish_year) : '',
+        cover_url: doc.cover_i ? ('https://covers.openlibrary.org/b/id/'+doc.cover_i+'-L.jpg') : ''
+      };
+    }catch(e){ return null; }
+  }
+  // Último recurso só para a capa: o endpoint de capas da Open Library por ISBN
+  // às vezes tem imagem mesmo quando nenhuma das fontes acima devolve dados.
+  async function lookupCoverOnly(isbn){
+    try{
+      const url = 'https://covers.openlibrary.org/b/isbn/'+encodeURIComponent(isbn)+'-L.jpg?default=false';
+      const resp = await fetch(url, {method:'HEAD'});
+      if(resp.ok) return url;
+    }catch(e){}
+    return '';
+  }
+  async function lookupIsbn(isbn){
+    // Consulta as três fontes em paralelo e junta o melhor de cada uma.
+    const [a, b, c] = await Promise.all([
+      lookupIsbnOpenLibraryBooks(isbn),
+      lookupIsbnGoogleBooks(isbn),
+      lookupIsbnOpenLibrarySearch(isbn)
+    ]);
+    let result = a || b || c;
+    if(result){
+      // Preenche com o que faltar a partir das outras fontes.
+      for(const other of [a,b,c]){
+        if(!other) continue;
+        if(!result.title && other.title) result.title = other.title;
+        if(!result.author && other.author) result.author = other.author;
+        if(!result.publisher && other.publisher) result.publisher = other.publisher;
+        if(!result.year && other.year) result.year = other.year;
+        if(!result.cover_url && other.cover_url) result.cover_url = other.cover_url;
+      }
     }
-    // Se a Open Library não tiver dados, ou tiver dados mas sem capa, tenta o Google Books
-    // (às vezes tem capa onde a Open Library não tem).
     if(!result || !result.cover_url){
-      const g = await lookupIsbnGoogleBooks(isbn);
-      if(g && !result) result = g;
-      else if(g && result && g.cover_url) result.cover_url = g.cover_url;
+      const coverFallback = await lookupCoverOnly(isbn);
+      if(coverFallback){
+        if(!result) result = {title:'', author:'', publisher:'', year:''};
+        result.cover_url = coverFallback;
+      }
     }
     if(!result) return {error:'não encontrado'};
     return result;
