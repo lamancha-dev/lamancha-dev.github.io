@@ -125,7 +125,8 @@
 
   .home-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:14px; margin-bottom:16px;}
   .home-card{background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:16px 18px;}
-  .home-card h3{margin:0 0 10px; font-size:14px; font-weight:700; color:var(--text);}
+  .home-card h3{margin:0 0 10px; font-size:14px; font-weight:700; color:var(--text); display:flex; align-items:center; gap:8px;}
+  .home-card h3 svg{color:var(--accent); opacity:0.85; flex-shrink:0;}
   .home-empty{color:var(--text-dim); font-size:13px; margin:0 0 10px;}
   .home-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:7px;}
   .home-list li{font-size:13.5px; cursor:pointer; color:var(--text);}
@@ -133,13 +134,16 @@
   .home-list li .dim{color:var(--text-dim);}
   .home-links{display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:12px;}
   .home-link{
-    display:flex; flex-direction:column; align-items:flex-start; gap:2px; text-align:left;
-    background:color-mix(in srgb, var(--link-color) 18%, var(--panel)); border:1px solid var(--link-color);
+    display:flex; align-items:center; gap:12px; text-align:left;
+    background:color-mix(in srgb, var(--link-color) 14%, var(--panel));
+    border:1px solid color-mix(in srgb, var(--link-color) 35%, var(--border));
     border-radius:12px; padding:14px 16px; cursor:pointer; transition:filter .15s, transform .15s;
+    color:var(--link-color);
   }
   .home-link:hover{filter:brightness(1.08); transform:translateY(-2px);}
-  .home-link b{font-size:14px; color:var(--text);}
-  .home-link span{font-size:12px; color:var(--text-dim);}
+  .home-link svg{flex-shrink:0;}
+  .home-link b{display:block; font-size:14px; color:var(--text);}
+  .home-link span{display:block; font-size:12px; color:var(--text-dim); margin-top:1px;}
 
   .actions{display:flex; gap:8px; flex-wrap:wrap;}
   button, .btn{
@@ -398,6 +402,7 @@
   }
   .stat-card .num{font-size:30px; font-weight:700; color:var(--accent); line-height:1.1; font-family:"Georgia","Iowan Old Style",serif;}
   .stat-card .label{font-size:12.5px; color:var(--text-dim); margin-top:4px;}
+  .stat-card .stat-ico{color:var(--accent); opacity:0.8; margin-bottom:8px;}
   .stats-section-title{font-size:15px; font-weight:700; margin:28px 0 14px 0; color:var(--text);}
 
   /* ---------- Antologia pessoal ---------- */
@@ -544,19 +549,19 @@
 </header>
 
 <div class="quick-tiles" id="quickTiles">
-  <button type="button" class="quick-tile" id="tileAcervo" style="--tile-color:#1f5f63;">
+  <button type="button" class="quick-tile" id="tileAcervo" style="--tile-color:#1f8f84;">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h12a1 1 0 0 1 1 1v14.5"/><path d="M6 21.5h13a1 1 0 0 0 1-1V19H6.5a1.5 1.5 0 0 0 0 3Z"/></svg>
     <div><b>Acervo</b><span>Todos os livros</span></div>
   </button>
-  <button type="button" class="quick-tile" id="tileAutores" style="--tile-color:#96661c;">
+  <button type="button" class="quick-tile" id="tileAutores" style="--tile-color:#d6962e;">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.3"/><path d="M2.5 20c0-3.2 2.7-5.5 6.5-5.5s6.5 2.3 6.5 5.5"/><circle cx="18" cy="8.5" r="2.6"/><path d="M15.5 14.8c2.6.2 4.5 2.1 4.8 5.2"/></svg>
     <div><b>Autores</b><span>Explorar por autor</span></div>
   </button>
-  <button type="button" class="quick-tile" id="tileColecoes" style="--tile-color:#9c3f2e;">
+  <button type="button" class="quick-tile" id="tileColecoes" style="--tile-color:#e07558;">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="5" rx="1.2"/><rect x="3" y="10.5" width="18" height="5" rx="1.2"/><rect x="3" y="17" width="18" height="5" rx="1.2"/></svg>
     <div><b>Séries/coleções</b><span>Organizar por saga</span></div>
   </button>
-  <button type="button" class="quick-tile" id="tileAntologia" style="--tile-color:#5b3b6e;">
+  <button type="button" class="quick-tile" id="tileAntologia" style="--tile-color:#1f8f84;">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h13"/><path d="M3 12h9"/><path d="M3 18h13"/><path d="M19 4v16l-3-2-3 2V4z"/></svg>
     <div><b>Antologia</b><span>Citações e excertos</span></div>
   </button>
@@ -1611,33 +1616,47 @@
       ? `<ul class="home-list">` + recentes.map(b=>`<li data-open="${esc(b.id)}">${esc(b.title)} <span class="dim">— ${esc(b.author)}</span></li>`).join('') + `</ul>`
       : `<p class="home-empty">Ainda não adicionou nenhum livro.</p><button type="button" class="btn-primary" id="homeAdicionarLivro">+ Adicionar livro</button>`;
 
+    const icoBook = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h12a1 1 0 0 1 1 1v14.5"/><path d="M6 21.5h13a1 1 0 0 0 1-1V19H6.5a1.5 1.5 0 0 0 0 3Z"/></svg>';
+    const icoPeople = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.3"/><path d="M2.5 20c0-3.2 2.7-5.5 6.5-5.5s6.5 2.3 6.5 5.5"/><circle cx="18" cy="8.5" r="2.6"/><path d="M15.5 14.8c2.6.2 4.5 2.1 4.8 5.2"/></svg>';
+    const icoCheck = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg>';
+    const icoStar = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 3.2l2.6 5.5 6 .6-4.5 4 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.5-4 6-.6z"/></svg>';
+    const icoChart = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-7"/></svg>';
+    const icoOpenBook = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c-2-1.3-4.5-2-7-2v13c2.5 0 5 .7 7 2 2-1.3 4.5-2 7-2V4c-2.5 0-5 .7-7 2Z"/><path d="M12 6v13"/></svg>';
+    const icoStack = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="5" rx="1.2"/><rect x="3" y="10.5" width="18" height="5" rx="1.2"/><rect x="3" y="17" width="18" height="5" rx="1.2"/></svg>';
+    const icoCalendar = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M3 10h18"/></svg>';
+    const icoTarget = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/></svg>';
+    const icoNote = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v5h5"/><path d="M8 13h8"/><path d="M8 17h5"/></svg>';
+
     els.content.innerHTML = `
-      <div class="stats-grid" style="margin-bottom:18px;">
-        <div class="stat-card"><div class="num">${total}</div><div class="label">Livros</div></div>
-        <div class="stat-card"><div class="num">${autores}</div><div class="label">Autores</div></div>
-        <div class="stat-card"><div class="num">${lidos}</div><div class="label">Lidos</div></div>
-        <div class="stat-card"><div class="num">${favoritos}</div><div class="label">Favoritos</div></div>
+      <div class="stats-grid home-stats" style="margin-bottom:18px;">
+        <div class="stat-card"><div class="stat-ico">${icoBook}</div><div class="num">${total}</div><div class="label">Livros</div></div>
+        <div class="stat-card"><div class="stat-ico">${icoPeople}</div><div class="num">${autores}</div><div class="label">Autores</div></div>
+        <div class="stat-card"><div class="stat-ico">${icoCheck}</div><div class="num">${lidos}</div><div class="label">Lidos</div></div>
+        <div class="stat-card"><div class="stat-ico">${icoStar}</div><div class="num">${favoritos}</div><div class="label">Favoritos</div></div>
       </div>
       <div class="home-grid">
         <div class="home-card">
-          <h3>Distribuição por género literário</h3>
+          <h3>${icoChart} Distribuição por género literário</h3>
           ${barList(topCounts(books, b=>b.genre))}
         </div>
         <div class="home-card">
-          <h3>Leituras em curso</h3>
+          <h3>${icoOpenBook} Leituras em curso</h3>
           ${emCursoHtml}
         </div>
         <div class="home-card">
-          <h3>Últimos livros adicionados</h3>
+          <h3>${icoStack} Últimos livros adicionados</h3>
           ${recentesHtml}
         </div>
       </div>
       <div class="home-links">
-        <button type="button" class="home-link" id="homePlanoLeitura" style="--link-color:#96661c;">
-          <b>Plano de leitura</b><span>Defina a sua meta anual</span>
+        <button type="button" class="home-link" id="homePlanoLeitura" style="--link-color:#3a6ea8;">
+          ${icoCalendar}<div><b>Plano de leitura</b><span>Defina os seus objetivos de leitura</span></div>
         </button>
-        <button type="button" class="home-link" id="homeListaDesejos" style="--link-color:#9c3f2e;">
-          <b>Lista de desejos</b><span>${queroLer} livro${queroLer===1?'':'s'} que quer ler</span>
+        <button type="button" class="home-link" id="homeListaDesejos" style="--link-color:#c9822f;">
+          ${icoTarget}<div><b>Lista de desejos</b><span>${queroLer} livro${queroLer===1?'':'s'} a adquirir</span></div>
+        </button>
+        <button type="button" class="home-link" id="homeNotas" style="--link-color:#3a8a5e;">
+          ${icoNote}<div><b>Notas e reflexões</b><span>Ideias, impressões e apontamentos</span></div>
         </button>
       </div>
     `;
@@ -1652,6 +1671,7 @@
       els.status.value = 'quero-ler';
       renderAcervo();
     };
+    document.getElementById('homeNotas').onclick = ()=>setTab('antologia');
   }
 
   // ---------- Antologia pessoal (todas as citações guardadas) ----------
