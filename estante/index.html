@@ -1000,6 +1000,27 @@
         <div class="field"><label style="font-weight:400;">Antologia</label><input type="color" id="s-tileAntologia" style="height:36px; padding:4px;"></div>
       </div>
     </div>
+    <div class="field">
+      <label>Cores dos ícones de "A minha biblioteca"</label>
+      <div class="field-row">
+        <div class="field"><label style="font-weight:400;">Livros</label><input type="color" id="s-statLivros" style="height:36px; padding:4px;"></div>
+        <div class="field"><label style="font-weight:400;">Autores</label><input type="color" id="s-statAutores" style="height:36px; padding:4px;"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label style="font-weight:400;">Lidos</label><input type="color" id="s-statLidos" style="height:36px; padding:4px;"></div>
+        <div class="field"><label style="font-weight:400;">Favoritos</label><input type="color" id="s-statFavoritos" style="height:36px; padding:4px;"></div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Cores dos ícones de Plano de leitura / Lista de desejos / Notas</label>
+      <div class="field-row">
+        <div class="field"><label style="font-weight:400;">Plano de leitura</label><input type="color" id="s-linkPlano" style="height:36px; padding:4px;"></div>
+        <div class="field"><label style="font-weight:400;">Lista de desejos</label><input type="color" id="s-linkDesejos" style="height:36px; padding:4px;"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label style="font-weight:400;">Notas e reflexões</label><input type="color" id="s-linkNotas" style="height:36px; padding:4px;"></div>
+      </div>
+    </div>
     <div style="background:var(--panel-2); border:1px solid var(--border); border-radius:10px; padding:10px 12px; font-size:12.5px; color:var(--text-dim); line-height:1.5;">
       <b style="color:var(--text);">Instalar no telemóvel:</b><br>
       iPhone: toque em Partilhar (o ícone com a seta) e depois em "Adicionar ao Ecrã Principal".<br>
@@ -1023,7 +1044,9 @@
   const STORAGE_KEY = 'biblioteca_antonia_v1';
   const SETTINGS_KEY = 'biblioteca_settings_v1';
   const DEFAULTS = {name:'Estante', bg:'#ffffff', accent:'#2f4d4a', personalLogo:null, personalLogoLabel:'Biblioteca pessoal',
-    tileColors:{acervo:'#02797c', autores:'#f3ac1f', colecoes:'#fa6353', antologia:'#26b2b0'}};
+    tileColors:{acervo:'#02797c', autores:'#f3ac1f', colecoes:'#fa6353', antologia:'#26b2b0'},
+    statColors:{livros:'#02797c', autores:'#f3ac1f', lidos:'#3fa562', favoritos:'#fa6353'},
+    linkColors:{planoLeitura:'#2f5c4f', listaDesejos:'#8a5a2f', notas:'#2f5c4f'}};
   const DB_NAME = 'bibliotecaCoversDB';
   const DB_STORE = 'covers';
 
@@ -1316,6 +1339,15 @@
     document.getElementById('s-tileAutores').value = tc.autores;
     document.getElementById('s-tileColecoes').value = tc.colecoes;
     document.getElementById('s-tileAntologia').value = tc.antologia;
+    const sc = Object.assign({}, DEFAULTS.statColors, s.statColors || {});
+    document.getElementById('s-statLivros').value = sc.livros;
+    document.getElementById('s-statAutores').value = sc.autores;
+    document.getElementById('s-statLidos').value = sc.lidos;
+    document.getElementById('s-statFavoritos').value = sc.favoritos;
+    const lkc = Object.assign({}, DEFAULTS.linkColors, s.linkColors || {});
+    document.getElementById('s-linkPlano').value = lkc.planoLeitura;
+    document.getElementById('s-linkDesejos').value = lkc.listaDesejos;
+    document.getElementById('s-linkNotas').value = lkc.notas;
     pendingLogo = undefined;
     const logoPreview = document.getElementById('logoPreview');
     if(s.personalLogo){ logoPreview.innerHTML = `<img src="${s.personalLogo}" alt="">`; }
@@ -1343,6 +1375,13 @@
     document.getElementById('s-tileAutores').value = DEFAULTS.tileColors.autores;
     document.getElementById('s-tileColecoes').value = DEFAULTS.tileColors.colecoes;
     document.getElementById('s-tileAntologia').value = DEFAULTS.tileColors.antologia;
+    document.getElementById('s-statLivros').value = DEFAULTS.statColors.livros;
+    document.getElementById('s-statAutores').value = DEFAULTS.statColors.autores;
+    document.getElementById('s-statLidos').value = DEFAULTS.statColors.lidos;
+    document.getElementById('s-statFavoritos').value = DEFAULTS.statColors.favoritos;
+    document.getElementById('s-linkPlano').value = DEFAULTS.linkColors.planoLeitura;
+    document.getElementById('s-linkDesejos').value = DEFAULTS.linkColors.listaDesejos;
+    document.getElementById('s-linkNotas').value = DEFAULTS.linkColors.notas;
   };
   document.getElementById('s-save').onclick = ()=>{
     const s = loadSettings();
@@ -1357,12 +1396,24 @@
       colecoes: document.getElementById('s-tileColecoes').value,
       antologia: document.getElementById('s-tileAntologia').value
     };
+    s.statColors = {
+      livros: document.getElementById('s-statLivros').value,
+      autores: document.getElementById('s-statAutores').value,
+      lidos: document.getElementById('s-statLidos').value,
+      favoritos: document.getElementById('s-statFavoritos').value
+    };
+    s.linkColors = {
+      planoLeitura: document.getElementById('s-linkPlano').value,
+      listaDesejos: document.getElementById('s-linkDesejos').value,
+      notas: document.getElementById('s-linkNotas').value
+    };
     if(pendingLogo !== undefined) s.personalLogo = pendingLogo;
     saveSettings(s);
     applySettings();
     settingsDialog.close();
     showToast('Definições guardadas.');
     if(currentTab==='estatisticas') renderEstatisticas();
+    if(currentTab==='inicio') renderInicio();
   };
   let books = [];
   let pendingImport = null;
@@ -1790,6 +1841,9 @@
       ? `<ul class="home-list">` + recentes.map(b=>`<li data-open="${esc(b.id)}">${esc(b.title)} <span class="dim">— ${esc(b.author)}</span></li>`).join('') + `</ul>`
       : `<p class="home-empty">Ainda não adicionou nenhum livro.</p><button type="button" class="btn-primary" id="homeAdicionarLivro">+ Adicionar livro</button>`;
 
+    const sc = Object.assign({}, DEFAULTS.statColors, loadSettings().statColors || {});
+    const lkc = Object.assign({}, DEFAULTS.linkColors, loadSettings().linkColors || {});
+
     const icoBook = '<svg width="24" height="24" viewBox="0 0 240 246"><path d="M 69 58 L 61 69 L 61 213 L 65 221 L 75 227 L 88 228 L 88 243 L 90 245 L 104 236 L 114 245 L 118 244 L 119 227 L 197 226 L 189 213 L 190 201 L 196 196 L 196 56 L 78 55 Z M 118 221 L 119 212 L 184 213 L 187 221 Z M 94 212 L 113 213 L 111 236 L 106 231 L 104 230 L 102 230 L 100 231 L 96 235 L 94 236 Z M 66 212 L 66 205 L 68 202 L 74 197 L 185 200 L 183 207 L 80 208 L 80 210 L 82 212 L 88 213 L 87 222 L 77 222 L 74 221 L 68 216 Z M 86 61 L 192 62 L 191 192 L 87 192 L 85 190 Z M 74 61 L 80 62 L 79 192 L 73 192 L 67 196 L 66 70 L 68 66 Z" fill="currentColor" fill-rule="evenodd"/></svg>';
     const icoPeople = '<svg width="24" height="24" viewBox="0 0 253 246"><path d="M 86 229 L 88 231 L 94 231 L 106 228 L 121 220 L 126 218 L 134 218 L 136 219 L 144 227 L 153 231 L 165 231 L 175 228 L 183 224 L 183 220 L 179 220 L 172 224 L 165 226 L 153 226 L 150 225 L 147 223 L 141 216 L 135 213 L 127 213 L 116 217 L 112 220 L 103 224 L 95 226 L 88 226 Z M 157 65 L 148 73 L 140 77 L 135 86 L 136 105 L 133 110 L 133 116 L 150 142 L 149 150 L 143 155 L 127 161 L 118 169 L 114 177 L 113 194 L 115 196 L 118 195 L 119 178 L 123 171 L 134 163 L 142 162 L 154 181 L 164 174 L 166 207 L 170 206 L 171 173 L 179 181 L 182 181 L 193 163 L 199 162 L 208 167 L 214 173 L 217 183 L 217 195 L 220 196 L 222 194 L 222 181 L 216 167 L 205 159 L 192 155 L 185 147 L 185 142 L 202 117 L 202 109 L 199 105 L 200 88 L 198 81 L 188 69 L 180 65 Z M 185 156 L 187 157 L 189 160 L 188 162 L 184 167 L 183 170 L 181 172 L 181 173 L 179 174 L 172 167 L 178 161 Z M 151 156 L 156 160 L 163 167 L 154 173 L 153 170 L 148 163 L 146 159 Z M 154 150 L 155 148 L 158 148 L 165 150 L 171 150 L 175 149 L 178 147 L 181 148 L 181 152 L 178 155 L 171 161 L 167 163 L 155 153 Z M 154 91 L 156 91 L 163 96 L 172 99 L 185 100 L 186 102 L 187 107 L 189 109 L 195 109 L 197 111 L 197 116 L 196 118 L 194 120 L 191 121 L 189 127 L 184 136 L 179 141 L 174 144 L 171 145 L 165 145 L 161 144 L 156 141 L 152 137 L 148 131 L 144 121 L 141 120 L 139 118 L 138 116 L 138 111 L 140 109 L 142 108 L 148 108 L 148 99 L 149 96 Z M 193 82 L 195 88 L 195 99 L 193 104 L 191 101 L 189 96 L 187 94 L 172 94 L 163 90 L 158 86 L 155 85 L 152 87 L 149 88 L 146 91 L 143 97 L 142 104 L 140 98 L 140 88 L 142 83 L 146 79 L 152 77 L 157 71 L 161 69 L 170 68 L 176 69 L 181 71 L 186 74 L 191 79 Z M 98 63 L 95 64 L 91 99 L 89 104 L 55 103 L 50 64 L 45 64 L 50 103 L 44 111 L 44 119 L 52 127 L 52 131 L 47 148 L 36 168 L 57 202 L 69 229 L 73 232 L 90 198 L 109 167 L 97 145 L 93 130 L 94 125 L 96 125 L 102 117 L 101 111 L 95 103 L 100 70 L 100 64 Z M 71 160 L 74 160 L 76 161 L 77 162 L 77 163 L 78 165 L 77 167 L 74 170 L 71 170 L 68 167 L 67 165 L 69 161 Z M 58 126 L 88 127 L 91 144 L 99 161 L 103 166 L 103 168 L 93 182 L 76 214 L 75 175 L 82 168 L 82 161 L 80 158 L 75 155 L 70 155 L 66 157 L 63 161 L 63 168 L 69 174 L 69 215 L 57 191 L 42 167 L 48 158 L 53 147 Z M 48 114 L 49 112 L 52 109 L 93 109 L 96 112 L 97 114 L 97 116 L 96 118 L 93 121 L 53 121 L 51 120 L 49 118 L 48 116 Z" fill="currentColor" fill-rule="evenodd"/></svg>';
     const icoCheck = '<svg width="22" height="22" viewBox="0 0 120 120"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M 82 63.10 L 82 22 C 82 18.69 79.31 16 76 16 L 32 16 C 27.58 16 24 19.58 24 24 L 24 90 C 24 94.42 27.58 98 32 98 L 68.35 98"/><path d="M 24 90 C 24 87.79 26.24 86 29 86 L 63.10 86"/><line x1="35" y1="16" x2="35" y2="86"/><circle cx="84" cy="84" r="21"/><polyline points="75,84.5 81,90.5 93.5,77.5"/></g></svg>';
@@ -1808,10 +1862,10 @@
         <div class="home-card home-biblio">
           <h3>A minha biblioteca</h3>
           <div class="home-biblio-row">
-            <div class="home-biblio-item"><div class="stat-ico" style="--stat-color:#02797c;">${icoBook}</div><div><div class="num">${total}</div><div class="label">Livros</div></div></div>
-            <div class="home-biblio-item"><div class="stat-ico" style="--stat-color:#f3ac1f;">${icoPeople}</div><div><div class="num">${autores}</div><div class="label">Autores</div></div></div>
-            <div class="home-biblio-item"><div class="stat-ico" style="--stat-color:#3fa562;">${icoCheck}</div><div><div class="num">${lidos}</div><div class="label">Lidos</div></div></div>
-            <div class="home-biblio-item"><div class="stat-ico" style="--stat-color:#fa6353;">${icoStar}</div><div><div class="num">${favoritos}</div><div class="label">Favoritos</div></div></div>
+            <div class="home-biblio-item"><div class="stat-ico" style="--stat-color:${sc.livros};">${icoBook}</div><div><div class="num">${total}</div><div class="label">Livros</div></div></div>
+            <div class="home-biblio-item"><div class="stat-ico" style="--stat-color:${sc.autores};">${icoPeople}</div><div><div class="num">${autores}</div><div class="label">Autores</div></div></div>
+            <div class="home-biblio-item"><div class="stat-ico" style="--stat-color:${sc.lidos};">${icoCheck}</div><div><div class="num">${lidos}</div><div class="label">Lidos</div></div></div>
+            <div class="home-biblio-item"><div class="stat-ico" style="--stat-color:${sc.favoritos};">${icoStar}</div><div><div class="num">${favoritos}</div><div class="label">Favoritos</div></div></div>
           </div>
         </div>
         <div class="home-card">
@@ -1828,13 +1882,13 @@
         </div>
       </div>
       <div class="home-links">
-        <button type="button" class="home-link" id="homePlanoLeitura" style="--link-color:#2f5c4f; --link-bg:#e3ebe2;">
+        <button type="button" class="home-link" id="homePlanoLeitura" style="--link-color:${lkc.planoLeitura};">
           <span class="tile-ico">${icoCalendar}</span><div><b>Plano de leitura</b><span>Defina os seus objetivos de leitura</span></div>
         </button>
-        <button type="button" class="home-link" id="homeListaDesejos" style="--link-color:#8a5a2f; --link-bg:#f5e8d6;">
+        <button type="button" class="home-link" id="homeListaDesejos" style="--link-color:${lkc.listaDesejos};">
           <span class="tile-ico">${icoTarget}</span><div><b>Lista de desejos</b><span>${queroLer} livro${queroLer===1?'':'s'} a adquirir</span></div>
         </button>
-        <button type="button" class="home-link" id="homeNotas" style="--link-color:#2f5c4f; --link-bg:#e3ebe2;">
+        <button type="button" class="home-link" id="homeNotas" style="--link-color:${lkc.notas};">
           <span class="tile-ico">${icoNote}</span><div><b>Notas e reflexões</b><span>Ideias, impressões e apontamentos</span></div>
         </button>
       </div>
