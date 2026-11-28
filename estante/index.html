@@ -1712,6 +1712,36 @@
       };
     }catch(e){ return null; }
   }
+  // A Wikidata tem muitos livros (sobretudo edições mais antigas ou menos
+  // comerciais) que não constam no Google Books nem na Open Library.
+  async function lookupIsbnWikidata(isbn){
+    try{
+      const sparql = `SELECT ?bookLabel ?authorLabel ?publisherLabel ?pubdate ?image WHERE {
+        { ?book wdt:P212 ?isbnv . FILTER(REPLACE(STR(?isbnv), "-", "") = "${isbn}") }
+        UNION
+        { ?book wdt:P957 ?isbnv2 . FILTER(REPLACE(STR(?isbnv2), "-", "") = "${isbn}") }
+        OPTIONAL { ?book wdt:P50 ?author. }
+        OPTIONAL { ?book wdt:P123 ?publisher. }
+        OPTIONAL { ?book wdt:P577 ?pubdate. }
+        OPTIONAL { ?book wdt:P18 ?image. }
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "pt,en". }
+      } LIMIT 1`;
+      const url = 'https://query.wikidata.org/sparql?format=json&query='+encodeURIComponent(sparql);
+      const resp = await fetch(url, {headers:{'Accept':'application/sparql-results+json'}});
+      if(!resp.ok) return null;
+      const raw = await resp.json();
+      const row = raw.results && raw.results.bindings && raw.results.bindings[0];
+      if(!row) return null;
+      const imageName = row.image ? decodeURIComponent(row.image.value.split('/').pop()) : '';
+      return {
+        title: row.bookLabel ? row.bookLabel.value : '',
+        author: row.authorLabel ? row.authorLabel.value : '',
+        publisher: row.publisherLabel ? row.publisherLabel.value : '',
+        year: row.pubdate ? String(row.pubdate.value).slice(0,4) : '',
+        cover_url: imageName ? ('https://commons.wikimedia.org/wiki/Special:FilePath/'+encodeURIComponent(imageName)) : ''
+      };
+    }catch(e){ return null; }
+  }
   // Último recurso só para a capa: o endpoint de capas da Open Library por ISBN
   // às vezes tem imagem mesmo quando nenhuma das fontes acima devolve dados.
   async function lookupCoverOnly(isbn){
@@ -1723,16 +1753,17 @@
     return '';
   }
   async function lookupIsbn(isbn){
-    // Consulta as três fontes em paralelo e junta o melhor de cada uma.
-    const [a, b, c] = await Promise.all([
+    // Consulta as quatro fontes em paralelo e junta o melhor de cada uma.
+    const [a, b, c, d] = await Promise.all([
       lookupIsbnOpenLibraryBooks(isbn),
       lookupIsbnGoogleBooks(isbn),
-      lookupIsbnOpenLibrarySearch(isbn)
+      lookupIsbnOpenLibrarySearch(isbn),
+      lookupIsbnWikidata(isbn)
     ]);
-    let result = a || b || c;
+    let result = a || b || c || d;
     if(result){
       // Preenche com o que faltar a partir das outras fontes.
-      for(const other of [a,b,c]){
+      for(const other of [a,b,c,d]){
         if(!other) continue;
         if(!result.title && other.title) result.title = other.title;
         if(!result.author && other.author) result.author = other.author;
