@@ -9,7 +9,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#2f4d4a">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png?v=5">
 <title>Estante</title>
 <style>
   :root{
@@ -55,18 +55,18 @@
     box-shadow:2px 0 18px -10px rgba(0,0,0,0.35);
   }
   .sidebar-brand{display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; margin-bottom:6px; padding:4px 6px 0 6px;}
-  .sidebar-brand .mark{width:72px;height:72px;border-radius:16px; display:flex;align-items:center;justify-content:center; flex-shrink:0; background:rgba(255,255,255,0.92); box-shadow:0 4px 14px rgba(0,0,0,0.3); padding:6px;}
+  .sidebar-brand .mark{width:96px;height:96px;border-radius:20px; display:flex;align-items:center;justify-content:center; flex-shrink:0; background:rgba(255,255,255,0.92); box-shadow:0 4px 14px rgba(0,0,0,0.3); padding:7px;}
   .sidebar-brand .mark img{width:100%;height:100%;object-fit:contain;}
   .sidebar-brand h1{font-size:19px; font-weight:700; letter-spacing:.2px; color:var(--sidebar-text);}
   .sidebar-brand p{margin:0; font-size:11px; color:var(--sidebar-text-dim);}
 
   .personal-logo{
-    display:flex; align-items:center; gap:12px; margin:16px 6px 20px 6px; padding:14px 12px;
+    display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; margin:16px 6px 20px 6px; padding:14px 12px;
     background:rgba(255,255,255,0.06); border:1px solid var(--sidebar-border); border-radius:12px;
   }
   .personal-logo img{
-    width:56px; height:56px; border-radius:12px; object-fit:contain;
-    background:#fff; padding:5px; box-shadow:0 2px 8px rgba(0,0,0,0.3);
+    width:96px; height:96px; border-radius:20px; object-fit:contain;
+    background:#fff; padding:7px; box-shadow:0 2px 8px rgba(0,0,0,0.3);
     flex-shrink:0;
   }
   .personal-logo span{font-size:13px; color:var(--sidebar-text); font-weight:600; line-height:1.3;}
@@ -369,16 +369,16 @@
     .sidebar-brand{
       flex-direction:row; text-align:left; gap:10px; margin:0; padding:0; flex-shrink:0;
     }
-    .sidebar-brand .mark{width:48px; height:48px; border-radius:11px; padding:3px;}
+    .sidebar-brand .mark{width:62px; height:62px; border-radius:13px; padding:4px;}
     .sidebar-brand p{display:none;}
     .sidebar-brand h1{font-size:15px;}
     #saveStatus{display:none;}
     .personal-logo{
-      display:flex; margin:0; padding:0; background:none; border:none; gap:0; flex-shrink:0;
+      display:flex; flex-direction:row; margin:0; padding:0; background:none; border:none; gap:0; flex-shrink:0;
     }
     .personal-logo img{
-      width:48px; height:48px; border-radius:11px; border:none;
-      background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.3); padding:2px; object-fit:contain;
+      width:62px; height:62px; border-radius:13px; border:none;
+      background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.3); padding:3px; object-fit:contain;
     }
     .personal-logo span{display:none;}
     nav.side-tabs{
@@ -403,7 +403,7 @@
 
 <div id="loginGate">
   <div class="login-card">
-    <div class="login-mark"><img src="estante.png?v=4" alt="Estante"></div>
+    <div class="login-mark"><img src="estante.png?v=5" alt="Estante"></div>
     <h1>Estante</h1>
     <p>A sua biblioteca pessoal, sincronizada entre o telemóvel e o computador.</p>
     <button type="button" id="btnGoogleLogin" class="btn-google">
@@ -419,7 +419,7 @@
 <div class="app-shell">
 <aside class="sidebar">
   <div class="sidebar-brand">
-    <div class="mark"><img src="estante.png?v=4" alt="Estante"></div>
+    <div class="mark"><img src="estante.png?v=5" alt="Estante"></div>
     <div>
       <h1 id="brandName">Estante</h1>
       <p id="subtitle">a carregar acervo…</p>
@@ -963,7 +963,7 @@
   // é gerado aqui, porque um manifesto gerado em JavaScript não é aceite pelo
   // Chrome/Android para instalação (é por isso que a instalação falhava).
   function updateIconsAndManifest(s){
-    const iconUrl = 'estante.png?v=4';
+    const iconUrl = 'estante.png?v=5';
 
     let favicon = document.querySelector('link[rel="icon"]');
     if(!favicon){ favicon = document.createElement('link'); favicon.rel = 'icon'; document.head.appendChild(favicon); }
