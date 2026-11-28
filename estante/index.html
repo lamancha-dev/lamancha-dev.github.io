@@ -1384,23 +1384,52 @@
   };
 
   // Procura de dados pelo ISBN diretamente na Open Library, a partir do browser.
+  async function lookupIsbnGoogleBooks(isbn){
+    try{
+      const url = 'https://www.googleapis.com/books/v1/volumes?q=isbn:'+encodeURIComponent(isbn);
+      const resp = await fetch(url);
+      if(!resp.ok) return null;
+      const raw = await resp.json();
+      const item = raw.items && raw.items[0] && raw.items[0].volumeInfo;
+      if(!item) return null;
+      const img = item.imageLinks || {};
+      return {
+        title: item.title || '',
+        author: (item.authors && item.authors[0]) || '',
+        publisher: item.publisher || '',
+        year: item.publishedDate ? String(item.publishedDate).slice(0,4) : '',
+        cover_url: (img.large || img.medium || img.thumbnail || img.smallThumbnail || '').replace('http://','https://')
+      };
+    }catch(e){ return null; }
+  }
   async function lookupIsbn(isbn){
     const url = 'https://openlibrary.org/api/books?bibkeys=ISBN:'+encodeURIComponent(isbn)+'&format=json&jscmd=data';
     const resp = await fetch(url);
     if(!resp.ok) throw new Error('offline');
     const raw = await resp.json();
     const info = raw['ISBN:'+isbn];
-    if(!info) return {error:'não encontrado'};
-    const authors = info.authors || [];
-    const publishers = info.publishers || [];
-    const cover = info.cover || {};
-    return {
-      title: info.title || '',
-      author: authors[0] ? authors[0].name : '',
-      publisher: publishers[0] ? publishers[0].name : '',
-      year: info.publish_date ? String(info.publish_date).slice(-4) : '',
-      cover_url: cover.large || cover.medium || cover.small || ''
-    };
+    let result = null;
+    if(info){
+      const authors = info.authors || [];
+      const publishers = info.publishers || [];
+      const cover = info.cover || {};
+      result = {
+        title: info.title || '',
+        author: authors[0] ? authors[0].name : '',
+        publisher: publishers[0] ? publishers[0].name : '',
+        year: info.publish_date ? String(info.publish_date).slice(-4) : '',
+        cover_url: cover.large || cover.medium || cover.small || ''
+      };
+    }
+    // Se a Open Library não tiver dados, ou tiver dados mas sem capa, tenta o Google Books
+    // (às vezes tem capa onde a Open Library não tem).
+    if(!result || !result.cover_url){
+      const g = await lookupIsbnGoogleBooks(isbn);
+      if(g && !result) result = g;
+      else if(g && result && g.cover_url) result.cover_url = g.cover_url;
+    }
+    if(!result) return {error:'não encontrado'};
+    return result;
   }
   const isbnStatusEl = document.getElementById('isbnStatus');
   function setIsbnStatus(text, kind){
