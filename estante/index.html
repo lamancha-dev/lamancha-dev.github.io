@@ -111,13 +111,15 @@
   .header-brand h2{margin:0; font-size:25px; font-weight:700; letter-spacing:0.3px; color:var(--text);}
   .header-brand p{margin:0; font-size:11.5px; letter-spacing:0.8px; text-transform:uppercase; color:var(--text-dim);}
   .sr-page-title{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap;}
-  .header-icons{display:flex; align-items:center; gap:8px;}
+  .header-search-wrap{flex:1 1 320px; max-width:460px; margin:0 4px;}
+  .header-search-wrap input{border-radius:999px; background:var(--panel-2);}
+  .header-icons{display:flex; align-items:center; gap:10px;}
   .icon-btn{
-    width:38px; height:38px; padding:0; border-radius:10px; display:flex; align-items:center; justify-content:center;
+    width:40px; height:40px; padding:0; border-radius:50%; display:flex; align-items:center; justify-content:center;
     border:1px solid var(--border); background:var(--panel-2); color:var(--text);
   }
   .icon-btn.active{background:var(--accent); color:#fff; border-color:var(--accent);}
-  .icon-btn-add{width:38px; height:38px; padding:0; border-radius:10px; display:flex; align-items:center; justify-content:center;}
+  .icon-btn-add{width:40px; height:40px; padding:0; border-radius:50%; display:flex; align-items:center; justify-content:center;}
 
   .quick-tiles{
     display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:14px;
@@ -212,6 +214,7 @@
     position:sticky; top:63px; z-index:15;
   }
   .search-wrap{position:relative; flex:1 1 320px; min-width:220px;}
+  .toolbar .search-wrap{display:none;}
   .search-wrap input{
     width:100%; padding:10px 14px 10px 36px; border-radius:8px; border:1px solid var(--border);
     background:var(--panel); color:var(--text); font-size:14px;
@@ -472,6 +475,7 @@
     .header-brand h2{font-size:15px;}
     .header-mark{width:32px; height:32px; border-radius:9px;}
     .icon-btn, .icon-btn-add{width:34px; height:34px;}
+    .header-search-wrap{flex-basis:100%; order:3; max-width:none; margin:6px 0 0 0;}
     .sidebar{
       position:sticky; top:0; z-index:30; width:100%; height:auto;
       flex-direction:row; flex-wrap:wrap; align-items:center; gap:10px; row-gap:8px;
@@ -572,15 +576,15 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
       Cópias de segurança
     </button>
+    <button id="btnSettings" title="Nome, logótipo e cores">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+      Definições
+    </button>
   </nav>
   <div class="sidebar-actions">
     <button class="btn-primary" id="btnAdd">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
       Adicionar livro
-    </button>
-    <button class="btn-ghost" id="btnSettings" title="Nome, logótipo e cores">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
-      Definições
     </button>
     <button class="btn-ghost" id="btnExport" title="Guardar uma cópia de segurança completa (ficheiro .json, inclui capas)">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
@@ -612,15 +616,16 @@
       </div>
     </div>
     <h1 id="pageTitle" class="sr-page-title">Acervo</h1>
+    <div class="search-wrap header-search-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" id="headerSearch" placeholder="Pesquisar por título, autor, ISBN, género...">
+    </div>
     <div class="header-icons">
       <button type="button" class="icon-btn" id="btnHeaderFavorite" title="Mostrar só favoritos">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2l2.6 5.5 6 .6-4.5 4 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.5-4 6-.6z"/></svg>
       </button>
       <button type="button" class="icon-btn" id="btnHeaderView" title="Alternar vista (grelha/lista)">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.2"/><rect x="14" y="3" width="7" height="7" rx="1.2"/><rect x="3" y="14" width="7" height="7" rx="1.2"/><rect x="14" y="14" width="7" height="7" rx="1.2"/></svg>
-      </button>
-      <button type="button" class="icon-btn" id="btnHeaderSettings" title="Definições">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
       </button>
       <button type="button" class="btn-primary icon-btn-add" id="btnHeaderAdd" title="Adicionar livro">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
@@ -968,6 +973,17 @@
         <input type="color" id="s-accent" value="#2f4d4a" style="height:40px; padding:4px;">
       </div>
     </div>
+    <div class="field">
+      <label>Cores dos cartões do Início</label>
+      <div class="field-row">
+        <div class="field"><label style="font-weight:400;">Acervo</label><input type="color" id="s-tileAcervo" style="height:36px; padding:4px;"></div>
+        <div class="field"><label style="font-weight:400;">Autores</label><input type="color" id="s-tileAutores" style="height:36px; padding:4px;"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label style="font-weight:400;">Coleções</label><input type="color" id="s-tileColecoes" style="height:36px; padding:4px;"></div>
+        <div class="field"><label style="font-weight:400;">Antologia</label><input type="color" id="s-tileAntologia" style="height:36px; padding:4px;"></div>
+      </div>
+    </div>
     <div style="background:var(--panel-2); border:1px solid var(--border); border-radius:10px; padding:10px 12px; font-size:12.5px; color:var(--text-dim); line-height:1.5;">
       <b style="color:var(--text);">Instalar no telemóvel:</b><br>
       iPhone: toque em Partilhar (o ícone com a seta) e depois em "Adicionar ao Ecrã Principal".<br>
@@ -990,7 +1006,8 @@
 (function(){
   const STORAGE_KEY = 'biblioteca_antonia_v1';
   const SETTINGS_KEY = 'biblioteca_settings_v1';
-  const DEFAULTS = {name:'Estante', bg:'#ffffff', accent:'#2f4d4a', personalLogo:null, personalLogoLabel:'Biblioteca pessoal'};
+  const DEFAULTS = {name:'Estante', bg:'#ffffff', accent:'#2f4d4a', personalLogo:null, personalLogoLabel:'Biblioteca pessoal',
+    tileColors:{acervo:'#02797c', autores:'#f3ac1f', colecoes:'#fa6353', antologia:'#26b2b0'}};
   const DB_NAME = 'bibliotecaCoversDB';
   const DB_STORE = 'covers';
 
@@ -1205,6 +1222,12 @@
     document.documentElement.style.setProperty('--border', border);
     document.documentElement.style.setProperty('--text', textCol);
     document.documentElement.style.setProperty('--text-dim', textDim);
+    const tc = Object.assign({}, DEFAULTS.tileColors, s.tileColors || {});
+    const tileMap = {tileAcervo:'acervo', tileAutores:'autores', tileColecoes:'colecoes', tileAntologia:'antologia'};
+    Object.keys(tileMap).forEach(id=>{
+      const el = document.getElementById(id);
+      if(el) el.style.setProperty('--tile-color', tc[tileMap[id]]);
+    });
     updateIconsAndManifest(s);
   }
 
@@ -1272,6 +1295,11 @@
     document.getElementById('s-readingGoal').value = s.readingGoal || '';
     document.getElementById('s-bg').value = s.bg || DEFAULTS.bg;
     document.getElementById('s-accent').value = s.accent || DEFAULTS.accent;
+    const tc = Object.assign({}, DEFAULTS.tileColors, s.tileColors || {});
+    document.getElementById('s-tileAcervo').value = tc.acervo;
+    document.getElementById('s-tileAutores').value = tc.autores;
+    document.getElementById('s-tileColecoes').value = tc.colecoes;
+    document.getElementById('s-tileAntologia').value = tc.antologia;
     pendingLogo = undefined;
     const logoPreview = document.getElementById('logoPreview');
     if(s.personalLogo){ logoPreview.innerHTML = `<img src="${s.personalLogo}" alt="">`; }
@@ -1295,6 +1323,10 @@
   document.getElementById('s-reset').onclick = ()=>{
     document.getElementById('s-bg').value = DEFAULTS.bg;
     document.getElementById('s-accent').value = DEFAULTS.accent;
+    document.getElementById('s-tileAcervo').value = DEFAULTS.tileColors.acervo;
+    document.getElementById('s-tileAutores').value = DEFAULTS.tileColors.autores;
+    document.getElementById('s-tileColecoes').value = DEFAULTS.tileColors.colecoes;
+    document.getElementById('s-tileAntologia').value = DEFAULTS.tileColors.antologia;
   };
   document.getElementById('s-save').onclick = ()=>{
     const s = loadSettings();
@@ -1303,6 +1335,12 @@
     s.readingGoal = parseInt(document.getElementById('s-readingGoal').value)||0;
     s.bg = document.getElementById('s-bg').value;
     s.accent = document.getElementById('s-accent').value;
+    s.tileColors = {
+      acervo: document.getElementById('s-tileAcervo').value,
+      autores: document.getElementById('s-tileAutores').value,
+      colecoes: document.getElementById('s-tileColecoes').value,
+      antologia: document.getElementById('s-tileAntologia').value
+    };
     if(pendingLogo !== undefined) s.personalLogo = pendingLogo;
     saveSettings(s);
     applySettings();
@@ -1648,8 +1686,30 @@
     document.getElementById('bulkBar').style.display = (tab==='acervo' && bulkMode) ? 'flex' : 'none';
     document.getElementById('quickTiles').style.display = (tab==='inicio') ? 'grid' : 'none';
     document.getElementById('pageTitle').textContent = TAB_TITLES[tab] || 'Estante';
+    syncHeaderSearch();
     render();
   }
+  function headerSearchTarget(){
+    if(currentTab==='acervo') return document.getElementById('searchInput');
+    if(currentTab==='emprestimos') return document.getElementById('loanSearch');
+    if(currentTab==='antologia') return document.getElementById('antologiaSearch');
+    return null;
+  }
+  function syncHeaderSearch(){
+    const hs = document.getElementById('headerSearch');
+    const target = headerSearchTarget();
+    const wrap = hs.closest('.header-search-wrap');
+    if(!target){ wrap.style.visibility = 'hidden'; hs.value = ''; return; }
+    wrap.style.visibility = 'visible';
+    hs.placeholder = target.placeholder;
+    hs.value = target.value;
+  }
+  document.getElementById('headerSearch').addEventListener('input', e=>{
+    const target = headerSearchTarget();
+    if(!target) return;
+    target.value = e.target.value;
+    target.dispatchEvent(new Event('input', {bubbles:true}));
+  });
   document.getElementById('tabInicio').onclick = ()=>setTab('inicio');
   document.getElementById('tabAcervo').onclick = ()=>setTab('acervo');
   document.getElementById('tabEmprestimos').onclick = ()=>setTab('emprestimos');
@@ -2055,7 +2115,6 @@
   };
   document.getElementById('btnAdd').onclick = ()=>openForm(null);
   document.getElementById('btnHeaderAdd').onclick = ()=>openForm(null);
-  document.getElementById('btnHeaderSettings').onclick = ()=>document.getElementById('btnSettings').click();
   document.getElementById('btnHeaderFavorite').onclick = ()=>{
     els.favorite.checked = !els.favorite.checked;
     document.getElementById('btnHeaderFavorite').classList.toggle('active', els.favorite.checked);
