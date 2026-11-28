@@ -1039,6 +1039,7 @@
 <script src="https://accounts.google.com/gsi/client"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://unpkg.com/@zxing/library@0.19.1/umd/index.min.js"></script>
 <script>
 (function(){
   const STORAGE_KEY = 'biblioteca_antonia_v1';
@@ -2535,6 +2536,7 @@
   const scanHintEl = document.getElementById('scanHint');
   let scanStream = null;
   let scanDetector = null;
+  let scanZxingReader = null;
   let scanRAF = null;
   let scanLastCode = null, scanMatchCount = 0, scanLastTick = 0;
 
@@ -2558,10 +2560,35 @@
   function isValidIsbn(isbn){ return isValidIsbn13(isbn) || isValidIsbn10(isbn); }
 
   async function stopScan(){
+    if(scanZxingReader){ try{ scanZxingReader.reset(); }catch(e){} scanZxingReader = null; }
     if(scanRAF) cancelAnimationFrame(scanRAF);
     scanRAF = null;
     if(scanStream){ scanStream.getTracks().forEach(t=>t.stop()); scanStream = null; }
     scanModal.close();
+  }
+  // Devolve true se aceitou o código (duas leituras iguais seguidas), para
+  // quem chama poder parar a câmara.
+  function handleScanCode(raw){
+    if(raw && isValidIsbn(raw)){
+      if(raw === scanLastCode){
+        scanMatchCount++;
+      } else {
+        scanLastCode = raw; scanMatchCount = 1;
+      }
+      if(scanMatchCount >= 2){
+        // Só aceita depois de ler o MESMO código duas vezes seguidas — evita
+        // aceitar uma leitura isolada e errada por causa de tremor da câmara.
+        stopScan();
+        document.getElementById('f-isbn').value = raw;
+        document.getElementById('btnIsbnLookup').click();
+        return true;
+      }
+      scanHintEl.textContent = 'Código detetado — a confirmar, mantenha o telemóvel parado...';
+    } else {
+      scanLastCode = null; scanMatchCount = 0;
+      if(raw) scanHintEl.textContent = 'Esse código não parece ser um ISBN válido. Tente apontar à barra de código junto ao ISBN impresso.';
+    }
+    return false;
   }
   async function tickScan(){
     if(!scanDetector || !scanStream) return;
@@ -2573,33 +2600,16 @@
     try{
       const codes = await scanDetector.detect(scanVideo);
       const raw = codes && codes[0] ? codes[0].rawValue.replace(/[^0-9Xx]/g,'') : '';
-      if(raw && isValidIsbn(raw)){
-        if(raw === scanLastCode){
-          scanMatchCount++;
-        } else {
-          scanLastCode = raw; scanMatchCount = 1;
-        }
-        if(scanMatchCount >= 2){
-          // Só aceita depois de ler o MESMO código duas vezes seguidas — evita
-          // aceitar uma leitura isolada e errada por causa de tremor da câmara.
-          await stopScan();
-          document.getElementById('f-isbn').value = raw;
-          document.getElementById('btnIsbnLookup').click();
-          return;
-        }
-        scanHintEl.textContent = 'Código detetado — a confirmar, mantenha o telemóvel parado...';
-      } else {
-        scanLastCode = null; scanMatchCount = 0;
-        if(raw) scanHintEl.textContent = 'Esse código não parece ser um ISBN válido. Tente apontar à barra de código junto ao ISBN impresso.';
-        else scanHintEl.textContent = 'Aponte a câmara para o código de barras (ISBN) na contracapa do livro.';
-      }
+      if(handleScanCode(raw)) return;
+      if(!raw) scanHintEl.textContent = 'Aponte a câmara para o código de barras (ISBN) na contracapa do livro.';
     }catch(e){ /* tenta outra vez no próximo frame */ }
     scanRAF = requestAnimationFrame(tickScan);
   }
   let scanBusy = false;
   document.getElementById('btnScanIsbn').onclick = async ()=>{
     if(scanBusy) return; // evita abrir duas vezes se tocar depressa
-    if(!('BarcodeDetector' in window)){
+    const hasZxing = (typeof ZXing !== 'undefined') && ZXing.BrowserMultiFormatReader;
+    if(!hasZxing && !('BarcodeDetector' in window)){
       scanModal.showModal();
       scanHintEl.textContent = 'O seu telemóvel ou browser não suporta a leitura de código de barras aqui. Feche esta janela e escreva o ISBN à mão, depois clique em "Procurar dados".';
       return;
@@ -2610,8 +2620,7 @@
     scanModal.showModal();
     scanHintEl.textContent = 'A ligar a câmara, aguarde...';
     try{
-      scanDetector = new BarcodeDetector({formats:['ean_13','ean_8']});
-      scanStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment', focusMode:'continuous'}});
+      scanStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment', focusMode:'continuous', width:{ideal:1280}, height:{ideal:720}}});
       scanVideo.srcObject = scanStream;
       await scanVideo.play().catch(()=>{});
       // Se a câmara suportar zoom ótico/digital, aproxima um pouco — ajuda a
@@ -2625,7 +2634,23 @@
         }
       }catch(e){}
       scanHintEl.textContent = 'Aponte a câmara para o código de barras (ISBN) na contracapa do livro, devagar, a uns 10-15 cm de distância.';
-      scanRAF = requestAnimationFrame(tickScan);
+      if(hasZxing){
+        // Motor de leitura mais robusto (funciona em muito mais telemóveis/browsers
+        // do que a deteção nativa, e lê melhor códigos tortos, pequenos ou com reflexo).
+        const hints = new Map();
+        hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [ZXing.BarcodeFormat.EAN_13, ZXing.BarcodeFormat.EAN_8]);
+        hints.set(ZXing.DecodeHintType.TRY_HARDER, true);
+        scanZxingReader = new ZXing.BrowserMultiFormatReader(hints, 180);
+        scanZxingReader.decodeFromStream(scanStream, scanVideo, (result, err)=>{
+          if(result){
+            const raw = (result.getText()||'').replace(/[^0-9Xx]/g,'');
+            handleScanCode(raw);
+          }
+        }).catch(()=>{});
+      } else {
+        scanDetector = new BarcodeDetector({formats:['ean_13','ean_8']});
+        scanRAF = requestAnimationFrame(tickScan);
+      }
     }catch(e){
       scanHintEl.textContent = 'Não foi possível aceder à câmara (' + (e && e.message ? e.message : 'erro desconhecido') + '). Verifique se deu autorização à câmara nas definições do browser, ou feche esta janela e escreva o ISBN à mão.';
     } finally {
@@ -2636,6 +2661,7 @@
   // Garante que a câmara é sempre libertada, mesmo que a janela feche de outra forma
   // (por exemplo com a tecla Esc ou o botão de recuar do telemóvel).
   scanModal.addEventListener('close', ()=>{
+    if(scanZxingReader){ try{ scanZxingReader.reset(); }catch(e){} scanZxingReader = null; }
     if(scanRAF){ cancelAnimationFrame(scanRAF); scanRAF = null; }
     if(scanStream){ scanStream.getTracks().forEach(t=>t.stop()); scanStream = null; }
   });
