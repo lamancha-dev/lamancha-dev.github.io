@@ -549,11 +549,11 @@
       Início
     </button>
     <button id="tabAcervo">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.8c-2-1.4-4.6-2-7.3-2v12.9c2.7 0 5.3.6 7.3 2 2-1.4 4.6-2 7.3-2V4.8c-2.7 0-5.3.6-7.3 2Z"/><path d="M12 6.8v12.9"/></svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5A1.5 1.5 0 0 1 7.5 2h9A1.5 1.5 0 0 1 18 3.5V21l-5-2-5 2Z"/></svg>
       Acervo
     </button>
     <button id="navAutores">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="7.5" r="3.2"/><path d="M2.5 20.5c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="8" r="2.4"/><path d="M15.2 15c2.5.5 4.3 2.8 4.3 5.5"/></svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.5 2.5-9 9-3.3.8.8-3.3 9-9Z"/><path d="M15 5l2 2"/></svg>
       Autores
     </button>
     <button id="navColecoes">
@@ -648,11 +648,11 @@
 
 <div class="quick-tiles" id="quickTiles">
   <button type="button" class="quick-tile" id="tileAcervo" style="--tile-color:#02797c;">
-    <span class="tile-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.8c-2-1.4-4.6-2-7.3-2v12.9c2.7 0 5.3.6 7.3 2 2-1.4 4.6-2 7.3-2V4.8c-2.7 0-5.3.6-7.3 2Z"/><path d="M12 6.8v12.9"/></svg></span>
+    <span class="tile-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5A1.5 1.5 0 0 1 7.5 2h9A1.5 1.5 0 0 1 18 3.5V21l-5-2-5 2Z"/></svg></span>
     <div><b>Acervo</b><span>Todos os livros</span></div>
   </button>
   <button type="button" class="quick-tile" id="tileAutores" style="--tile-color:#f3ac1f;">
-    <span class="tile-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="7.5" r="3.2"/><path d="M2.5 20.5c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="8" r="2.4"/><path d="M15.2 15c2.5.5 4.3 2.8 4.3 5.5"/></svg></span>
+    <span class="tile-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.5 2.5-9 9-3.3.8.8-3.3 9-9Z"/><path d="M15 5l2 2"/></svg></span>
     <div><b>Autores</b><span>Explorar por autor</span></div>
   </button>
   <button type="button" class="quick-tile" id="tileColecoes" style="--tile-color:#fa6353;">
@@ -1788,16 +1788,16 @@
       ? `<ul class="home-list">` + recentes.map(b=>`<li data-open="${esc(b.id)}">${esc(b.title)} <span class="dim">— ${esc(b.author)}</span></li>`).join('') + `</ul>`
       : `<p class="home-empty">Ainda não adicionou nenhum livro.</p><button type="button" class="btn-primary" id="homeAdicionarLivro">+ Adicionar livro</button>`;
 
-    const icoBook = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.8c-2-1.4-4.6-2-7.3-2v12.9c2.7 0 5.3.6 7.3 2 2-1.4 4.6-2 7.3-2V4.8c-2.7 0-5.3.6-7.3 2Z"/><path d="M12 6.8v12.9"/></svg>';
-    const icoPeople = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="7.5" r="3.2"/><path d="M2.5 20.5c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="8" r="2.4"/><path d="M15.2 15c2.5.5 4.3 2.8 4.3 5.5"/></svg>';
+    const icoBook = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5A1.5 1.5 0 0 1 7.5 2h9A1.5 1.5 0 0 1 18 3.5V21l-5-2-5 2Z"/></svg>';
+    const icoPeople = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.5 2.5-9 9-3.3.8.8-3.3 9-9Z"/><path d="M15 5l2 2"/></svg>';
     const icoCheck = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg>';
     const icoStar = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2l2.6 5.5 6 .6-4.5 4 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.5-4 6-.6z"/></svg>';
-    const icoChart = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-7"/></svg>';
+    const icoChart = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20v-6"/><path d="M12 20V9"/><path d="M20 20v-9"/><path d="M4 12.5 10 7l4 3 6-6"/><path d="M16 4h4v4"/></svg>';
     const icoOpenBook = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c-2-1.3-4.5-2-7-2v13c2.5 0 5 .7 7 2 2-1.3 4.5-2 7-2V4c-2.5 0-5 .7-7 2Z"/><path d="M12 6v13"/></svg>';
-    const icoStack = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="5" rx="1.2"/><rect x="3" y="10.5" width="18" height="5" rx="1.2"/><rect x="3" y="17" width="18" height="5" rx="1.2"/></svg>';
+    const icoStack = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3.5A1.5 1.5 0 0 1 5.5 2h8A1.5 1.5 0 0 1 15 3.5V19l-4-1.6L7 19V3.5Z"/><circle cx="18" cy="17" r="5"/><path d="M18 14.5V17l1.8 1"/></svg>';
     const icoCalendar = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M3 10h18"/></svg>';
     const icoTarget = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2l2.6 5.5 6 .6-4.5 4 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.5-4 6-.6z"/></svg>';
-    const icoNote = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v5h5"/><path d="M8 13h8"/><path d="M8 17h5"/></svg>';
+    const icoNote = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2Z"/><path d="M8 4v2"/><path d="M12 4v2"/><path d="M16 4v2"/><path d="M8 11h4"/><path d="m14.5 17.5 4.5-4.5 2 2-4.5 4.5-2.5.5Z"/></svg>';
 
     els.content.innerHTML = `
       <div class="home-grid home-grid--2col">
