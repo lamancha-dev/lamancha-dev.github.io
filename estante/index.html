@@ -55,7 +55,7 @@
     box-shadow:2px 0 18px -10px rgba(0,0,0,0.35);
   }
   .sidebar-brand{display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; margin-bottom:6px; padding:4px 6px 0 6px;}
-  .sidebar-brand .mark{width:96px;height:96px;border-radius:20px; display:flex;align-items:center;justify-content:center; flex-shrink:0; background:rgba(255,255,255,0.92); box-shadow:0 4px 14px rgba(0,0,0,0.3); padding:7px;}
+  .sidebar-brand .mark{width:96px;height:96px;border-radius:20px; display:flex;align-items:center;justify-content:center; flex-shrink:0; background:rgba(255,255,255,0.92); box-shadow:0 4px 14px rgba(0,0,0,0.3); padding:2px;}
   .sidebar-brand .mark img{width:100%;height:100%;object-fit:contain;}
   .sidebar-brand h1{font-size:19px; font-weight:700; letter-spacing:.2px; color:var(--sidebar-text);}
   .sidebar-brand p{margin:0; font-size:11px; color:var(--sidebar-text-dim);}
@@ -66,7 +66,7 @@
   }
   .personal-logo img{
     width:96px; height:96px; border-radius:20px; object-fit:contain;
-    background:#fff; padding:7px; box-shadow:0 2px 8px rgba(0,0,0,0.3);
+    background:#fff; padding:2px; box-shadow:0 2px 8px rgba(0,0,0,0.3);
     flex-shrink:0;
   }
   .personal-logo span{font-size:13px; color:var(--sidebar-text); font-weight:600; line-height:1.3;}
@@ -390,7 +390,7 @@
     .sidebar-brand{
       flex-direction:row; text-align:left; gap:10px; margin:0; padding:0; flex-shrink:0;
     }
-    .sidebar-brand .mark{width:62px; height:62px; border-radius:13px; padding:4px;}
+    .sidebar-brand .mark{width:62px; height:62px; border-radius:13px; padding:1px;}
     .sidebar-brand p{display:none;}
     .sidebar-brand h1{font-size:15px;}
     #saveStatus{display:none;}
@@ -399,7 +399,7 @@
     }
     .personal-logo img{
       width:62px; height:62px; border-radius:13px; border:none;
-      background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.3); padding:3px; object-fit:contain;
+      background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.3); padding:1px; object-fit:contain;
     }
     .personal-logo span{display:none;}
     nav.side-tabs{
@@ -618,6 +618,18 @@
         <div class="field">
           <label>Ano</label>
           <input type="number" id="f-year" min="0" max="2100">
+        </div>
+      </div>
+      <div class="field">
+        <label>Foto do autor <span style="font-weight:400;color:var(--text-dim);">(opcional — fica associada ao nome do autor, partilhada por todos os livros dele)</span></label>
+        <div class="cover-upload">
+          <div class="cover-preview" id="authorPhotoPreview" style="width:64px;height:64px;border-radius:50%;">sem foto</div>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <label class="btn btn-ghost" for="f-author-photo" style="width:fit-content;">Escolher imagem
+              <input type="file" id="f-author-photo" accept="image/*">
+            </label>
+            <button type="button" class="btn-ghost" id="removeAuthorPhoto" style="width:fit-content; font-size:12px;">Remover foto</button>
+          </div>
         </div>
       </div>
       <div class="field">
@@ -840,7 +852,7 @@
   const DRIVE_FILE_NAME = 'estante_dados.json';
   let accessToken = null;
   let driveFileId = null;
-  let DATA = {books: [], settings: {}, covers: {}};
+  let DATA = {books: [], settings: {}, covers: {}, authorPhotos: {}};
   let saveTimer = null;
   let saving = false;
 
@@ -876,6 +888,7 @@
     if(!Array.isArray(DATA.books)) DATA.books = [];
     if(!DATA.settings || typeof DATA.settings!=='object') DATA.settings = {};
     if(!DATA.covers || typeof DATA.covers!=='object') DATA.covers = {};
+    if(!DATA.authorPhotos || typeof DATA.authorPhotos!=='object') DATA.authorPhotos = {};
   }
   const saveStatusEl = document.getElementById('saveStatus');
   function setSaveStatus(text, kind){
@@ -983,8 +996,19 @@
       if(value===null) delete DATA.covers[id]; else DATA.covers[id] = value;
       scheduleSave(); return true;
     }
+    if(path.startsWith('authorphoto/')){
+      const key = decodeURIComponent(path.slice(12));
+      if(method==='GET') return DATA.authorPhotos[key] || null;
+      if(value===null) delete DATA.authorPhotos[key]; else DATA.authorPhotos[key] = value;
+      scheduleSave(); return true;
+    }
     return null;
   }
+  function authorKey(name){ return (name||'').trim().toLowerCase(); }
+  const authorPhotoCache = new Map();
+  async function saveAuthorPhoto(authorName,dataUrl){ const k=authorKey(authorName); if(!k) return; disk('POST','authorphoto/'+encodeURIComponent(k),dataUrl); authorPhotoCache.set(k,dataUrl); }
+  async function deleteAuthorPhoto(authorName){ const k=authorKey(authorName); if(!k) return; disk('POST','authorphoto/'+encodeURIComponent(k),null); authorPhotoCache.set(k,null); }
+  async function getAuthorPhoto(authorName){ const k=authorKey(authorName); if(!k) return null; if(!authorPhotoCache.has(k)) authorPhotoCache.set(k,disk('GET','authorphoto/'+encodeURIComponent(k))); return authorPhotoCache.get(k); }
   // Cores usadas como "predefinição" em versões anteriores da Estante — se as suas
   // definições guardadas ainda tiverem uma destas (porque nunca escolheu cor própria,
   // só ficaram gravadas ao abrir "Definições" numa versão antiga), substitui-se sempre
@@ -1700,6 +1724,17 @@
   const bookForm = document.getElementById('bookForm');
   let pendingCoverDataUrl = undefined; // undefined = unchanged, null = removed, string = new
   const coverPreviewEl = document.getElementById('coverPreview');
+  let pendingAuthorPhoto = undefined; // undefined = unchanged, null = removed, string = new
+  const authorPhotoPreviewEl = document.getElementById('authorPhotoPreview');
+
+  async function refreshAuthorPhotoPreview(){
+    if(pendingAuthorPhoto !== undefined) return; // o utilizador já escolheu/removeu uma foto nesta sessão do formulário
+    const authorName = document.getElementById('f-author').value.trim();
+    const existing = authorName ? await getAuthorPhoto(authorName) : null;
+    authorPhotoPreviewEl.innerHTML = existing ? `<img src="${existing}" alt="">` : 'sem foto';
+  }
+  document.getElementById('f-author').addEventListener('change', refreshAuthorPhotoPreview);
+  document.getElementById('f-author').addEventListener('blur', refreshAuthorPhotoPreview);
 
   async function openForm(book){
     document.getElementById('formTitle').textContent = book ? 'Editar livro' : 'Adicionar livro';
@@ -1736,8 +1771,25 @@
         coverPreviewEl.appendChild(img);
       }
     }
+    pendingAuthorPhoto = undefined;
+    document.getElementById('f-author-photo').value = '';
+    await refreshAuthorPhotoPreview();
     bookDialog.showModal();
   }
+  document.getElementById('f-author-photo').addEventListener('change', async e=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    try{
+      const dataUrl = await resizeImageFile(file, 400, 0.85);
+      pendingAuthorPhoto = dataUrl;
+      authorPhotoPreviewEl.innerHTML = `<img src="${dataUrl}" alt="">`;
+    }catch(err){ showToast('Não foi possível processar a imagem.'); }
+  });
+  document.getElementById('removeAuthorPhoto').onclick = ()=>{
+    pendingAuthorPhoto = null;
+    authorPhotoPreviewEl.innerHTML = 'sem foto';
+    document.getElementById('f-author-photo').value = '';
+  };
   document.getElementById('btnAdd').onclick = ()=>openForm(null);
   document.getElementById('closeForm').onclick = ()=>bookDialog.close();
   document.getElementById('cancelForm').onclick = ()=>bookDialog.close();
@@ -2227,6 +2279,8 @@
     }
     if(pendingCoverDataUrl === null){ await deleteCover(bookId); }
     else if(typeof pendingCoverDataUrl === 'string'){ await saveCover(bookId, pendingCoverDataUrl); }
+    if(pendingAuthorPhoto === null){ await deleteAuthorPhoto(data.author); }
+    else if(typeof pendingAuthorPhoto === 'string'){ await saveAuthorPhoto(data.author, pendingAuthorPhoto); }
     save();
     bookDialog.close();
     render();
@@ -2240,6 +2294,7 @@
     currentDetailId = id;
     const statusLabel = {lido:'Lido','a-ler':'A ler','por-ler':'Por ler','quero-ler':'Quero ler'}[b.status||'por-ler'];
     const coverUrl = await getCover(id);
+    const authorPhotoUrl = await getAuthorPhoto(b.author);
     const loan = activeLoan(b);
     const history = (b.loans||[]).slice().reverse();
 
@@ -2281,6 +2336,7 @@
     document.getElementById('detailBody').innerHTML = `
       <div class="detail-cover" id="detailCoverBox">${coverUrl ? `<img src="${coverUrl}" alt="">` : esc(initials(b.title))}</div>
       <h3 style="text-align:center;margin-bottom:4px;">${b.favorite?'⭐ ':''}${esc(b.title)}</h3>
+      ${authorPhotoUrl ? `<img src="${authorPhotoUrl}" alt="" style="width:56px;height:56px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 6px auto;box-shadow:0 2px 8px rgba(0,0,0,0.25);">` : ''}
       <p style="text-align:center;color:var(--text-dim);margin:0 0 4px 0;"><a href="#" id="authorLink" style="color:inherit;text-decoration:underline;cursor:pointer;">${esc(b.author)}</a></p>
       ${b.series ? `<p style="text-align:center;color:var(--accent);font-size:12.5px;font-weight:600;margin:0 0 4px 0;">${esc(b.series)}${b.seriesNumber?' — volume '+esc(b.seriesNumber):''}</p>` : ''}
       ${b.authorBio ? `<p style="text-align:center;color:var(--text-dim);font-size:12.5px;font-style:italic;margin:0 0 14px 0;line-height:1.5;">${esc(b.authorBio)}</p>` : '<div style="margin-bottom:14px;"></div>'}
