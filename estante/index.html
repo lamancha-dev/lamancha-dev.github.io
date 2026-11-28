@@ -2,7 +2,7 @@
 <html lang="pt-PT">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Estante">
@@ -339,7 +339,10 @@
   .field label{font-size:12.5px; color:var(--text-dim); font-weight:600;}
   .field input, .field textarea, .field select{
     padding:9px 11px; border-radius:8px; border:1px solid var(--border); background:var(--panel-2);
-    color:var(--text); font-size:14px; font-family:inherit;
+    color:var(--text); font-size:16px; font-family:inherit;
+  }
+  @media (max-width:600px){
+    .field-row{grid-template-columns:1fr;}
   }
   .field textarea{resize:vertical; min-height:60px;}
   .field-row{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
@@ -2620,7 +2623,7 @@
     scanModal.showModal();
     scanHintEl.textContent = 'A ligar a câmara, aguarde...';
     try{
-      scanStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment', focusMode:'continuous', width:{ideal:1280}, height:{ideal:720}}});
+      scanStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment', width:{ideal:1280}, height:{ideal:720}, advanced:[{focusMode:'continuous'}]}});
       scanVideo.srcObject = scanStream;
       await scanVideo.play().catch(()=>{});
       // Se a câmara suportar zoom ótico/digital, aproxima um pouco — ajuda a
@@ -2646,11 +2649,20 @@
             const raw = (result.getText()||'').replace(/[^0-9Xx]/g,'');
             handleScanCode(raw);
           }
-        }).catch(()=>{});
+        }).catch((e)=>{
+          scanHintEl.textContent = 'A leitura automática falhou neste telemóvel (' + (e && e.message ? e.message : 'erro desconhecido') + '). Escreva o ISBN à mão e clique em "Procurar dados".';
+        });
       } else {
         scanDetector = new BarcodeDetector({formats:['ean_13','ean_8']});
         scanRAF = requestAnimationFrame(tickScan);
       }
+      // Se ao fim de 12 segundos ainda não leu nada, avisa e sugere alternativa —
+      // em vez de deixar a pessoa a apontar a câmara sem saber se está a funcionar.
+      setTimeout(()=>{
+        if(scanBusy===false && (scanStream || scanZxingReader) && !scanLastCode && scanModal.open){
+          scanHintEl.textContent = 'Ainda não consegui ler o código. Aproxime mais a câmara, garanta boa luz e que o código de barras está bem direito. Se continuar a falhar, feche esta janela e escreva o ISBN à mão.';
+        }
+      }, 12000);
     }catch(e){
       scanHintEl.textContent = 'Não foi possível aceder à câmara (' + (e && e.message ? e.message : 'erro desconhecido') + '). Verifique se deu autorização à câmara nas definições do browser, ou feche esta janela e escreva o ISBN à mão.';
     } finally {
