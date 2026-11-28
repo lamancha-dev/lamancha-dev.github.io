@@ -13,8 +13,8 @@
 <title>Estante</title>
 <style>
   :root{
-    --bg:#ffffff;
-    --bg-soft:#f4f5f6;
+    --bg:#f2f3f4;
+    --bg-soft:#eceef0;
     --panel:#ffffff;
     --panel-2:#f1f2f4;
     --border:#dde0e3;
@@ -26,6 +26,12 @@
     --loan:#3d6fa0;
     --loan-soft:#3d6fa01e;
     --radius:10px;
+    --sidebar-bg:#20352f;
+    --sidebar-text:#eef1ee;
+    --sidebar-text-dim:rgba(238,241,238,0.62);
+    --sidebar-border:rgba(255,255,255,0.12);
+    --sidebar-hover:rgba(255,255,255,0.08);
+    --sidebar-active-bg:rgba(255,255,255,0.14);
     font-family: "Georgia", "Iowan Old Style", serif;
   }
   *{box-sizing:border-box;}
@@ -42,38 +48,45 @@
 
   .sidebar{
     width:232px; flex-shrink:0;
-    background:var(--panel); border-right:1px solid var(--border);
+    background:var(--sidebar-bg); border-right:1px solid var(--sidebar-border);
     display:flex; flex-direction:column;
     position:sticky; top:0; height:100vh; overflow-y:auto;
     padding:26px 18px;
+    box-shadow:2px 0 18px -10px rgba(0,0,0,0.35);
   }
   .sidebar-brand{display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; margin-bottom:6px; padding:4px 6px 0 6px;}
-  .sidebar-brand .mark{width:96px;height:96px;border-radius:16px; display:flex;align-items:center;justify-content:center; flex-shrink:0;}
+  .sidebar-brand .mark{width:72px;height:72px;border-radius:16px; display:flex;align-items:center;justify-content:center; flex-shrink:0; background:rgba(255,255,255,0.92); box-shadow:0 4px 14px rgba(0,0,0,0.3); padding:6px;}
   .sidebar-brand .mark img{width:100%;height:100%;object-fit:contain;}
-  .sidebar-brand h1{font-size:20px; font-weight:700; letter-spacing:.2px;}
-  .sidebar-brand p{margin:0; font-size:11px; color:var(--text-dim);}
+  .sidebar-brand h1{font-size:19px; font-weight:700; letter-spacing:.2px; color:var(--sidebar-text);}
+  .sidebar-brand p{margin:0; font-size:11px; color:var(--sidebar-text-dim);}
 
   .personal-logo{
     display:flex; align-items:center; gap:12px; margin:16px 6px 20px 6px; padding:14px 12px;
-    background:var(--panel-2); border:1px solid var(--border); border-radius:12px;
+    background:rgba(255,255,255,0.06); border:1px solid var(--sidebar-border); border-radius:12px;
   }
   .personal-logo img{
-    width:80px; height:80px; border-radius:50%; object-fit:cover;
-    border:2px solid #fff; box-shadow:0 2px 8px rgba(40,50,60,0.18);
+    width:64px; height:64px; border-radius:50%; object-fit:cover;
+    border:2px solid rgba(255,255,255,0.85); box-shadow:0 2px 8px rgba(0,0,0,0.3);
     flex-shrink:0;
   }
-  .personal-logo span{font-size:13px; color:var(--text); font-weight:600; line-height:1.3;}
+  .personal-logo span{font-size:13px; color:var(--sidebar-text); font-weight:600; line-height:1.3;}
 
   nav.side-tabs{display:flex; flex-direction:column; gap:3px; margin-top:6px;}
   nav.side-tabs button{
-    justify-content:flex-start; background:transparent; border:none; color:var(--text-dim);
+    justify-content:flex-start; background:transparent; border:none; color:var(--sidebar-text-dim);
     font-size:14px; font-weight:600; padding:11px 12px; border-radius:9px; width:100%; text-align:left;
   }
-  nav.side-tabs button:hover{background:var(--panel-2); color:var(--text);}
-  nav.side-tabs button.active{background:var(--accent-soft); color:var(--accent);}
+  nav.side-tabs button:hover{background:var(--sidebar-hover); color:var(--sidebar-text);}
+  nav.side-tabs button.active{background:var(--sidebar-active-bg); color:var(--sidebar-text);}
 
-  .sidebar-actions{display:flex; flex-direction:column; gap:7px; margin-top:auto; padding-top:16px; border-top:1px solid var(--border);}
-  .sidebar-actions button, .sidebar-actions label.btn{width:100%; justify-content:center;}
+  .sidebar-actions{display:flex; flex-direction:column; gap:7px; margin-top:auto; padding-top:16px; border-top:1px solid var(--sidebar-border);}
+  .sidebar-actions button, .sidebar-actions label.btn{
+    width:100%; justify-content:center; background:rgba(255,255,255,0.06); color:var(--sidebar-text);
+    border-color:var(--sidebar-border);
+  }
+  .sidebar-actions button:hover, .sidebar-actions label.btn:hover{background:rgba(255,255,255,0.14); border-color:rgba(255,255,255,0.22);}
+  .sidebar-actions .btn-primary{background:var(--accent); border-color:var(--accent); color:#fff;}
+  .sidebar-actions .btn-primary:hover{filter:brightness(1.12);}
 
   .main-area{flex:1; min-width:0;}
 
@@ -98,9 +111,9 @@
     display:inline-flex; align-items:center; gap:6px; transition:background .15s, border-color .15s;
     font-family:inherit;
   }
-  button:hover{background:#f1e4cf; border-color:#d8c4a2;}
+  button:hover{background:var(--panel-2); border-color:var(--border);}
   .btn-primary{background:var(--accent); color:#fff; border-color:var(--accent); font-weight:600;}
-  .btn-primary:hover{background:#9c5125;}
+  .btn-primary:hover{filter:brightness(1.12);}
   .btn-ghost{background:transparent;}
   .btn-danger{color:#a33a31; border-color:#e3bdb7;}
   .btn-danger:hover{background:#fbeae8;}
@@ -312,10 +325,19 @@
   .scan-video-wrap{position:relative; width:100%; aspect-ratio:4/3; background:#000; border-radius:10px; overflow:hidden;}
   .scan-video-wrap video{width:100%; height:100%; object-fit:cover;}
   .scan-video-wrap .scan-frame{
-    position:absolute; left:10%; right:10%; top:38%; bottom:38%;
-    border:2px solid var(--accent); border-radius:8px; box-shadow:0 0 0 2000px rgba(0,0,0,0.35);
+    position:absolute; left:4%; right:4%; top:28%; bottom:28%;
+    border:3px solid var(--accent); border-radius:10px; box-shadow:0 0 0 2000px rgba(0,0,0,0.35);
   }
   .scan-hint{font-size:12.5px; color:var(--text-dim); text-align:center; margin-top:10px;}
+
+  #cropDialog::backdrop{background:rgba(5,6,10,0.82);}
+  .crop-viewport{
+    position:relative; width:100%; max-width:280px; aspect-ratio:2/3; margin:0 auto;
+    overflow:hidden; border-radius:8px; background:#111; border:2px solid var(--accent);
+    touch-action:none; cursor:grab;
+  }
+  .crop-viewport:active{cursor:grabbing;}
+  .crop-viewport img{position:absolute; left:0; top:0; max-width:none; user-select:none; -webkit-user-drag:none; pointer-events:none;}
 
   /* ---------- Painel de Estatísticas ---------- */
   .stats-grid{
@@ -325,6 +347,7 @@
   .stat-card{
     background:var(--panel); border:1px solid var(--border); border-radius:14px;
     padding:18px 18px 16px 18px; text-align:left;
+    box-shadow:0 2px 10px -4px rgba(20,30,30,0.12);
   }
   .stat-card .num{font-size:30px; font-weight:700; color:var(--accent); line-height:1.1; font-family:"Georgia","Iowan Old Style",serif;}
   .stat-card .label{font-size:12.5px; color:var(--text-dim); margin-top:4px;}
@@ -338,11 +361,34 @@
 
   @media (max-width:900px){
     .app-shell{flex-direction:column;}
-    .sidebar{position:static; width:100%; height:auto; flex-direction:row; flex-wrap:wrap; align-items:center; padding:14px 16px;}
-    .sidebar-brand{margin-bottom:0;}
-    .personal-logo{margin:0 0 0 auto;}
-    nav.side-tabs{flex-direction:row; margin-top:0;}
-    .sidebar-actions{flex-direction:row; margin:0; padding:0; border:none; width:100%; order:3;}
+    .sidebar{
+      position:sticky; top:0; z-index:30; width:100%; height:auto;
+      flex-direction:row; flex-wrap:nowrap; align-items:center; gap:10px;
+      padding:10px 14px; overflow-x:visible;
+    }
+    .sidebar-brand{
+      flex-direction:row; text-align:left; gap:8px; margin:0; padding:0; flex-shrink:0;
+    }
+    .sidebar-brand .mark{width:38px; height:38px; border-radius:9px; padding:3px;}
+    .sidebar-brand p{display:none;}
+    .sidebar-brand h1{font-size:15px;}
+    #saveStatus{display:none;}
+    .personal-logo{display:none;}
+    nav.side-tabs{
+      flex-direction:row; margin:0 0 0 auto; gap:2px; flex-shrink:0;
+    }
+    nav.side-tabs button{padding:8px 10px; font-size:0;}
+    nav.side-tabs button svg{width:20px; height:20px;}
+    .sidebar-actions{
+      flex-direction:row; margin:0; padding:0; border:none; gap:4px; flex-shrink:0;
+    }
+    .sidebar-actions button, .sidebar-actions label.btn{width:auto; padding:8px; font-size:0;}
+    .sidebar-actions button svg, .sidebar-actions label.btn svg{width:18px; height:18px;}
+    .sidebar-actions input[type=file]{display:none;}
+  }
+  @media (max-width:520px){
+    .sidebar-brand h1{display:none;}
+    nav.side-tabs button{padding:7px 7px;}
   }
 </style>
 </head>
@@ -404,10 +450,10 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
       Exportar
     </button>
-    <label class="btn btn-ghost" for="importInput" title="Carregar livros de um ficheiro Excel, CSV ou JSON">
+    <label class="btn btn-ghost" for="importInput" title="Carregar livros de um ficheiro Word, Excel, CSV ou JSON">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
       Importar
-      <input type="file" id="importInput" accept=".csv,.json,.xlsx,.xls">
+      <input type="file" id="importInput" accept=".csv,.json,.xlsx,.xls,.docx">
     </label>
   </div>
 </aside>
@@ -613,11 +659,29 @@
   </div>
 </dialog>
 
+<dialog id="cropDialog">
+  <div class="dlg-head"><h2>Ajustar a capa</h2><button type="button" class="close-x" id="closeCrop">✕</button></div>
+  <div class="dlg-body">
+    <p class="scan-hint" style="margin-top:0;">Arraste a imagem para a posicionar e use a barra para aproximar, até a capa ficar enquadrada tal como aparece no livro.</p>
+    <div class="crop-viewport" id="cropViewport">
+      <img id="cropImg" alt="">
+    </div>
+    <div style="display:flex; align-items:center; gap:10px; margin-top:12px;">
+      <span style="font-size:12px; color:var(--text-dim);">🔍</span>
+      <input type="range" id="cropZoom" min="100" max="300" value="100" style="flex:1;">
+    </div>
+  </div>
+  <div class="dlg-foot">
+    <button class="btn-ghost" id="cancelCrop">Cancelar</button>
+    <button class="btn-primary" id="confirmCrop">Usar esta capa</button>
+  </div>
+</dialog>
+
 <dialog id="importDialog">
   <div class="dlg-head"><h2>Importar livros</h2><button type="button" class="close-x" id="closeImport">✕</button></div>
   <div class="dlg-body">
     <p style="font-size:13px;color:var(--text-dim);margin:0 0 8px 0;">
-      Aceita ficheiros <b>Excel (.xlsx)</b>, <b>.csv</b> ou <b>.json</b>. Se o ficheiro tiver uma linha de cabeçalho com nomes como <i>título, autor, ano, género, editora, isbn, idioma, localização, estado, notas, biografia</i>, as colunas são associadas automaticamente — não precisam de estar numa ordem fixa nem de usar todas.
+      Aceita ficheiros <b>Word (.docx)</b>, <b>Excel (.xlsx)</b>, <b>.csv</b> ou <b>.json</b>. Num Excel ou CSV, se tiver uma linha de cabeçalho com nomes como <i>título, autor, ano, género, editora, isbn, idioma, localização, estado, notas, biografia</i>, as colunas são associadas automaticamente. Num Word, pode ser uma tabela (com cabeçalho) ou simplesmente uma lista com um livro por linha — nesse caso é só o título, autor, isbn.
     </p>
     <div id="importPreview"></div>
   </div>
@@ -677,6 +741,7 @@
 </div><!-- /appRoot -->
 <script src="https://accounts.google.com/gsi/client"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
 (function(){
   const STORAGE_KEY = 'biblioteca_antonia_v1';
@@ -1438,14 +1503,9 @@
     const file = e.target.files[0];
     if(!file) return;
     try{
-      const dataUrl = await resizeImageFile(file);
-      pendingCoverDataUrl = dataUrl;
-      coverPreviewEl.innerHTML = '';
-      const img = document.createElement('img');
-      img.src = dataUrl;
-      coverPreviewEl.appendChild(img);
+      await openCropper(file);
     }catch(err){
-      showToast('Não foi possível processar a imagem.');
+      if(err && err.message !== 'cancelado') showToast('Não foi possível processar a imagem.');
     }
   }
   document.getElementById('f-cover').addEventListener('change', handleCoverFile);
@@ -1456,6 +1516,135 @@
     document.getElementById('f-cover').value = '';
     document.getElementById('f-cover-camera').value = '';
   };
+
+  // ---------- Editor de corte da capa (como um "scan" recortado) ----------
+  const cropDialog = document.getElementById('cropDialog');
+  const cropViewport = document.getElementById('cropViewport');
+  const cropImg = document.getElementById('cropImg');
+  const cropZoom = document.getElementById('cropZoom');
+  let cropState = null; // {natW,natH,baseScale,scale,offX,offY,VW,VH}
+
+  function cropClamp(){
+    const s = cropState;
+    const dispW = s.natW * s.baseScale * s.scale;
+    const dispH = s.natH * s.baseScale * s.scale;
+    s.offX = Math.min(0, Math.max(s.VW - dispW, s.offX));
+    s.offY = Math.min(0, Math.max(s.VH - dispH, s.offY));
+    cropImg.style.width = dispW + 'px';
+    cropImg.style.height = dispH + 'px';
+    cropImg.style.transform = `translate(${s.offX}px, ${s.offY}px)`;
+  }
+
+  function openCropper(file){
+    return new Promise((resolve, reject)=>{
+      const reader = new FileReader();
+      reader.onerror = reject;
+      reader.onload = ()=>{
+        const img = new Image();
+        img.onerror = reject;
+        img.onload = ()=>{
+          const VW = cropViewport.clientWidth || 280;
+          const VH = cropViewport.clientHeight || Math.round(VW*1.5);
+          const baseScale = Math.max(VW/img.width, VH/img.height);
+          cropState = {natW:img.width, natH:img.height, baseScale, scale:1, offX:(VW-img.width*baseScale)/2, offY:(VH-img.height*baseScale)/2, VW, VH};
+          cropImg.src = reader.result;
+          cropZoom.value = 100;
+          cropClamp();
+          cropDialog.showModal();
+          cropDialog._resolve = resolve;
+          cropDialog._reject = reject;
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  cropZoom.addEventListener('input', ()=>{
+    if(!cropState) return;
+    cropState.scale = cropZoom.value / 100;
+    cropClamp();
+  });
+
+  (function setupCropDrag(){
+    let dragging = false, startX=0, startY=0, startOffX=0, startOffY=0;
+    let pinchStartDist = 0, pinchStartScale = 1;
+    const pointers = new Map();
+    cropViewport.addEventListener('pointerdown', e=>{
+      if(!cropState) return;
+      pointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
+      cropViewport.setPointerCapture(e.pointerId);
+      if(pointers.size===1){
+        dragging = true; startX = e.clientX; startY = e.clientY;
+        startOffX = cropState.offX; startOffY = cropState.offY;
+      } else if(pointers.size===2){
+        dragging = false;
+        const pts = [...pointers.values()];
+        pinchStartDist = Math.hypot(pts[0].x-pts[1].x, pts[0].y-pts[1].y) || 1;
+        pinchStartScale = cropState.scale;
+      }
+    });
+    cropViewport.addEventListener('pointermove', e=>{
+      if(!cropState || !pointers.has(e.pointerId)) return;
+      pointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
+      if(pointers.size>=2){
+        const pts = [...pointers.values()];
+        const dist = Math.hypot(pts[0].x-pts[1].x, pts[0].y-pts[1].y) || 1;
+        const minScale = 1, maxScale = 3;
+        cropState.scale = Math.min(maxScale, Math.max(minScale, pinchStartScale * (dist/pinchStartDist)));
+        cropZoom.value = Math.round(cropState.scale*100);
+        cropClamp();
+      } else if(dragging){
+        cropState.offX = startOffX + (e.clientX - startX);
+        cropState.offY = startOffY + (e.clientY - startY);
+        cropClamp();
+      }
+    });
+    function endPointer(e){
+      pointers.delete(e.pointerId);
+      if(pointers.size<2) pinchStartDist = 0;
+      if(pointers.size===0) dragging = false;
+    }
+    cropViewport.addEventListener('pointerup', endPointer);
+    cropViewport.addEventListener('pointercancel', endPointer);
+    cropViewport.addEventListener('wheel', e=>{
+      if(!cropState) return;
+      e.preventDefault();
+      cropState.scale = Math.min(3, Math.max(1, cropState.scale - e.deltaY*0.0015));
+      cropZoom.value = Math.round(cropState.scale*100);
+      cropClamp();
+    }, {passive:false});
+  })();
+
+  function finishCrop(ok){
+    if(cropDialog._resolve){
+      if(ok) cropDialog._resolve(true); else cropDialog._reject(new Error('cancelado'));
+    }
+    cropDialog._resolve = null; cropDialog._reject = null;
+    cropState = null;
+    cropDialog.close();
+  }
+  document.getElementById('confirmCrop').onclick = ()=>{
+    const s = cropState;
+    if(!s){ finishCrop(false); return; }
+    const outW = 480, outH = 720;
+    const px = s.baseScale * s.scale;
+    const sx = -s.offX / px, sy = -s.offY / px;
+    const sw = s.VW / px, sh = s.VH / px;
+    const canvas = document.createElement('canvas');
+    canvas.width = outW; canvas.height = outH;
+    canvas.getContext('2d').drawImage(cropImg, sx, sy, sw, sh, 0, 0, outW, outH);
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+    pendingCoverDataUrl = dataUrl;
+    coverPreviewEl.innerHTML = '';
+    const img = document.createElement('img');
+    img.src = dataUrl;
+    coverPreviewEl.appendChild(img);
+    finishCrop(true);
+  };
+  document.getElementById('cancelCrop').onclick = ()=>finishCrop(false);
+  document.getElementById('closeCrop').onclick = ()=>finishCrop(false);
+  cropDialog.addEventListener('cancel', ()=>finishCrop(false));
 
   // Procura de dados pelo ISBN em várias fontes, a partir do browser — tenta todas,
   // uma a seguir à outra, até encontrar algo, e combina o que cada uma tiver.
@@ -1608,6 +1797,27 @@
   let scanStream = null;
   let scanDetector = null;
   let scanRAF = null;
+  let scanLastCode = null, scanMatchCount = 0, scanLastTick = 0;
+
+  // Valida o dígito de controlo do ISBN, para rejeitar leituras de outros
+  // códigos de barras que por vezes aparecem na contracapa (ex.: preço),
+  // em vez de aceitar qualquer código de 10 ou 13 dígitos que passe à frente.
+  function isValidIsbn13(isbn){
+    if(isbn.length!==13 || !/^97[89]\d{10}$/.test(isbn)) return false;
+    let sum=0;
+    for(let i=0;i<12;i++) sum += parseInt(isbn[i],10) * (i%2===0?1:3);
+    return ((10 - (sum%10))%10) === parseInt(isbn[12],10);
+  }
+  function isValidIsbn10(isbn){
+    if(!/^\d{9}[\dXx]$/.test(isbn)) return false;
+    let sum=0;
+    for(let i=0;i<9;i++) sum += parseInt(isbn[i],10) * (10-i);
+    const last = isbn[9].toUpperCase();
+    sum += (last==='X') ? 10 : parseInt(last,10);
+    return sum % 11 === 0;
+  }
+  function isValidIsbn(isbn){ return isValidIsbn13(isbn) || isValidIsbn10(isbn); }
+
   async function stopScan(){
     if(scanRAF) cancelAnimationFrame(scanRAF);
     scanRAF = null;
@@ -1616,16 +1826,33 @@
   }
   async function tickScan(){
     if(!scanDetector || !scanStream) return;
+    // Só tenta ler umas 5 vezes por segundo, em vez de a cada frame do vídeo (60x/s):
+    // dá tempo para a imagem assentar e evita "piscar" entre leituras instáveis.
+    const now = performance.now();
+    if(now - scanLastTick < 200){ scanRAF = requestAnimationFrame(tickScan); return; }
+    scanLastTick = now;
     try{
       const codes = await scanDetector.detect(scanVideo);
-      if(codes && codes.length){
-        const isbn = codes[0].rawValue.replace(/[^0-9Xx]/g,'');
-        if(isbn.length===10 || isbn.length===13){
+      const raw = codes && codes[0] ? codes[0].rawValue.replace(/[^0-9Xx]/g,'') : '';
+      if(raw && isValidIsbn(raw)){
+        if(raw === scanLastCode){
+          scanMatchCount++;
+        } else {
+          scanLastCode = raw; scanMatchCount = 1;
+        }
+        if(scanMatchCount >= 2){
+          // Só aceita depois de ler o MESMO código duas vezes seguidas — evita
+          // aceitar uma leitura isolada e errada por causa de tremor da câmara.
           await stopScan();
-          document.getElementById('f-isbn').value = isbn;
+          document.getElementById('f-isbn').value = raw;
           document.getElementById('btnIsbnLookup').click();
           return;
         }
+        scanHintEl.textContent = 'Código detetado — a confirmar, mantenha o telemóvel parado...';
+      } else {
+        scanLastCode = null; scanMatchCount = 0;
+        if(raw) scanHintEl.textContent = 'Esse código não parece ser um ISBN válido. Tente apontar à barra de código junto ao ISBN impresso.';
+        else scanHintEl.textContent = 'Aponte a câmara para o código de barras (ISBN) na contracapa do livro.';
       }
     }catch(e){ /* tenta outra vez no próximo frame */ }
     scanRAF = requestAnimationFrame(tickScan);
@@ -1639,15 +1866,26 @@
       return;
     }
     scanBusy = true;
+    scanLastCode = null; scanMatchCount = 0; scanLastTick = 0;
     // Abre a janela já com a câmara a "ligar", para nunca ficar sem resposta visível.
     scanModal.showModal();
     scanHintEl.textContent = 'A ligar a câmara, aguarde...';
     try{
       scanDetector = new BarcodeDetector({formats:['ean_13','ean_8']});
-      scanStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
+      scanStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment', focusMode:'continuous'}});
       scanVideo.srcObject = scanStream;
       await scanVideo.play().catch(()=>{});
-      scanHintEl.textContent = 'Aponte a câmara para o código de barras (ISBN) na contracapa do livro.';
+      // Se a câmara suportar zoom ótico/digital, aproxima um pouco — ajuda a
+      // ler o código com mais nitidez e dá mais tempo para apontar com calma.
+      try{
+        const track = scanStream.getVideoTracks()[0];
+        const caps = track.getCapabilities ? track.getCapabilities() : {};
+        if(caps.zoom && caps.zoom.max > caps.zoom.min){
+          const target = Math.min(caps.zoom.max, caps.zoom.min + (caps.zoom.max-caps.zoom.min)*0.3);
+          await track.applyConstraints({advanced:[{zoom:target}]}).catch(()=>{});
+        }
+      }catch(e){}
+      scanHintEl.textContent = 'Aponte a câmara para o código de barras (ISBN) na contracapa do livro, devagar, a uns 10-15 cm de distância.';
       scanRAF = requestAnimationFrame(tickScan);
     }catch(e){
       scanHintEl.textContent = 'Não foi possível aceder à câmara (' + (e && e.message ? e.message : 'erro desconhecido') + '). Verifique se deu autorização à câmara nas definições do browser, ou feche esta janela e escreva o ISBN à mão.';
@@ -1837,12 +2075,76 @@
 
   // ---------- Import ----------
   const importDialog = document.getElementById('importDialog');
-  document.getElementById('importInput').addEventListener('change', e=>{
+  // ---------- Leitura de ficheiros Word (.docx) ----------
+  function xmlDecode(s){ return s.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&amp;/g,'&'); }
+  function docxRunText(fragmentXml){
+    let text = '';
+    const re = /<w:t[^>]*>([^<]*)<\/w:t>|<w:tab\s*\/>|<w:br\s*\/?>/g;
+    let m;
+    while((m = re.exec(fragmentXml))){
+      text += (m[1] !== undefined) ? xmlDecode(m[1]) : ' ';
+    }
+    return text.replace(/\s+/g,' ').trim();
+  }
+  function docxExtractTables(xml){
+    const tables = [];
+    const tblRe = /<w:tbl>([\s\S]*?)<\/w:tbl>/g;
+    let tm;
+    while((tm = tblRe.exec(xml))){
+      const rows = [];
+      const trRe = /<w:tr[ >][\s\S]*?<\/w:tr>/g;
+      let rm;
+      while((rm = trRe.exec(tm[1]))){
+        const cells = [];
+        const tcRe = /<w:tc[ >][\s\S]*?<\/w:tc>/g;
+        let cm;
+        while((cm = tcRe.exec(rm[0]))) cells.push(docxRunText(cm[0]));
+        if(cells.length) rows.push(cells);
+      }
+      if(rows.length) tables.push(rows);
+    }
+    return tables;
+  }
+  function docxExtractParagraphs(xml){
+    const noTables = xml.replace(/<w:tbl>[\s\S]*?<\/w:tbl>/g, '');
+    const paras = [];
+    const pRe = /<w:p[ >][\s\S]*?<\/w:p>/g;
+    let pm;
+    while((pm = pRe.exec(noTables))){
+      const text = docxRunText(pm[0]);
+      if(text) paras.push(text);
+    }
+    return paras;
+  }
+  // Para uma lista simples (um livro por linha), tenta separar título/autor/ISBN
+  // por separadores comuns (travessão, tabulação, ou "ISBN:" no fim da linha).
+  function linesToBooks(lines){
+    const books = [];
+    for(const raw of lines){
+      const l = raw.trim();
+      if(!l) continue;
+      let line = l, isbn = '';
+      const isbnMatch = line.match(/isbn[:\s]*([\dXx-]{9,17})\s*$/i) || line.match(/[\(\[]([\dXx-]{9,17})[\)\]]\s*$/);
+      if(isbnMatch){ isbn = isbnMatch[1].replace(/[^0-9Xx]/g,''); line = line.slice(0, isbnMatch.index).trim(); }
+      let title = line, author = '';
+      const tabParts = line.split('\t').map(s=>s.trim()).filter(Boolean);
+      if(tabParts.length >= 2){
+        title = tabParts[0]; author = tabParts[1]; if(tabParts[2] && !isbn) isbn = tabParts[2].replace(/[^0-9Xx]/g,'');
+      } else {
+        const dashParts = line.split(/\s[-–—]\s/);
+        if(dashParts.length >= 2){ title = dashParts[0].trim(); author = dashParts.slice(1).join(' - ').trim(); }
+      }
+      if(title) books.push({id:uid(), title, author, isbn, loans:[], added:Date.now(), status:'por-ler'});
+    }
+    return books;
+  }
+
+  document.getElementById('importInput').addEventListener('change', async e=>{
     const file = e.target.files[0];
     if(!file) return;
     const name = file.name.toLowerCase();
     const reader = new FileReader();
-    reader.onload = ()=>{
+    reader.onload = async ()=>{
       try{
         let parsed = [];
         pendingBackup = null;
@@ -1865,6 +2167,24 @@
             const header = rows[0].map(h=>String(h||''));
             parsed = rowsToBooks(header, rows.slice(1));
           }
+        } else if(name.endsWith('.docx')){
+          if(typeof JSZip === 'undefined'){
+            showToast('Não foi possível carregar o leitor de Word. Verifique a ligação à internet e tente novamente.');
+            e.target.value = '';
+            return;
+          }
+          const zip = await JSZip.loadAsync(reader.result);
+          const docXmlFile = zip.file('word/document.xml');
+          if(!docXmlFile){ parsed = []; }
+          else {
+            const xml = await docXmlFile.async('string');
+            const tables = docxExtractTables(xml);
+            if(tables.length && tables[0].length >= 2){
+              parsed = rowsToBooks(tables[0][0], tables[0].slice(1));
+            } else {
+              parsed = linesToBooks(docxExtractParagraphs(xml));
+            }
+          }
         } else {
           const lines = reader.result.split(/\r?\n/).filter(l=>l.trim().length);
           if(lines.length < 2){ parsed = []; }
@@ -1880,14 +2200,14 @@
              <ul style="font-size:12.5px;color:var(--text-dim);max-height:160px;overflow:auto;padding-left:18px;">
                ${parsed.slice(0,8).map(b=>`<li>${esc(b.title||'(sem título)')} — ${esc(b.author||'(sem autor)')}</li>`).join('')}
              </ul>`
-          : `<p style="color:var(--danger);">Não foi possível interpretar o ficheiro. Verifique se tem uma linha de cabeçalho e pelo menos uma linha de dados.</p>`;
+          : `<p style="color:var(--danger);">Não foi possível interpretar o ficheiro. Verifique se tem uma linha de cabeçalho e pelo menos uma linha de dados (num Word, pelo menos uma linha de texto por livro).</p>`;
         importDialog.showModal();
       }catch(err){
         showToast('Erro ao ler o ficheiro: ' + err.message);
       }
       e.target.value = '';
     };
-    if(name.endsWith('.xlsx') || name.endsWith('.xls')) reader.readAsArrayBuffer(file);
+    if(name.endsWith('.xlsx') || name.endsWith('.xls') || name.endsWith('.docx')) reader.readAsArrayBuffer(file);
     else reader.readAsText(file, 'UTF-8');
   });
 
