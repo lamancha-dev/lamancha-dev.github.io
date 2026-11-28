@@ -370,6 +370,7 @@
     <div>
       <h1 id="brandName">Estante</h1>
       <p id="subtitle">a carregar acervo…</p>
+      <p id="saveStatus" style="font-size:11px; color:var(--text-dim); margin:2px 0 0; min-height:14px;"></p>
     </div>
   </div>
   <div class="personal-logo" id="personalLogoBox" style="display:none;">
@@ -726,25 +727,91 @@
     if(!DATA.settings || typeof DATA.settings!=='object') DATA.settings = {};
     if(!DATA.covers || typeof DATA.covers!=='object') DATA.covers = {};
   }
+  const saveStatusEl = document.getElementById('saveStatus');
+  function setSaveStatus(text, kind){
+    if(!saveStatusEl) return;
+    saveStatusEl.textContent = text;
+    saveStatusEl.style.color = kind==='erro' ? 'var(--danger)' : kind==='ok' ? '#2f7a44' : 'var(--text-dim)';
+  }
+  let saveRetryCount = 0;
+  let saveRetryTimer = null;
+  // Pede um novo token sem mostrar nenhum ecrã ao usuário (silencioso), para quando
+  // o token de acesso expira (acontece ao fim de cerca de uma hora a usar a app).
+  function silentTokenRefresh(){
+    return new Promise((resolve)=>{
+      if(!tokenClient){ resolve(false); return; }
+      const prevCallback = tokenClient.callback;
+      tokenClient.callback = (resp)=>{
+        if(resp && resp.access_token){ accessToken = resp.access_token; resolve(true); }
+        else resolve(false);
+      };
+      try{ tokenClient.requestAccessToken({prompt:''}); }
+      catch(e){ resolve(false); }
+      setTimeout(()=>resolve(false), 8000);
+    });
+  }
   async function driveSaveNow(){
     if(!driveFileId || !accessToken) return;
     saving = true;
+    setSaveStatus('A guardar…', 'neutro');
     try{
-      await fetch(`https://www.googleapis.com/upload/drive/v3/files/${driveFileId}?uploadType=media`, {
+      const res = await fetch(`https://www.googleapis.com/upload/drive/v3/files/${driveFileId}?uploadType=media`, {
         method:'PATCH',
         headers:driveHeaders({'Content-Type':'application/json'}),
         body: JSON.stringify(DATA)
       });
+      if(res.status===401){
+        // Token expirado — pede um novo em silêncio e tenta guardar outra vez.
+        const ok = await silentTokenRefresh();
+        if(ok){
+          const retry = await fetch(`https://www.googleapis.com/upload/drive/v3/files/${driveFileId}?uploadType=media`, {
+            method:'PATCH',
+            headers:driveHeaders({'Content-Type':'application/json'}),
+            body: JSON.stringify(DATA)
+          });
+          if(!retry.ok) throw new Error('falha após renovar sessão');
+        } else {
+          throw new Error('sessão expirada');
+        }
+      } else if(!res.ok){
+        throw new Error('HTTP '+res.status);
+      }
+      saveRetryCount = 0;
+      clearTimeout(saveRetryTimer);
+      setSaveStatus('Guardado ✔', 'ok');
+    } catch(e){
+      // Nunca falha em silêncio: avisa sempre e tenta de novo até conseguir,
+      // para nenhuma alteração se perder por falha de rede momentânea.
+      saveRetryCount++;
+      const delay = Math.min(30000, 2000 * Math.pow(1.6, saveRetryCount));
+      setSaveStatus('⚠ Não foi possível guardar agora — a tentar de novo…', 'erro');
+      clearTimeout(saveRetryTimer);
+      saveRetryTimer = setTimeout(driveSaveNow, delay);
     } finally { saving = false; }
   }
   function scheduleSave(){
     clearTimeout(saveTimer);
+    setSaveStatus('A guardar…', 'neutro');
     saveTimer = setTimeout(driveSaveNow, 700);
   }
+  // Se a pessoa tentar fechar a página com alterações ainda por guardar
+  // (por exemplo, a meio de uma tentativa de reenvio após falha de rede),
+  // avisa antes de sair para não perder dados.
+  window.addEventListener('beforeunload', (e)=>{
+    if(saving || saveRetryCount>0){ e.preventDefault(); e.returnValue = ''; }
+  });
   async function driveEnsureFile(){
-    driveFileId = await driveFindFile();
-    if(driveFileId){ await driveLoad(); }
-    else { driveFileId = await driveCreateFile(DATA); }
+    try{
+      driveFileId = await driveFindFile();
+      if(driveFileId){ await driveLoad(); }
+      else { driveFileId = await driveCreateFile(DATA); }
+    }catch(e){
+      // Pode ter sido um erro de rede momentâneo (comum em redes móveis) — tenta mais uma vez.
+      await new Promise(r=>setTimeout(r, 1200));
+      driveFileId = await driveFindFile();
+      if(driveFileId){ await driveLoad(); }
+      else { driveFileId = await driveCreateFile(DATA); }
+    }
   }
   async function driveRefreshFromCloud(){
     if(!driveFileId || saving) return;
@@ -1934,7 +2001,8 @@
           setInterval(driveRefreshFromCloud, 20000);
           document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='visible') driveRefreshFromCloud(); });
         }catch(e){
-          loginStatusEl.textContent = 'Erro ao aceder à Google Drive: ' + e.message;
+          loginStatusEl.textContent = 'Não foi possível aceder à Google Drive (' + e.message + '). Verifique a ligação à internet e tente novamente.';
+          document.getElementById('btnGoogleLogin').disabled = false;
         }
       }
     });
@@ -1943,6 +2011,7 @@
   document.getElementById('btnGoogleLogin').onclick = ()=>{
     if(!tokenClient){ loginStatusEl.textContent = 'A preparar o início de sessão, aguarde...'; return; }
     loginStatusEl.textContent = '';
+    document.getElementById('btnGoogleLogin').disabled = true;
     tokenClient.requestAccessToken();
   };
   setupGoogleLogin();
