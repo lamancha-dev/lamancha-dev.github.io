@@ -65,8 +65,8 @@
     background:rgba(255,255,255,0.06); border:1px solid var(--sidebar-border); border-radius:12px;
   }
   .personal-logo img{
-    width:64px; height:64px; border-radius:50%; object-fit:cover;
-    border:2px solid rgba(255,255,255,0.85); box-shadow:0 2px 8px rgba(0,0,0,0.3);
+    width:56px; height:56px; border-radius:12px; object-fit:contain;
+    background:#fff; padding:5px; box-shadow:0 2px 8px rgba(0,0,0,0.3);
     flex-shrink:0;
   }
   .personal-logo span{font-size:13px; color:var(--sidebar-text); font-weight:600; line-height:1.3;}
@@ -373,7 +373,14 @@
     .sidebar-brand p{display:none;}
     .sidebar-brand h1{font-size:15px;}
     #saveStatus{display:none;}
-    .personal-logo{display:none;}
+    .personal-logo{
+      display:flex; margin:0; padding:0; background:none; border:none; gap:0; flex-shrink:0;
+    }
+    .personal-logo img{
+      width:38px; height:38px; border-radius:9px; border:none;
+      background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.3); padding:2px; object-fit:contain;
+    }
+    .personal-logo span{display:none;}
     nav.side-tabs{
       flex-direction:row; margin:0 0 0 auto; gap:2px; flex-shrink:0;
     }
