@@ -172,10 +172,10 @@
   .home-links{display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:16px;}
   .home-link{
     display:flex; align-items:center; gap:16px; text-align:left; min-height:88px;
-    background:var(--link-bg, color-mix(in srgb, var(--link-color) 14%, var(--panel)));
-    border:1px solid color-mix(in srgb, var(--link-color) 30%, var(--border));
+    background:var(--bg);
+    border:1px solid var(--border);
     border-radius:18px; padding:20px 22px; cursor:pointer; transition:filter .15s, transform .15s, box-shadow .15s;
-    color:var(--link-color); box-shadow:0 2px 10px -6px rgba(20,30,30,0.1); position:relative;
+    color:var(--text); box-shadow:0 2px 10px -6px rgba(20,30,30,0.1); position:relative;
   }
   .home-link:hover{filter:brightness(1.04); transform:translateY(-2px); box-shadow:0 8px 16px -8px rgba(20,30,30,0.25);}
   .home-link .tile-ico{
@@ -549,11 +549,11 @@
       Início
     </button>
     <button id="tabAcervo">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h12a1 1 0 0 1 1 1v14.5"/><path d="M6 21.5h13a1 1 0 0 0 1-1V19H6.5a1.5 1.5 0 0 0 0 3Z"/><path d="M9 7h6"/><path d="M9 10.5h6"/></svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.8c-2-1.4-4.6-2-7.3-2v12.9c2.7 0 5.3.6 7.3 2 2-1.4 4.6-2 7.3-2V4.8c-2.7 0-5.3.6-7.3 2Z"/><path d="M12 6.8v12.9"/></svg>
       Acervo
     </button>
     <button id="navAutores">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.3"/><path d="M2.5 20c0-3.2 2.7-5.5 6.5-5.5s6.5 2.3 6.5 5.5"/><circle cx="18" cy="8.5" r="2.6"/><path d="M15.5 14.8c2.6.2 4.5 2.1 4.8 5.2"/></svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="7.5" r="3.2"/><path d="M2.5 20.5c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="8" r="2.4"/><path d="M15.2 15c2.5.5 4.3 2.8 4.3 5.5"/></svg>
       Autores
     </button>
     <button id="navColecoes">
@@ -648,11 +648,11 @@
 
 <div class="quick-tiles" id="quickTiles">
   <button type="button" class="quick-tile" id="tileAcervo" style="--tile-color:#02797c;">
-    <span class="tile-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h12a1 1 0 0 1 1 1v14.5"/><path d="M6 21.5h13a1 1 0 0 0 1-1V19H6.5a1.5 1.5 0 0 0 0 3Z"/></svg></span>
+    <span class="tile-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.8c-2-1.4-4.6-2-7.3-2v12.9c2.7 0 5.3.6 7.3 2 2-1.4 4.6-2 7.3-2V4.8c-2.7 0-5.3.6-7.3 2Z"/><path d="M12 6.8v12.9"/></svg></span>
     <div><b>Acervo</b><span>Todos os livros</span></div>
   </button>
   <button type="button" class="quick-tile" id="tileAutores" style="--tile-color:#f3ac1f;">
-    <span class="tile-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.3"/><path d="M2.5 20c0-3.2 2.7-5.5 6.5-5.5s6.5 2.3 6.5 5.5"/><circle cx="18" cy="8.5" r="2.6"/><path d="M15.5 14.8c2.6.2 4.5 2.1 4.8 5.2"/></svg></span>
+    <span class="tile-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="7.5" r="3.2"/><path d="M2.5 20.5c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="8" r="2.4"/><path d="M15.2 15c2.5.5 4.3 2.8 4.3 5.5"/></svg></span>
     <div><b>Autores</b><span>Explorar por autor</span></div>
   </button>
   <button type="button" class="quick-tile" id="tileColecoes" style="--tile-color:#fa6353;">
@@ -1788,8 +1788,8 @@
       ? `<ul class="home-list">` + recentes.map(b=>`<li data-open="${esc(b.id)}">${esc(b.title)} <span class="dim">— ${esc(b.author)}</span></li>`).join('') + `</ul>`
       : `<p class="home-empty">Ainda não adicionou nenhum livro.</p><button type="button" class="btn-primary" id="homeAdicionarLivro">+ Adicionar livro</button>`;
 
-    const icoBook = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h12a1 1 0 0 1 1 1v14.5"/><path d="M6 21.5h13a1 1 0 0 0 1-1V19H6.5a1.5 1.5 0 0 0 0 3Z"/></svg>';
-    const icoPeople = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.3"/><path d="M2.5 20c0-3.2 2.7-5.5 6.5-5.5s6.5 2.3 6.5 5.5"/><circle cx="18" cy="8.5" r="2.6"/><path d="M15.5 14.8c2.6.2 4.5 2.1 4.8 5.2"/></svg>';
+    const icoBook = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.8c-2-1.4-4.6-2-7.3-2v12.9c2.7 0 5.3.6 7.3 2 2-1.4 4.6-2 7.3-2V4.8c-2.7 0-5.3.6-7.3 2Z"/><path d="M12 6.8v12.9"/></svg>';
+    const icoPeople = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="7.5" r="3.2"/><path d="M2.5 20.5c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="8" r="2.4"/><path d="M15.2 15c2.5.5 4.3 2.8 4.3 5.5"/></svg>';
     const icoCheck = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg>';
     const icoStar = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2l2.6 5.5 6 .6-4.5 4 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.5-4 6-.6z"/></svg>';
     const icoChart = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-7"/></svg>';
