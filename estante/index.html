@@ -123,6 +123,24 @@
     .quick-tile{padding:12px 14px;}
   }
 
+  .home-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:14px; margin-bottom:16px;}
+  .home-card{background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:16px 18px;}
+  .home-card h3{margin:0 0 10px; font-size:14px; font-weight:700; color:var(--text);}
+  .home-empty{color:var(--text-dim); font-size:13px; margin:0 0 10px;}
+  .home-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:7px;}
+  .home-list li{font-size:13.5px; cursor:pointer; color:var(--text);}
+  .home-list li:hover{text-decoration:underline;}
+  .home-list li .dim{color:var(--text-dim);}
+  .home-links{display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:12px;}
+  .home-link{
+    display:flex; flex-direction:column; align-items:flex-start; gap:2px; text-align:left;
+    background:color-mix(in srgb, var(--link-color) 18%, var(--panel)); border:1px solid var(--link-color);
+    border-radius:12px; padding:14px 16px; cursor:pointer; transition:filter .15s, transform .15s;
+  }
+  .home-link:hover{filter:brightness(1.08); transform:translateY(-2px);}
+  .home-link b{font-size:14px; color:var(--text);}
+  .home-link span{font-size:12px; color:var(--text-dim);}
+
   .actions{display:flex; gap:8px; flex-wrap:wrap;}
   button, .btn{
     cursor:pointer; border:1px solid var(--border); background:var(--panel-2); color:var(--text);
@@ -471,7 +489,11 @@
     <span id="personalLogoLabel"></span>
   </div>
   <nav class="side-tabs">
-    <button id="tabAcervo" class="active">
+    <button id="tabInicio" class="active">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/><path d="M9.5 20.5V14h5v6.5"/></svg>
+      Início
+    </button>
+    <button id="tabAcervo">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h12a1 1 0 0 1 1 1v14.5"/><path d="M6 21.5h13a1 1 0 0 0 1-1V19H6.5a1.5 1.5 0 0 0 0 3Z"/><path d="M9 7h6"/><path d="M9 10.5h6"/></svg>
       Acervo
     </button>
@@ -522,19 +544,19 @@
 </header>
 
 <div class="quick-tiles" id="quickTiles">
-  <button type="button" class="quick-tile" id="tileAcervo" style="--tile-color:#2f4d45;">
+  <button type="button" class="quick-tile" id="tileAcervo" style="--tile-color:#1f5f63;">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h12a1 1 0 0 1 1 1v14.5"/><path d="M6 21.5h13a1 1 0 0 0 1-1V19H6.5a1.5 1.5 0 0 0 0 3Z"/></svg>
     <div><b>Acervo</b><span>Todos os livros</span></div>
   </button>
-  <button type="button" class="quick-tile" id="tileAutores" style="--tile-color:#8a6a1f;">
+  <button type="button" class="quick-tile" id="tileAutores" style="--tile-color:#96661c;">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.3"/><path d="M2.5 20c0-3.2 2.7-5.5 6.5-5.5s6.5 2.3 6.5 5.5"/><circle cx="18" cy="8.5" r="2.6"/><path d="M15.5 14.8c2.6.2 4.5 2.1 4.8 5.2"/></svg>
     <div><b>Autores</b><span>Explorar por autor</span></div>
   </button>
-  <button type="button" class="quick-tile" id="tileColecoes" style="--tile-color:#8a4030;">
+  <button type="button" class="quick-tile" id="tileColecoes" style="--tile-color:#9c3f2e;">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="5" rx="1.2"/><rect x="3" y="10.5" width="18" height="5" rx="1.2"/><rect x="3" y="17" width="18" height="5" rx="1.2"/></svg>
     <div><b>Séries/coleções</b><span>Organizar por saga</span></div>
   </button>
-  <button type="button" class="quick-tile" id="tileAntologia" style="--tile-color:#2d5a5e;">
+  <button type="button" class="quick-tile" id="tileAntologia" style="--tile-color:#5b3b6e;">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h13"/><path d="M3 12h9"/><path d="M3 18h13"/><path d="M19 4v16l-3-2-3 2V4z"/></svg>
     <div><b>Antologia</b><span>Citações e excertos</span></div>
   </button>
@@ -1204,7 +1226,7 @@
   let pendingImport = null;
   let pendingBackup = null;
   let currentDetailId = null;
-  let currentTab = 'acervo';
+  let currentTab = 'inicio';
   const coverCache = new Map(); // bookId -> dataUrl (null = known absent)
 
   function uid(){ return 'b_' + Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
@@ -1523,9 +1545,10 @@
   document.getElementById('viewList').onclick = ()=>{ viewMode='list'; document.getElementById('viewList').classList.add('active'); document.getElementById('viewGrid').classList.remove('active'); renderAcervo(); };
 
   // ---------- Tabs ----------
-  const TAB_TITLES = {acervo:'Acervo', emprestimos:'Empréstimos', estatisticas:'Estatísticas', antologia:'Antologia pessoal'};
+  const TAB_TITLES = {inicio:'Início', acervo:'Acervo', emprestimos:'Empréstimos', estatisticas:'Estatísticas', antologia:'Antologia pessoal'};
   function setTab(tab){
     currentTab = tab;
+    document.getElementById('tabInicio').classList.toggle('active', tab==='inicio');
     document.getElementById('tabAcervo').classList.toggle('active', tab==='acervo');
     document.getElementById('tabEmprestimos').classList.toggle('active', tab==='emprestimos');
     document.getElementById('tabEstatisticas').classList.toggle('active', tab==='estatisticas');
@@ -1535,10 +1558,11 @@
     document.getElementById('toolbarAntologia').style.display = tab==='antologia' ? 'flex' : 'none';
     document.getElementById('statsStrip').style.display = (tab==='acervo') ? 'flex' : 'none';
     document.getElementById('bulkBar').style.display = (tab==='acervo' && bulkMode) ? 'flex' : 'none';
-    document.getElementById('quickTiles').style.display = (tab==='acervo') ? 'grid' : 'none';
+    document.getElementById('quickTiles').style.display = (tab==='inicio') ? 'grid' : 'none';
     document.getElementById('pageTitle').textContent = TAB_TITLES[tab] || 'Estante';
     render();
   }
+  document.getElementById('tabInicio').onclick = ()=>setTab('inicio');
   document.getElementById('tabAcervo').onclick = ()=>setTab('acervo');
   document.getElementById('tabEmprestimos').onclick = ()=>setTab('emprestimos');
   document.getElementById('tabEstatisticas').onclick = ()=>setTab('estatisticas');
@@ -1547,24 +1571,87 @@
 
   document.getElementById('tileAcervo').onclick = ()=>{
     els.author.value = ''; els.tag.value = ''; els.search.value = '';
-    renderAcervo();
+    setTab('acervo');
   };
   document.getElementById('tileAutores').onclick = ()=>{
     els.search.value = '';
-    renderAcervo();
+    setTab('acervo');
     els.author.focus();
   };
   document.getElementById('tileColecoes').onclick = ()=>{
     els.sort.value = 'series-asc';
-    renderAcervo();
+    setTab('acervo');
   };
   document.getElementById('tileAntologia').onclick = ()=>setTab('antologia');
 
   function render(){
-    if(currentTab === 'acervo') renderAcervo();
+    if(currentTab === 'inicio') renderInicio();
+    else if(currentTab === 'acervo') renderAcervo();
     else if(currentTab === 'emprestimos') renderEmprestimos();
     else if(currentTab === 'antologia') renderAntologia();
     else renderEstatisticas();
+  }
+
+  // ---------- Início (página de boas-vindas) ----------
+  function renderInicio(){
+    const total = books.length;
+    const autores = new Set(books.map(b=>b.author).filter(Boolean)).size;
+    const lidos = books.filter(b=>b.status==='lido').length;
+    const favoritos = books.filter(b=>b.favorite).length;
+    const emCurso = books.filter(b=>b.status==='a-ler');
+    const queroLer = books.filter(b=>b.status==='quero-ler').length;
+    const recentes = [...books].sort((a,b)=>(b.added||0)-(a.added||0)).slice(0,5);
+    els.subtitle.textContent = `${total} livro${total===1?'':'s'} no acervo`;
+
+    const emCursoHtml = emCurso.length
+      ? `<ul class="home-list">` + emCurso.slice(0,5).map(b=>`<li data-open="${esc(b.id)}">${esc(b.title)} <span class="dim">— ${esc(b.author)}</span></li>`).join('') + `</ul>`
+      : `<p class="home-empty">Não tem leituras em curso.</p><button type="button" class="btn-primary" id="homeRegistarLeitura">+ Registar leitura</button>`;
+
+    const recentesHtml = recentes.length
+      ? `<ul class="home-list">` + recentes.map(b=>`<li data-open="${esc(b.id)}">${esc(b.title)} <span class="dim">— ${esc(b.author)}</span></li>`).join('') + `</ul>`
+      : `<p class="home-empty">Ainda não adicionou nenhum livro.</p><button type="button" class="btn-primary" id="homeAdicionarLivro">+ Adicionar livro</button>`;
+
+    els.content.innerHTML = `
+      <div class="stats-grid" style="margin-bottom:18px;">
+        <div class="stat-card"><div class="num">${total}</div><div class="label">Livros</div></div>
+        <div class="stat-card"><div class="num">${autores}</div><div class="label">Autores</div></div>
+        <div class="stat-card"><div class="num">${lidos}</div><div class="label">Lidos</div></div>
+        <div class="stat-card"><div class="num">${favoritos}</div><div class="label">Favoritos</div></div>
+      </div>
+      <div class="home-grid">
+        <div class="home-card">
+          <h3>Distribuição por género literário</h3>
+          ${barList(topCounts(books, b=>b.genre))}
+        </div>
+        <div class="home-card">
+          <h3>Leituras em curso</h3>
+          ${emCursoHtml}
+        </div>
+        <div class="home-card">
+          <h3>Últimos livros adicionados</h3>
+          ${recentesHtml}
+        </div>
+      </div>
+      <div class="home-links">
+        <button type="button" class="home-link" id="homePlanoLeitura" style="--link-color:#96661c;">
+          <b>Plano de leitura</b><span>Defina a sua meta anual</span>
+        </button>
+        <button type="button" class="home-link" id="homeListaDesejos" style="--link-color:#9c3f2e;">
+          <b>Lista de desejos</b><span>${queroLer} livro${queroLer===1?'':'s'} que quer ler</span>
+        </button>
+      </div>
+    `;
+    els.content.querySelectorAll('[data-open]').forEach(li=>li.addEventListener('click', ()=>openDetail(li.dataset.open)));
+    const regLeitura = document.getElementById('homeRegistarLeitura');
+    if(regLeitura) regLeitura.onclick = ()=>{ openForm(null); document.getElementById('f-status').value='a-ler'; };
+    const addLivro = document.getElementById('homeAdicionarLivro');
+    if(addLivro) addLivro.onclick = ()=>openForm(null);
+    document.getElementById('homePlanoLeitura').onclick = ()=>setTab('estatisticas');
+    document.getElementById('homeListaDesejos').onclick = ()=>{
+      setTab('acervo');
+      els.status.value = 'quero-ler';
+      renderAcervo();
+    };
   }
 
   // ---------- Antologia pessoal (todas as citações guardadas) ----------
